@@ -128,10 +128,10 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                             wget https://github.com/actions/runner/releases/download/v2.321.0/actions-runner-linux-{runnerArchitecture}-2.321.0.tar.gz
                             tar xf actions-runner-linux-{runnerArchitecture}-2.321.0.tar.gz
                             
-                            ./config.sh --url https://github.com/{workflowJobEvent.Repository!.FullName} --token {GitHubClient.CreateRunnerRegistrationToken(
+                            ./config.sh --url https://github.com/{workflowJobEvent.Repository!.FullName} --token {(await GitHubClient.CreateRunnerRegistrationToken(
                                 workflowJobEvent.Repository!.FullName,
                                 workflowJobEvent.Installation!.Id
-                            )} --ephemeral
+                            )).Token} --ephemeral
                             ./svc.sh install runner
                             ./svc.sh start
                             """,
