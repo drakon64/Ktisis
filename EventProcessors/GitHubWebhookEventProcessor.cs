@@ -26,21 +26,17 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
 
             return;
         }
-        
+
         if (workflowJobEvent.Action != "queued")
         {
-            await Console.Out.WriteLineAsync(
-                $"Workflow action is not `queued`."
-            );
+            await Console.Out.WriteLineAsync($"Workflow action is not `queued`.");
 
             return;
         }
-        
+
         if (!workflowJobEvent.WorkflowJob.Labels.Contains("ktisis"))
         {
-            await Console.Out.WriteLineAsync(
-                $"Workflow is not set to use Ktisis."
-            );
+            await Console.Out.WriteLineAsync($"Workflow is not set to use Ktisis.");
 
             return;
         }
