@@ -12,9 +12,9 @@
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.2.1" />
   </ItemGroup>
 
-  <PropertyGroup>
-    <PublishReadyToRun>true</PublishReadyToRun>
-    <PublishReadyToRunComposite>true</PublishReadyToRunComposite>
-  </PropertyGroup>
+<!--  <PropertyGroup>-->
+<!--    <PublishReadyToRun>true</PublishReadyToRun>-->
+<!--    <PublishReadyToRunComposite>true</PublishReadyToRunComposite>-->
+<!--  </PropertyGroup>-->
 
 </Project>
