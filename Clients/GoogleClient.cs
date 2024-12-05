@@ -20,13 +20,9 @@ internal static class GoogleClient
             }
         );
 
-        var accessToken = await request.Content.ReadFromJsonAsync<AccessTokenResponse>(
+        return await request.Content.ReadFromJsonAsync<AccessTokenResponse>(
             AccessTokenResponseSerializerContext.Default.AccessTokenResponse
         );
-
-        Console.Out.WriteLine($"Access token: ${accessToken!.AccessToken}");
-
-        return accessToken;
     }
 
     public static async Task CreateInstance(Instance instance, string project, string zone)
