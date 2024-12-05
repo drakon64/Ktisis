@@ -16,14 +16,32 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
     )
     {
         if (
-            (
-                Program.RepositoryOwners is not null
-                && !Program.RepositoryOwners.Contains(workflowJobEvent.Repository!.Owner.Name)
-            )
-            || workflowJobEvent.Action != "queued"
-            || !workflowJobEvent.WorkflowJob.Labels.Contains("ktisis")
+            Program.RepositoryOwners is not null
+            && !Program.RepositoryOwners.Contains(workflowJobEvent.Repository!.Owner.Name)
         )
         {
+            await Console.Out.WriteLineAsync(
+                $"Repository {workflowJobEvent.Repository.FullName} is not owned by an allowlisted owner."
+            );
+
+            return;
+        }
+        
+        if (workflowJobEvent.Action != "queued")
+        {
+            await Console.Out.WriteLineAsync(
+                $"Workflow action is not `queued`."
+            );
+
+            return;
+        }
+        
+        if (!workflowJobEvent.WorkflowJob.Labels.Contains("ktisis"))
+        {
+            await Console.Out.WriteLineAsync(
+                $"Workflow is not set to use Ktisis."
+            );
+
             return;
         }
 
