@@ -19,7 +19,9 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
             (
                 Program.RepositoryOwners is not null
                 && !Program.RepositoryOwners.Contains(workflowJobEvent.Repository!.Owner.Name)
-            ) || !workflowJobEvent.WorkflowJob.Labels.Contains("ktisis")
+            )
+            || workflowJobEvent.Action != "queued"
+            || !workflowJobEvent.WorkflowJob.Labels.Contains("ktisis")
         )
         {
             return;
