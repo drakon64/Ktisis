@@ -86,8 +86,6 @@ internal class GitHubClient
             }
         );
 
-        Console.Out.WriteLine(await responseMessage.Content.ReadAsStringAsync());
-
         _githubInstallationAccessToken = (
             await responseMessage.Content.ReadFromJsonAsync<InstallationAccessToken>(
                 GitHubSerializerContext.Default.InstallationAccessToken
