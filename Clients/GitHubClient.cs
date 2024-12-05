@@ -90,6 +90,8 @@ internal static class GitHubClient
                 ),
             }
         );
+        
+        Console.Out.WriteLine(await responseMessage.Content.ReadAsStringAsync());
 
         _githubInstallationAccessToken = (
             await responseMessage.Content.ReadFromJsonAsync<InstallationAccessToken>(
@@ -121,8 +123,6 @@ internal static class GitHubClient
                 ),
             }
         );
-
-        Console.Out.WriteLine(await request.Content.ReadAsStringAsync());
 
         return await request.Content.ReadFromJsonAsync<RunnerRegistrationToken>(
             GitHubSerializerContext.Default.RunnerRegistrationToken
