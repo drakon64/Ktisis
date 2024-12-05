@@ -15,5 +15,8 @@ internal class Instance
 }
 
 [JsonSerializable(typeof(Instance))]
-[JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
+[JsonSourceGenerationOptions(
+    IncludeFields = true,
+    PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase
+)]
 internal partial class InstanceSerializerContext : JsonSerializerContext;
