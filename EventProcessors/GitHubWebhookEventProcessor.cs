@@ -123,7 +123,7 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                             Value = $"""
                             #!/bin/sh
 
-                            useradd runner --home /runner --shell /bin/bash --group runner
+                            useradd runner --home /runner --shell /bin/sh --group runner
                             cd /runner
                             wget https://github.com/actions/runner/releases/download/v2.321.0/actions-runner-linux-{runnerArchitecture}-2.321.0.tar.gz
                             tar xf actions-runner-linux-{runnerArchitecture}-2.321.0.tar.gz
