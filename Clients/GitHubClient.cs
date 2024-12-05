@@ -13,6 +13,10 @@ internal static class GitHubClient
 
     static GitHubClient()
     {
+        GitHubClientId =
+            Environment.GetEnvironmentVariable("GITHUB_CLIENT_ID")
+            ?? throw new InvalidOperationException("GITHUB_CLIENT_ID is null.");
+
         var rsa = RSA.Create();
         rsa.ImportFromPem(
             Environment.GetEnvironmentVariable("GITHUB_PRIVATE_KEY")
@@ -26,10 +30,6 @@ internal static class GitHubClient
         {
             CryptoProviderFactory = new CryptoProviderFactory { CacheSignatureProviders = false },
         };
-
-        GitHubClientId =
-            Environment.GetEnvironmentVariable("GITHUB_CLIENT_ID")
-            ?? throw new InvalidOperationException("GITHUB_CLIENT_ID is null.");
     }
 
     private static string GenerateJwtSecurityToken()
@@ -117,10 +117,12 @@ internal static class GitHubClient
                     },
                 },
                 RequestUri = new Uri(
-                    $"{GitHubApiUri}/repos/{repo}/actions/runners/registration-token"
+                    $"{GitHubApiUri}repos/{repo}/actions/runners/registration-token"
                 ),
             }
         );
+
+        Console.Out.WriteLine(await request.Content.ReadAsStringAsync());
 
         return await request.Content.ReadFromJsonAsync<RunnerRegistrationToken>(
             GitHubSerializerContext.Default.RunnerRegistrationToken
