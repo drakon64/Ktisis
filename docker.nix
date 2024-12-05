@@ -1,7 +1,7 @@
 {
   pkgs ?
     let
-      npins = import ../npins;
+      npins = import ./npins;
     in
     import npins.nixpkgs { },
 }:
@@ -11,7 +11,7 @@ in
 pkgs.dockerTools.buildLayeredImage {
   name = "ktisis";
 
-  config.Entrypoint = [ "${receiver}/lib/ktisis/Ktisis" ];
+  config.Entrypoint = [ "${ktisis}/lib/ktisis/Ktisis" ];
 
   contents = with pkgs; [ cacert ];
 
