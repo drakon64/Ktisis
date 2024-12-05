@@ -92,7 +92,7 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
             new Instance
             {
                 Name =
-                    $"{workflowJobEvent.Repository!.FullName}/{workflowJobEvent.WorkflowJob.RunId}/{workflowJobEvent.WorkflowJob.Id}",
+                    $"{workflowJobEvent.Repository!.FullName.Replace('/', '-')}-{workflowJobEvent.WorkflowJob.RunId}-{workflowJobEvent.WorkflowJob.Id}",
                 MachineType =
                     $"projects/{Program.Project}/zones/{Program.Zone}/machineTypes/{machineType}",
                 Disks =
