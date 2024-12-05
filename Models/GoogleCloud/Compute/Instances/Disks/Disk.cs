@@ -2,6 +2,7 @@ namespace Ktisis.Models.GoogleCloud.Compute.Instances.Disks;
 
 internal class Disk
 {
+    public bool AutoDelete = true;
     public required bool Boot { get; init; }
     public required DiskInitializeParams InitializeParams { get; init; }
 }
