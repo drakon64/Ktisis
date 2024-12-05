@@ -85,7 +85,7 @@ internal class GitHubClient
                 ),
             }
         );
-        
+
         Console.Out.WriteLine(await responseMessage.Content.ReadAsStringAsync());
 
         _githubInstallationAccessToken = (
