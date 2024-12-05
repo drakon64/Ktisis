@@ -45,6 +45,7 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
         var machineType = "n4-standard-4";
         var disk = "14";
         var architecture = "amd64";
+        var runnerArchitecture = "x64";
 
         {
             var setMachineType = false;
@@ -73,10 +74,12 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                     {
                         case "x64":
                             architecture = "amd64";
+                            runnerArchitecture = "x64";
                             setArchitecture = true;
                             break;
                         case "ARM64":
                             architecture = "arm64";
+                            runnerArchitecture = "arm64";
                             setArchitecture = true;
                             break;
                     }
@@ -122,8 +125,8 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
 
                             useradd runner --home /runner --shell /bin/bash --group runner
                             cd /runner
-                            wget https://github.com/actions/runner/releases/download/v2.321.0/actions-runner-linux-arm64-2.321.0.tar.gz
-                            tar xf actions-runner-linux-arm64-2.321.0.tar.gz
+                            wget https://github.com/actions/runner/releases/download/v2.321.0/actions-runner-linux-{runnerArchitecture}-2.321.0.tar.gz
+                            tar xf actions-runner-linux-{runnerArchitecture}-2.321.0.tar.gz
                             
                             ./config.sh --url https://github.com/{workflowJobEvent.Repository!.FullName} --token {GitHubClient.CreateRunnerRegistrationToken(
                                 workflowJobEvent.Repository!.FullName,
