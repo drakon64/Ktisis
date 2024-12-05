@@ -1,4 +1,5 @@
 using Ktisis.Models;
+using Ktisis.Models.GoogleCloud.Compute;
 
 namespace Ktisis.Clients;
 
@@ -6,7 +7,7 @@ internal static class GoogleClient
 {
     private static readonly HttpClient HttpClient = new();
 
-    public static async Task<AccessTokenResponse?> GetAccessToken()
+    private static async Task<AccessTokenResponse?> GetAccessToken()
     {
         var request = await HttpClient.SendAsync(
             new HttpRequestMessage
@@ -21,6 +22,26 @@ internal static class GoogleClient
 
         return await request.Content.ReadFromJsonAsync<AccessTokenResponse>(
             AccessTokenResponseSerializerContext.Default.AccessTokenResponse
+        );
+    }
+
+    public static async Task CreateInstance(Instance instance, string project, string zone)
+    {
+        var accessToken = await GetAccessToken();
+
+        var request = await HttpClient.SendAsync(
+            new HttpRequestMessage
+            {
+                Method = HttpMethod.Post,
+                Content = JsonContent.Create(instance, InstanceSerializerContext.Default.Instance),
+                Headers =
+                {
+                    { "Authorization", $"{accessToken!.TokenType} {accessToken.AccessToken}" },
+                },
+                RequestUri = new Uri(
+                    $"https://compute.googleapis.com/compute/v1/projects/{project}/zones/{zone}/instances"
+                ),
+            }
         );
     }
 }

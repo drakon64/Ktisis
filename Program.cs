@@ -10,6 +10,14 @@ public class Program
         .GetEnvironmentVariable("REPOSITORY_OWNERS")
         ?.Split([' ']);
 
+    internal static readonly string Project =
+        Environment.GetEnvironmentVariable("PROJECT")
+        ?? throw new InvalidOperationException("PROJECT is null");
+
+    internal static readonly string Zone =
+        Environment.GetEnvironmentVariable("ZONE")
+        ?? throw new InvalidOperationException("ZONE is null");
+
     public static void Main()
     {
         var builder = WebApplication.CreateSlimBuilder();
