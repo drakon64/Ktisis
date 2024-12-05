@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace Ktisis.Models;
 
 internal class AccessTokenResponse
@@ -6,3 +8,7 @@ internal class AccessTokenResponse
     public required ushort ExpiresIn { get; init; }
     public required string TokenType { get; init; }
 }
+
+[JsonSerializable(typeof(AccessTokenResponse))]
+[JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.SnakeCaseLower)]
+internal partial class AccessTokenResponseSerializerContext : JsonSerializerContext;
