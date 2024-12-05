@@ -1,6 +1,7 @@
 using Ktisis.Clients;
 using Ktisis.Models.GoogleCloud.Compute;
 using Ktisis.Models.GoogleCloud.Compute.Instances.Disks;
+using Ktisis.Models.GoogleCloud.Compute.Instances.Metadata;
 using Octokit.Webhooks;
 using Octokit.Webhooks.Events;
 using Octokit.Webhooks.Events.WorkflowJob;
@@ -90,9 +91,10 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
         await GoogleClient.CreateInstance(
             new Instance
             {
+                Name =
+                    $"{workflowJobEvent.Repository!.FullName}/{workflowJobEvent.WorkflowJob.RunId}/{workflowJobEvent.WorkflowJob.Id}",
                 MachineType =
                     $"projects/{Program.Project}/zones/{Program.Zone}/machineTypes/{machineType}",
-                Name = "test",
                 Disks =
                 [
                     new Disk
@@ -106,6 +108,33 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                         },
                     },
                 ],
+                Metadata = new Metadata
+                {
+                    Items =
+                    [
+                        new MetadataItem { Key = "enable-oslogin", Value = "true" },
+                        new MetadataItem { Key = "enable-oslogin-2fa", Value = "true" },
+                        new MetadataItem
+                        {
+                            Key = "startup-script",
+                            Value = $"""
+                            #!/bin/sh
+
+                            useradd runner --home /runner --shell /bin/bash --group runner
+                            cd /runner
+                            wget https://github.com/actions/runner/releases/download/v2.321.0/actions-runner-linux-arm64-2.321.0.tar.gz
+                            tar xf actions-runner-linux-arm64-2.321.0.tar.gz
+                            
+                            ./config.sh --url https://github.com/{workflowJobEvent.Repository!.FullName} --token {GitHubClient.CreateRunnerRegistrationToken(
+                                workflowJobEvent.Repository!.FullName,
+                                workflowJobEvent.Installation!.Id
+                            )} --ephemeral
+                            ./svc.sh install runner
+                            ./svc.sh start
+                            """,
+                        },
+                    ],
+                },
             },
             Program.Project,
             Program.Zone

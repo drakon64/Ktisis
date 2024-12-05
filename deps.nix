@@ -19,6 +19,26 @@
     hash = "sha256-FU8qj3DR8bDdc1c+WeGZx/PCZeqqndweZM9epcpXjSo=";
   })
   (fetchNuGet {
+    pname = "Microsoft.IdentityModel.Abstractions";
+    version = "8.2.1";
+    hash = "sha256-+9aIQ5tVPM915SEaquiiVUYaW2wk2MvkYWEMTzGYEl4=";
+  })
+  (fetchNuGet {
+    pname = "Microsoft.IdentityModel.JsonWebTokens";
+    version = "8.2.1";
+    hash = "sha256-0tL7K87O8w2IOje7+WFZQiPiYFWLMqMRsVoHKVose+0=";
+  })
+  (fetchNuGet {
+    pname = "Microsoft.IdentityModel.Logging";
+    version = "8.2.1";
+    hash = "sha256-0FHmPBoogYIEAa7hxVvxIYy1jCCB3NmnVS5eoVWsjrU=";
+  })
+  (fetchNuGet {
+    pname = "Microsoft.IdentityModel.Tokens";
+    version = "8.2.1";
+    hash = "sha256-kO/Xrv/XbJ0hKqA0PFWMKJA8EBCuAjBO7D6XoPH0l8k=";
+  })
+  (fetchNuGet {
     pname = "Octokit.Webhooks";
     version = "2.4.1";
     hash = "sha256-FZ2Eg432VkDh8fQWXkacGJNf9Uvv5LUCAU/xrqugnFc=";
@@ -27,5 +47,10 @@
     pname = "Octokit.Webhooks.AspNetCore";
     version = "2.4.1";
     hash = "sha256-UGRKHb8wwtNl1nMIp2hZs0DTQZmWOAFZB8MXzbRBV7g=";
+  })
+  (fetchNuGet {
+    pname = "System.IdentityModel.Tokens.Jwt";
+    version = "8.2.1";
+    hash = "sha256-osV3VbG9k5Jb4XSlUsDxqbMEASNR3c7DA6+AKVXVhHQ=";
   })
 ]

@@ -11,7 +11,7 @@ internal class Instance
     public required string MachineType { get; init; }
     public NetworkInterface[] NetworkInterfaces = [new()];
     public required Disk[] Disks { get; init; }
-    public Metadata Metadata = new();
+    public required Metadata Metadata { get; init; }
 }
 
 [JsonSerializable(typeof(Instance))]
