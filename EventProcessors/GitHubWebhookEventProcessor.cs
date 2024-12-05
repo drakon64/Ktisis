@@ -74,7 +74,8 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
         await GoogleClient.CreateInstance(
             new Instance
             {
-                MachineType = machineType,
+                MachineType =
+                    $"projects/{Program.Project}/zones/{Program.Zone}/machineTypes/{machineType}",
                 Name = "test",
                 Disks =
                 [
