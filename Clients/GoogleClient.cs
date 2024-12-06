@@ -5,11 +5,9 @@ namespace Ktisis.Clients;
 
 internal static class GoogleClient
 {
-    private static readonly HttpClient HttpClient = new();
-
     private static async Task<AccessTokenResponse?> GetAccessToken()
     {
-        var request = await HttpClient.SendAsync(
+        var request = await Program.HttpClient.SendAsync(
             new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
@@ -29,7 +27,7 @@ internal static class GoogleClient
     {
         var accessToken = await GetAccessToken();
 
-        var request = await HttpClient.SendAsync(
+        var request = await Program.HttpClient.SendAsync(
             new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
@@ -51,7 +49,7 @@ internal static class GoogleClient
     {
         var accessToken = await GetAccessToken();
 
-        var request = await HttpClient.SendAsync(
+        var request = await Program.HttpClient.SendAsync(
             new HttpRequestMessage
             {
                 Method = HttpMethod.Delete,

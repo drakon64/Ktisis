@@ -49,16 +49,6 @@ internal class GitHubClient
         return new JwtSecurityTokenHandler().WriteToken(jwt);
     }
 
-    private static readonly HttpClient HttpClient = new()
-    {
-        DefaultRequestHeaders =
-        {
-            { "User-Agent", "Ktisis/0.0.1" },
-            { "Accept", "application/vnd.github+json" },
-            { "X-GitHub-Api-Version", "2022-11-28" },
-        },
-    };
-
     private const string GitHubApiUri = "https://api.github.com/";
 
     private InstallationAccessToken _githubInstallationAccessToken = new()
@@ -75,11 +65,17 @@ internal class GitHubClient
 
         await Console.Out.WriteLineAsync("Generating new GitHub installation access token");
 
-        var responseMessage = await HttpClient.SendAsync(
+        var responseMessage = await Program.HttpClient.SendAsync(
             new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
-                Headers = { { "Authorization", $"Bearer {GenerateJwtSecurityToken()}" } },
+                Headers =
+                {
+                    { "Authorization", $"Bearer {GenerateJwtSecurityToken()}" },
+                    { "User-Agent", "Ktisis/0.0.1" },
+                    { "Accept", "application/vnd.github+json" },
+                    { "X-GitHub-Api-Version", "2022-11-28" },
+                },
                 RequestUri = new Uri(
                     $"{GitHubApiUri}app/installations/{installationId}/access_tokens"
                 ),
@@ -100,7 +96,7 @@ internal class GitHubClient
         long installationId
     )
     {
-        var request = await HttpClient.SendAsync(
+        var request = await Program.HttpClient.SendAsync(
             new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
@@ -110,6 +106,9 @@ internal class GitHubClient
                         "Authorization",
                         $"Bearer {await GetGitHubInstallationAccessToken(installationId)}"
                     },
+                    { "User-Agent", "Ktisis/0.0.1" },
+                    { "Accept", "application/vnd.github+json" },
+                    { "X-GitHub-Api-Version", "2022-11-28" },
                 },
                 RequestUri = new Uri(
                     $"{GitHubApiUri}repos/{repo}/actions/runners/registration-token"

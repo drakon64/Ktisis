@@ -19,6 +19,8 @@ public class Program
         Environment.GetEnvironmentVariable("ZONES")?.Split(' ')
         ?? throw new InvalidOperationException("ZONE is null");
 
+    internal static readonly HttpClient HttpClient = new();
+
     internal static readonly GitHubClient GitHubClient = new(
         Environment.GetEnvironmentVariable("GITHUB_PRIVATE_KEY")
             ?? throw new InvalidOperationException("GITHUB_PRIVATE_KEY is null."),
