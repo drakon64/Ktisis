@@ -9,7 +9,7 @@ public class Program
 {
     internal static readonly string[]? RepositoryOwners = Environment
         .GetEnvironmentVariable("REPOSITORY_OWNERS")
-        ?.Split([' ']);
+        ?.Split(' ');
 
     internal static readonly string Project =
         Environment.GetEnvironmentVariable("PROJECT")
