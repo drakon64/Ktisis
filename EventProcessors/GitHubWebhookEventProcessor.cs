@@ -9,6 +9,8 @@ namespace Ktisis.EventProcessors;
 
 public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
 {
+    private static readonly Random Random = new();
+
     protected override async Task ProcessWorkflowJobWebhookAsync(
         WebhookHeaders headers,
         WorkflowJobEvent workflowJobEvent,
@@ -45,6 +47,7 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
         var disk = "14";
         var architecture = "amd64";
         var runnerArchitecture = "x64";
+        var zone = Program.Zones[Random.Next(Program.Zones.Length)];
 
         {
             var setMachineType = false;
@@ -95,14 +98,13 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
             {
                 Name =
                     $"{workflowJobEvent.Repository!.FullName.Replace('/', '-')}-{workflowJobEvent.WorkflowJob.RunId}-{workflowJobEvent.WorkflowJob.Id}",
-                MachineType =
-                    $"projects/{Program.Project}/zones/{Program.Zone}/machineTypes/{machineType}",
+                MachineType = $"projects/{Program.Project}/zones/{zone}/machineTypes/{machineType}",
                 Disks =
                 [
                     new Disk
                     {
                         Boot = true,
-                        InitializeParams = new DiskInitializeParams
+                        InitializeParams = new DiskInitializeParams(zone)
                         {
                             DiskSizeGb = disk,
                             SourceImage =
@@ -112,7 +114,7 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                     new Disk
                     {
                         DeviceName = "swap",
-                        InitializeParams = new DiskInitializeParams { DiskSizeGb = "16" },
+                        InitializeParams = new DiskInitializeParams(zone) { DiskSizeGb = "16" },
                     },
                 ],
                 Metadata = new Metadata
@@ -155,7 +157,7 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                 },
             },
             Program.Project,
-            Program.Zone
+            zone
         );
     }
 }

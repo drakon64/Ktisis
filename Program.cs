@@ -15,8 +15,8 @@ public class Program
         Environment.GetEnvironmentVariable("PROJECT")
         ?? throw new InvalidOperationException("PROJECT is null");
 
-    internal static readonly string Zone =
-        Environment.GetEnvironmentVariable("ZONE")
+    internal static readonly string[] Zones =
+        Environment.GetEnvironmentVariable("ZONES")?.Split(' ')
         ?? throw new InvalidOperationException("ZONE is null");
 
     internal static readonly GitHubClient GitHubClient = new(
