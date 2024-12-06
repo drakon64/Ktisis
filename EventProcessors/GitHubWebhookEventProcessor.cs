@@ -19,7 +19,7 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
     {
         if (
             Program.RepositoryOwners is not null
-            && !Program.RepositoryOwners.Contains(workflowJobEvent.Repository!.Owner.Name)
+            && !Program.RepositoryOwners.Contains(workflowJobEvent.Repository!.Owner.Login)
         )
         {
             await Console.Out.WriteLineAsync(
