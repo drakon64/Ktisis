@@ -126,8 +126,7 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                             adduser --home /runner --shell /bin/sh runner
                             cd /runner
                             wget https://github.com/actions/runner/releases/download/v2.321.0/actions-runner-linux-{runnerArchitecture}-2.321.0.tar.gz
-                            tar xvf actions-runner-linux-{runnerArchitecture}-2.321.0.tar.gz
-                            ls -hl
+                            tar xf actions-runner-linux-{runnerArchitecture}-2.321.0.tar.gz
                             
                             sudo -u runner ./config.sh --url https://github.com/{workflowJobEvent.Repository!.FullName} --token {(await Program.GitHubClient.CreateRunnerRegistrationToken(
                                 workflowJobEvent.Repository!.FullName,
