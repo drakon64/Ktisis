@@ -28,6 +28,11 @@ public class Program
 
     public static void Main()
     {
+        if (RepositoryOwners is not null)
+            Console.Out.WriteLine(
+                $"Allowlisted repository owners: {string.Join(' ', RepositoryOwners)}"
+            );
+
         var builder = WebApplication.CreateSlimBuilder();
         builder.Services.AddSingleton<WebhookEventProcessor, GitHubWebhookEventProcessor>();
 
