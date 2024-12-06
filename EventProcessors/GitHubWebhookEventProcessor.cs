@@ -122,6 +122,10 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                             Key = "startup-script",
                             Value = $"""
                             #!/bin/sh -ex
+                            
+                            curl -sSO https://dl.google.com/cloudagents/add-google-cloud-ops-agent-repo.sh
+                            bash add-google-cloud-ops-agent-repo.sh --also-install
+                            rm add-google-cloud-ops-agent-repo.sh
 
                             adduser --home /runner --shell /bin/sh runner
                             cd /runner
