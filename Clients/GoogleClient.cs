@@ -25,11 +25,7 @@ internal static class GoogleClient
         );
     }
 
-    public static async Task CreateInstance(
-        Instance instance,
-        string project,
-        string zone
-    )
+    public static async Task CreateInstance(Instance instance, string project, string zone)
     {
         var accessToken = await GetAccessToken();
 

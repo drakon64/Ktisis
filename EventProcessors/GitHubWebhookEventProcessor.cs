@@ -121,7 +121,7 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                             Key = "startup-script",
                             Value = $"""
                             #!/bin/sh -ex
-                            
+
                             curl -sSO https://dl.google.com/cloudagents/add-google-cloud-ops-agent-repo.sh
                             bash add-google-cloud-ops-agent-repo.sh --also-install
                             rm add-google-cloud-ops-agent-repo.sh
@@ -129,10 +129,11 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                             adduser --home /runner --shell /bin/sh runner
                             echo '%runner ALL=(ALL:ALL) NOPASSWD:ALL' > /etc/sudoers.d/runner
                             cd /runner
+
                             wget https://github.com/actions/runner/releases/download/v2.321.0/actions-runner-linux-{runnerArchitecture}-2.321.0.tar.gz
                             tar xf actions-runner-linux-{runnerArchitecture}-2.321.0.tar.gz
                             rm actions-runner-linux-{runnerArchitecture}-2.321.0.tar.gz
-                            
+
                             sudo -u runner ./config.sh --url https://github.com/{workflowJobEvent.Repository!.FullName} --token {(await Program.GitHubClient.CreateRunnerRegistrationToken(
                                 workflowJobEvent.Repository!.FullName,
                                 workflowJobEvent.Installation!.Id
