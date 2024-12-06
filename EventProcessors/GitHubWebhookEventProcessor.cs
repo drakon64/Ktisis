@@ -109,6 +109,11 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                                 $"projects/ubuntu-os-cloud/global/images/ubuntu-minimal-2404-noble-{architecture}-v20241116", // TODO: Don't hardcode this
                         },
                     },
+                    new Disk
+                    {
+                        DeviceName = "swap",
+                        InitializeParams = new DiskInitializeParams { DiskSizeGb = "16" },
+                    },
                 ],
                 Metadata = new Metadata
                 {
@@ -121,6 +126,10 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                             Key = "startup-script",
                             Value = $"""
                             #!/bin/sh -ex
+                            
+                            sysctl vm.swappiness=1
+                            mkswap /dev/disk/by-id/google-swap
+                            swapon /dev/disk/by-id/google-swap
 
                             curl -sSO https://dl.google.com/cloudagents/add-google-cloud-ops-agent-repo.sh
                             bash add-google-cloud-ops-agent-repo.sh --also-install
