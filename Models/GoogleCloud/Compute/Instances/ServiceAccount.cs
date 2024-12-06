@@ -1,4 +1,4 @@
-namespace Ktisis.Models.GoogleCloud.Compute.Instances.ServiceAccounts;
+namespace Ktisis.Models.GoogleCloud.Compute.Instances;
 
 internal class ServiceAccount
 {

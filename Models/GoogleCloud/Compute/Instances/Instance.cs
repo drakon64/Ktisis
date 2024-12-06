@@ -1,10 +1,8 @@
 using System.Text.Json.Serialization;
 using Ktisis.Models.GoogleCloud.Compute.Instances.Disks;
-using Ktisis.Models.GoogleCloud.Compute.Instances.Metadata;
 using Ktisis.Models.GoogleCloud.Compute.Instances.NetworkInterfaces;
-using Ktisis.Models.GoogleCloud.Compute.Instances.ServiceAccounts;
 
-namespace Ktisis.Models.GoogleCloud.Compute;
+namespace Ktisis.Models.GoogleCloud.Compute.Instances;
 
 internal class Instance
 {
@@ -14,6 +12,7 @@ internal class Instance
     public required Disk[] Disks { get; init; }
     public required Metadata Metadata { get; init; }
     public ServiceAccount[] ServiceAccounts = [new()];
+    public Scheduling Scheduling = new();
 }
 
 [JsonSerializable(typeof(Instance))]

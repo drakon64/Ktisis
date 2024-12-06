@@ -1,5 +1,5 @@
-using Ktisis.Models;
-using Ktisis.Models.GoogleCloud.Compute;
+using Ktisis.Models.GoogleCloud;
+using Ktisis.Models.GoogleCloud.Compute.Instances;
 
 namespace Ktisis.Clients;
 
@@ -25,7 +25,11 @@ internal static class GoogleClient
         );
     }
 
-    public static async Task CreateInstance(Instance instance, string project, string zone)
+    public static async Task CreateInstance(
+        Instance instance,
+        string project,
+        string zone
+    )
     {
         var accessToken = await GetAccessToken();
 
@@ -44,6 +48,6 @@ internal static class GoogleClient
             }
         );
 
-        Console.Out.WriteLine(await request.Content.ReadAsStringAsync());
+        await Console.Out.WriteLineAsync(await request.Content.ReadAsStringAsync());
     }
 }

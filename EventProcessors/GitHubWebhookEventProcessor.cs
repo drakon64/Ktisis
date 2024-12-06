@@ -1,7 +1,6 @@
 using Ktisis.Clients;
-using Ktisis.Models.GoogleCloud.Compute;
+using Ktisis.Models.GoogleCloud.Compute.Instances;
 using Ktisis.Models.GoogleCloud.Compute.Instances.Disks;
-using Ktisis.Models.GoogleCloud.Compute.Instances.Metadata;
 using Octokit.Webhooks;
 using Octokit.Webhooks.Events;
 using Octokit.Webhooks.Events.WorkflowJob;
@@ -30,14 +29,14 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
 
         if (workflowJobEvent.Action != "queued")
         {
-            await Console.Out.WriteLineAsync($"Workflow action is not `queued`.");
+            await Console.Out.WriteLineAsync("Workflow action is not `queued`.");
 
             return;
         }
 
         if (!workflowJobEvent.WorkflowJob.Labels.Contains("ktisis"))
         {
-            await Console.Out.WriteLineAsync($"Workflow is not set to use Ktisis.");
+            await Console.Out.WriteLineAsync("Workflow is not set to use Ktisis.");
 
             return;
         }
