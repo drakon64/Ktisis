@@ -121,4 +121,46 @@ internal class GitHubClient
             GitHubSerializerContext.Default.RunnerRegistrationToken
         );
     }
+
+    public async Task<Runner[]> ListSelfHostedRunners(string repo, long installationId)
+    {
+        var request = await HttpClient.SendAsync(
+            new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                Headers =
+                {
+                    {
+                        "Authorization",
+                        $"Bearer {await GetGitHubInstallationAccessToken(installationId)}"
+                    },
+                },
+                RequestUri = new Uri($"{GitHubApiUri}repos/{repo}/actions/runners"),
+            }
+        );
+
+        return (
+            await request.Content.ReadFromJsonAsync<SelfHostedRunners>(
+                GitHubSerializerContext.Default.SelfHostedRunners
+            )
+        )!.Runners;
+    }
+
+    public async Task DeleteSelfHostedRunner(string repo, int runnerId, long installationId)
+    {
+        var request = await HttpClient.SendAsync(
+            new HttpRequestMessage
+            {
+                Method = HttpMethod.Delete,
+                Headers =
+                {
+                    {
+                        "Authorization",
+                        $"Bearer {await GetGitHubInstallationAccessToken(installationId)}"
+                    },
+                },
+                RequestUri = new Uri($"{GitHubApiUri}repos/{repo}/actions/runners/{runnerId}"),
+            }
+        );
+    }
 }
