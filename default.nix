@@ -5,11 +5,23 @@
     in
     import npins.nixpkgs { },
 }:
+let
+  fs = pkgs.lib.fileset;
+  sourceFiles = fs.unions [
+    (fs.fileFilter (file: file.hasExt "cs" || file.hasExt "csproj") ./.)
+    ./appsettings.json
+    ./appsettings.Development.json
+    ./Properties/launchSettings.json
+  ];
+in
 pkgs.buildDotnetModule {
   pname = "ktisis";
   version = "0.0.1";
 
-  src = ./.;
+  src = fs.toSource {
+    fileset = sourceFiles;
+    root = ./.;
+  };
 
   projectFile = "Ktisis.csproj";
   nugetDeps = ./deps.nix;
