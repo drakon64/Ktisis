@@ -1,8 +1,8 @@
-name: Ktisis
+name: Ktisis Beta
 on:
   push:
     branches:
-     - main
+     - beta
     paths:
       - "**.cs"
       - "**.nix"
@@ -34,7 +34,7 @@ jobs:
 
       - run: docker load < result
 
-      - run: docker tag ktisis:latest ${{ secrets.GOOGLE_ARTIFACT_REGISTRY }}/ktisis:latest
+      - run: docker tag ktisis:latest ${{ secrets.GOOGLE_ARTIFACT_REGISTRY }}/ktisis:beta
 
       - uses: google-github-actions/auth@v2
         with:
@@ -45,11 +45,11 @@ jobs:
 
       - run: gcloud auth configure-docker ${{ vars.GOOGLE_REGION }}-docker.pkg.dev
 
-      - run: docker push ${{ secrets.GOOGLE_ARTIFACT_REGISTRY }}/ktisis:latest
+      - run: docker push ${{ secrets.GOOGLE_ARTIFACT_REGISTRY }}/ktisis:beta
 
       - uses: google-github-actions/deploy-cloudrun@v2
         with:
           service: ktisis
-          image: ${{ secrets.GOOGLE_ARTIFACT_REGISTRY }}/ktisis:latest
-          project_id: ${{ secrets.GOOGLE_PROJECT_ID }}
+          image: ${{ secrets.GOOGLE_ARTIFACT_REGISTRY }}/ktisis:beta
+          project_id: ${{ secrets.GOOGLE_PROJECT_ID_BETA }}
           region: ${{ vars.GOOGLE_REGION }}

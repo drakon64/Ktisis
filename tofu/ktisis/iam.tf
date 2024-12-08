@@ -1,17 +1,13 @@
-resource "google_project_service" "iam_credentials" {
-  service = "iamcredentials.googleapis.com"
-}
-
-resource "google_service_account" "github_actions" {
+data "google_service_account" "github_actions" {
   account_id = "github-actions"
 
-  display_name = "GitHub Actions"
+  project = var.common_project
 }
 
 resource "google_project_iam_member" "github_actions" {
-  member  = google_service_account.github_actions.member
+  member  = data.google_service_account.github_actions.member
   project = data.google_project.project.id
-  role    = "roles/owner"
+  role    = "roles/run.developer"
 }
 
 resource "google_service_account" "ktisis" {

@@ -10,21 +10,21 @@ resource "google_cloud_run_v2_service" "ktisis" {
 
   template {
     containers {
-      image = "${var.region}-docker.pkg.dev/${data.google_project.project.name}/ktisis/ktisis:latest"
+      image = "${var.region}-docker.pkg.dev/${var.common_project}/ktisis/ktisis:latest"
 
       env {
         name  = "PROJECT"
         value = var.project
       }
-      
+
       env {
-        name = "REPOSITORY_OWNERS"
+        name  = "REPOSITORY_OWNERS"
         value = "drakon64 lilyinstarlight"
       }
 
       env {
         name  = "ZONES"
-        value = "us-central1-a us-central1-b us-central1-c"
+        value = join(" ", var.zones)
       }
 
       env {
@@ -95,6 +95,7 @@ resource "google_cloud_run_v2_service" "ktisis" {
 
   depends_on = [
     google_project_service.cloud_run,
+    google_artifact_registry_repository_iam_member.ktisis,
     google_secret_manager_secret_iam_member.ktisis,
   ]
 }
