@@ -16,6 +16,12 @@ resource "google_service_account" "ktisis" {
   display_name = "Ktisis"
 }
 
+resource "google_service_account_iam_member" "ktisis" {
+  member             = data.google_service_account.github_actions.member
+  role               = "roles/iam.serviceAccountUser"
+  service_account_id = google_service_account.ktisis.id
+}
+
 resource "google_project_iam_member" "ktisis" {
   member  = google_service_account.ktisis.member
   project = data.google_project.project.id
