@@ -5,4 +5,4 @@ common_project   = "drakon64-ktisis"
 project          = "nixos-cosmic"
 region           = "europe-west2"
 repository_owner = "drakon64"
-zones            = ["us-central1-a", "us-central1-b", "us-central1-c"]
+zones            = ["northamerica-northeast1-a", "northamerica-northeast1-b", "northamerica-northeast1-c"]
