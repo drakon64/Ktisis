@@ -164,12 +164,14 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
             }
             case "completed":
             {
-                var instance = workflowJobEvent.WorkflowJob.RunnerName!;
-
                 // TODO: Get the instance zone rather than brute-forcing
                 foreach (var zone in Program.Zones)
                 {
-                    await GoogleClient.DeleteInstance(instance, Program.Project, zone);
+                    await GoogleClient.DeleteInstance(
+                        workflowJobEvent.WorkflowJob.RunnerName!,
+                        Program.Project,
+                        zone
+                    );
                 }
 
                 break;
