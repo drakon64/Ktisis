@@ -5,8 +5,19 @@ namespace Ktisis.Clients;
 
 internal static class GoogleClient
 {
-    private static async Task<AccessTokenResponse?> GetAccessToken()
+    private static AccessTokenResponse _accessToken = new()
     {
+        AccessToken = "",
+        ExpiresIn = 0,
+        TokenType = "",
+    };
+
+    private static async Task<AccessTokenResponse> GetAccessToken()
+    {
+        // If the current installation access token expires in less than a minute, generate a new one
+        if (_accessToken.ExpiresAt.Subtract(DateTime.Now).Minutes >= 1)
+            return _accessToken;
+
         var request = await Program.HttpClient.SendAsync(
             new HttpRequestMessage
             {
@@ -18,9 +29,13 @@ internal static class GoogleClient
             }
         );
 
-        return await request.Content.ReadFromJsonAsync<AccessTokenResponse>(
-            AccessTokenResponseSerializerContext.Default.AccessTokenResponse
-        );
+        _accessToken = (
+            await request.Content.ReadFromJsonAsync<AccessTokenResponse>(
+                AccessTokenResponseSerializerContext.Default.AccessTokenResponse
+            )
+        )!;
+
+        return _accessToken;
     }
 
     public static async Task CreateInstance(Instance instance, string project, string zone)
