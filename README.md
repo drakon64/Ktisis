@@ -17,7 +17,7 @@ Alternatively an ARM64 runner can be specified with:
 ```yaml
 jobs:
   job-name:
-    runs-on: [ linux, ARM64, self-hosted, ktisis ]
+    runs-on: [ linux, ARM64, self-hosted, ktisis, ktisis-c4a-standard-4 ]
 ```
 
 It is also possible to use a custom machine family and type, and allocate a custom-size boot disk:
@@ -28,7 +28,7 @@ jobs:
     runs-on: [ linux, x64, self-hosted, ktisis, ktisis-c3d-highcpu-4, ktisis-24GB ]
 ```
 
-By default, Ktisis will use a machine type similar to that of the GitHub-hosted Runners (`c3d-standard-4`/`c4a-standard-4`, 14GB boot disk).
+By default, Ktisis will use a machine type similar to that of the GitHub-hosted Runners (`c3d-standard-4`, 14GB boot disk).
 
 ## License
 
