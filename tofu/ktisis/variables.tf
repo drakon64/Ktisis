@@ -27,6 +27,11 @@ variable "repository_owner" {
   type = string
 }
 
+variable "tag" {
+  type    = string
+  default = "latest"
+}
+
 variable "zones" {
   type = list(string)
 }

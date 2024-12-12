@@ -10,7 +10,7 @@ resource "google_cloud_run_v2_service" "ktisis" {
 
   template {
     containers {
-      image = "${var.region}-docker.pkg.dev/${var.common_project}/ktisis/ktisis:latest"
+      image = "${var.region}-docker.pkg.dev/${var.common_project}/ktisis/ktisis:${var.tag}"
 
       env {
         name  = "PROJECT"
