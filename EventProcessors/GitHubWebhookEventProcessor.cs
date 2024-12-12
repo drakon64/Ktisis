@@ -158,7 +158,7 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                                              sudo -u runner ./config.sh --url https://github.com/{workflowJobEvent.Repository!.FullName} --token {(await Program.GitHubClient.CreateRunnerRegistrationToken(
                                                  workflowJobEvent.Repository!.FullName,
                                                  workflowJobEvent.Installation!.Id
-                                             )).Token} --ephemeral --labels ktisis,ktisis-{machineType},ktisis-{disk}GB
+                                             ))!.Token} --ephemeral --labels ktisis,ktisis-{machineType},ktisis-{disk}GB
                                              ./svc.sh install runner
                                              ./svc.sh start
                                              """,
