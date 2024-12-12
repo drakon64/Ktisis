@@ -1,6 +1,7 @@
 using Ktisis.Clients;
 using Ktisis.Models.GoogleCloud.Compute.Instances;
 using Ktisis.Models.GoogleCloud.Compute.Instances.Disks;
+using Ktisis.Models.GoogleCloud.Compute.Instances.NetworkInterfaces;
 using Octokit.Webhooks;
 using Octokit.Webhooks.Events;
 using Octokit.Webhooks.Events.WorkflowJob;
@@ -97,6 +98,14 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                             $"{workflowJobEvent.Repository!.FullName.Replace('/', '-')}-{workflowJobEvent.WorkflowJob.RunId}-{workflowJobEvent.WorkflowJob.Id}",
                         MachineType =
                             $"projects/{Program.Project}/zones/{zone}/machineTypes/{machineType}",
+                        NetworkInterfaces =
+                        [
+                            new NetworkInterface
+                            {
+                                Network = Environment.GetEnvironmentVariable("NETWORK"),
+                                Subnetwork = Environment.GetEnvironmentVariable("SUBNETWORK"),
+                            },
+                        ],
                         Disks =
                         [
                             new Disk
