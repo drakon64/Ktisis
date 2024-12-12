@@ -5,10 +5,7 @@ namespace Ktisis.Models.GoogleCloud;
 internal class AccessTokenResponse
 {
     public required string AccessToken { get; init; }
-
-    [JsonInclude]
-    public required ushort ExpiresIn { private get; init; }
-
+    public required ushort ExpiresIn { get; init; }
     public required string TokenType { get; init; }
 
     public readonly DateTime ExpiresAt;
