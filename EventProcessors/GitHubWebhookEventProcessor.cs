@@ -178,7 +178,7 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
             }
             default:
                 await Console.Out.WriteLineAsync(
-                    "Workflow action is not `queued` nor `completed`."
+                    "Workflow action is neither `queued` nor `completed`."
                 );
                 break;
         }
