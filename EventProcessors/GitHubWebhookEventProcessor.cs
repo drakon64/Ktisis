@@ -40,7 +40,7 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
         {
             case "queued":
             {
-                var machineType = "n4-standard-4";
+                var machineType = "c3d-standard-4";
                 var disk = "14";
                 var architecture = "amd64";
                 var runnerArchitecture = "x64";

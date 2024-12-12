@@ -28,7 +28,7 @@ jobs:
     runs-on: [ linux, x64, self-hosted, ktisis, ktisis-c3d-highcpu-4, ktisis-24GB ]
 ```
 
-By default, Ktisis will use a machine type similar to that of the GitHub-hosted Runners (`n4-standard-4`/`c4a-standard-4`, 14GB boot disk).
+By default, Ktisis will use a machine type similar to that of the GitHub-hosted Runners (`c3d-standard-4`/`c4a-standard-4`, 14GB boot disk).
 
 ## License
 
