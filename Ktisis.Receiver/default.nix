@@ -10,7 +10,6 @@ let
   sourceFiles = fs.unions [
     (fs.fileFilter (file: file.hasExt "cs" || file.hasExt "csproj") ./.)
     ./appsettings.json
-    ./appsettings.Development.json
     ./Properties/launchSettings.json
 
     (fs.fileFilter (file: file.hasExt "cs" || file.hasExt "csproj") ../Ktisis.Common)
