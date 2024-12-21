@@ -124,7 +124,7 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                                                 {
                                                     DiskSizeGb = disk,
                                                     SourceImage =
-                                                        $"projects/ubuntu-os-cloud/global/images/ubuntu-minimal-2404-noble-{architecture}-v20241116", // TODO: Don't hardcode this
+                                                        $"projects/ubuntu-os-cloud/global/images/ubuntu-minimal-2404-noble-{architecture}-v20241218a", // TODO: Don't hardcode this
                                                 },
                                             },
                                             new Disk
