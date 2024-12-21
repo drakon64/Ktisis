@@ -1,2 +1,2 @@
-deps.nix linguist-generated=true
+**/deps.nix linguist-generated=true
 npins/* linguist-generated=true
