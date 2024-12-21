@@ -1,8 +1,8 @@
 using System.Text.Json.Serialization;
-using Ktisis.Receiver.Models.GoogleCloud.Compute.Instances;
-using Ktisis.Receiver.Models.GoogleCloud.Tasks;
+using Ktisis.Common.Models.GoogleCloud.Compute.Instances;
+using Ktisis.Common.Models.GoogleCloud.Tasks;
 
-namespace Ktisis.Receiver.Models.GoogleCloud;
+namespace Ktisis.Common.Models.GoogleCloud;
 
 [JsonSerializable(typeof(CreateCloudTask))]
 [JsonSerializable(typeof(Instance))]
@@ -10,4 +10,4 @@ namespace Ktisis.Receiver.Models.GoogleCloud;
     IncludeFields = true,
     PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase
 )]
-internal partial class GoogleCloudSerializerContext : JsonSerializerContext;
+public partial class GoogleCloudSerializerContext : JsonSerializerContext;

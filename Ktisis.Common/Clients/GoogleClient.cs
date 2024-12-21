@@ -1,12 +1,12 @@
-using Ktisis.Receiver.Models.GoogleCloud;
-using Ktisis.Receiver.Models.GoogleCloud.Compute.Instances;
-using Ktisis.Receiver.Models.GoogleCloud.Tasks;
-using AccessTokenResponseSerializerContext = Ktisis.Receiver.Models.GoogleCloud.AccessTokenResponseSerializerContext;
-using GoogleCloudSerializerContext = Ktisis.Receiver.Models.GoogleCloud.GoogleCloudSerializerContext;
+using System.Net.Http.Json;
+using Ktisis.Common.Models.GoogleCloud;
+using Ktisis.Common.Models.GoogleCloud.Compute.Instances;
+using Ktisis.Common.Models.GoogleCloud.Tasks;
+using AccessTokenResponseSerializerContext = Ktisis.Common.Models.GoogleCloud.AccessTokenResponseSerializerContext;
 
-namespace Ktisis.Receiver.Clients;
+namespace Ktisis.Common.Clients;
 
-internal static class GoogleClient
+public static class GoogleClient
 {
     private static AccessTokenResponse _accessToken = new()
     {
@@ -14,8 +14,24 @@ internal static class GoogleClient
         ExpiresIn = 0,
         TokenType = "",
     };
+    
+    // TODO: Make this async
+    public static readonly string Project = Ktisis
+        .HttpClient.Send(
+            new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                Headers = { { "Metadata-Flavor", "Google" } },
+                RequestUri = new Uri(
+                    "http://metadata.google.internal/computeMetadata/v1/project/project-id"
+                ),
+            }
+        )
+        .Content.ReadAsStringAsync()
+        .Result;
 
-    private static readonly string Region = Program
+    // TODO: Make this async
+    private static readonly string Region = Ktisis
         .HttpClient.Send(
             new HttpRequestMessage
             {
@@ -39,7 +55,7 @@ internal static class GoogleClient
         if (_accessToken.ExpiresAt.Subtract(DateTime.Now).Minutes >= 1)
             return _accessToken;
 
-        var request = await Program.HttpClient.SendAsync(
+        var request = await Ktisis.HttpClient.SendAsync(
             new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
@@ -63,7 +79,7 @@ internal static class GoogleClient
     {
         var accessToken = await GetAccessToken();
 
-        var request = await Program.HttpClient.SendAsync(
+        var request = await Ktisis.HttpClient.SendAsync(
             new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
@@ -73,7 +89,7 @@ internal static class GoogleClient
                     { "Authorization", $"{accessToken.TokenType} {accessToken.AccessToken}" },
                 },
                 RequestUri = new Uri(
-                    $"https://cloudtasks.googleapis.com/v2/projects/{Program.Project}/locations/{Region}/queues/{Queue}/tasks"
+                    $"https://cloudtasks.googleapis.com/v2/projects/{Project}/locations/{Region}/queues/{Queue}/tasks"
                 ),
             }
         );
@@ -85,7 +101,7 @@ internal static class GoogleClient
     {
         var accessToken = await GetAccessToken();
 
-        var request = await Program.HttpClient.SendAsync(
+        var request = await Ktisis.HttpClient.SendAsync(
             new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
@@ -110,7 +126,7 @@ internal static class GoogleClient
     {
         var accessToken = await GetAccessToken();
 
-        var request = await Program.HttpClient.SendAsync(
+        var request = await Ktisis.HttpClient.SendAsync(
             new HttpRequestMessage
             {
                 Method = HttpMethod.Delete,

@@ -1,4 +1,4 @@
-namespace Ktisis.Receiver.Models.GitHub;
+namespace Ktisis.Common.Models.GitHub;
 
 internal class InstallationAccessToken
 {

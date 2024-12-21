@@ -1,8 +1,8 @@
 using System.Text.Json.Serialization;
 
-namespace Ktisis.Receiver.Models.GoogleCloud.Tasks;
+namespace Ktisis.Common.Models.GoogleCloud.Tasks;
 
-internal class CloudTaskHttpRequest(string body)
+public class CloudTaskHttpRequest(string body)
 {
     public required string Url { get; init; }
     public const string HttpMethod = "POST";

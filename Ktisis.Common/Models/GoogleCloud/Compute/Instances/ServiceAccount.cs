@@ -1,6 +1,6 @@
-namespace Ktisis.Receiver.Models.GoogleCloud.Compute.Instances;
+namespace Ktisis.Common.Models.GoogleCloud.Compute.Instances;
 
-internal class ServiceAccount
+public class ServiceAccount
 {
     public string Email =
         Environment.GetEnvironmentVariable("COMPUTE_SERVICE_ACCOUNT")

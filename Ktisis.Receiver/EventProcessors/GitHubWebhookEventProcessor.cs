@@ -1,13 +1,13 @@
 using System.Text.Json;
-using Ktisis.Receiver.Clients;
-using Ktisis.Receiver.Models.GoogleCloud.Compute.Instances;
-using Ktisis.Receiver.Models.GoogleCloud.Compute.Instances.Disks;
-using Ktisis.Receiver.Models.GoogleCloud.Compute.Instances.NetworkInterfaces;
-using Ktisis.Receiver.Models.GoogleCloud.Tasks;
+using Ktisis.Common.Clients;
+using Ktisis.Common.Models.GoogleCloud;
+using Ktisis.Common.Models.GoogleCloud.Compute.Instances;
+using Ktisis.Common.Models.GoogleCloud.Compute.Instances.Disks;
+using Ktisis.Common.Models.GoogleCloud.Compute.Instances.NetworkInterfaces;
+using Ktisis.Common.Models.GoogleCloud.Tasks;
 using Octokit.Webhooks;
 using Octokit.Webhooks.Events;
 using Octokit.Webhooks.Events.WorkflowJob;
-using GoogleCloudSerializerContext = Ktisis.Receiver.Models.GoogleCloud.GoogleCloudSerializerContext;
 
 namespace Ktisis.Receiver.EventProcessors;
 
@@ -106,7 +106,7 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                                         Name =
                                             $"{workflowJobEvent.Repository!.FullName.Replace('/', '-')}-{workflowJobEvent.WorkflowJob.RunId}-{workflowJobEvent.WorkflowJob.Id}",
                                         MachineType =
-                                            $"projects/{Program.Project}/zones/{zone}/machineTypes/{machineType}",
+                                            $"projects/{GoogleClient.Project}/zones/{zone}/machineTypes/{machineType}",
                                         NetworkInterfaces =
                                         [
                                             new NetworkInterface
@@ -176,12 +176,10 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                                                     tar xf actions-runner-linux-{runnerArchitecture}-2.321.0.tar.gz
                                                     rm actions-runner-linux-{runnerArchitecture}-2.321.0.tar.gz
 
-                                                    sudo -u runner ./config.sh --url https://github.com/{workflowJobEvent.Repository!.FullName} --token {(
-                                                        await Program.GitHubClient.CreateRunnerRegistrationToken(
-                                                            workflowJobEvent.Repository!.FullName,
-                                                            workflowJobEvent.Installation!.Id
-                                                        )
-                                                    )!.Token} --ephemeral --labels ktisis,ktisis-{machineType},ktisis-{disk}GB
+                                                    sudo -u runner ./config.sh --url https://github.com/{workflowJobEvent.Repository!.FullName} --token {await Program.GitHubClient.CreateRunnerRegistrationToken(
+                                                        workflowJobEvent.Repository!.FullName,
+                                                        workflowJobEvent.Installation!.Id
+                                                    )} --ephemeral --labels ktisis,ktisis-{machineType},ktisis-{disk}GB
                                                     ./svc.sh install runner
                                                     ./svc.sh start
                                                     """,
@@ -209,7 +207,7 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                 {
                     await GoogleClient.DeleteInstance(
                         workflowJobEvent.WorkflowJob.RunnerName!,
-                        Program.Project,
+                        GoogleClient.Project,
                         zone
                     );
                 }

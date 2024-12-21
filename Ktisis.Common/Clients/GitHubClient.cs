@@ -1,13 +1,13 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http.Json;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using Ktisis.Receiver.Models.GitHub;
+using Ktisis.Common.Models.GitHub;
 using Microsoft.IdentityModel.Tokens;
-using GitHubSerializerContext = Ktisis.Receiver.Models.GitHub.GitHubSerializerContext;
 
-namespace Ktisis.Receiver.Clients;
+namespace Ktisis.Common.Clients;
 
-internal class GitHubClient
+public class GitHubClient
 {
     private readonly SigningCredentials _githubSigningCredentials;
     private readonly string _githubClientId;
@@ -66,7 +66,7 @@ internal class GitHubClient
 
         await Console.Out.WriteLineAsync("Generating new GitHub installation access token");
 
-        var responseMessage = await Program.HttpClient.SendAsync(
+        var responseMessage = await Ktisis.HttpClient.SendAsync(
             new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
@@ -92,12 +92,12 @@ internal class GitHubClient
         return _githubInstallationAccessToken.Token;
     }
 
-    public async Task<RunnerRegistrationToken?> CreateRunnerRegistrationToken(
+    public async Task<string> CreateRunnerRegistrationToken(
         string repo,
         long installationId
     )
     {
-        var request = await Program.HttpClient.SendAsync(
+        var request = await Ktisis.HttpClient.SendAsync(
             new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
@@ -117,8 +117,8 @@ internal class GitHubClient
             }
         );
 
-        return await request.Content.ReadFromJsonAsync<RunnerRegistrationToken>(
+        return (await request.Content.ReadFromJsonAsync<RunnerRegistrationToken>(
             GitHubSerializerContext.Default.RunnerRegistrationToken
-        );
+        ))!.Token;
     }
 }

@@ -1,4 +1,4 @@
-using Ktisis.Receiver.Clients;
+using Ktisis.Common.Clients;
 using Ktisis.Receiver.EventProcessors;
 using Octokit.Webhooks;
 using Octokit.Webhooks.AspNetCore;
@@ -11,15 +11,9 @@ public class Program
         .GetEnvironmentVariable("REPOSITORY_OWNERS")
         ?.Split(' ');
 
-    internal static readonly string Project =
-        Environment.GetEnvironmentVariable("PROJECT")
-        ?? throw new InvalidOperationException("PROJECT is null");
-
     internal static readonly string[] Zones =
         Environment.GetEnvironmentVariable("ZONES")?.Split(' ')
         ?? throw new InvalidOperationException("ZONE is null");
-
-    internal static readonly HttpClient HttpClient = new();
 
     internal static readonly GitHubClient GitHubClient = new(
         Environment.GetEnvironmentVariable("GITHUB_PRIVATE_KEY")

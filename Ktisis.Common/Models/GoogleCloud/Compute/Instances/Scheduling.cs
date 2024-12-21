@@ -1,12 +1,12 @@
-namespace Ktisis.Receiver.Models.GoogleCloud.Compute.Instances;
+namespace Ktisis.Common.Models.GoogleCloud.Compute.Instances;
 
-internal class Scheduling
+public class Scheduling
 {
     public string InstanceTerminationAction = "DELETE";
     public MaxRunDuration MaxRunDuration = new();
 }
 
-internal class MaxRunDuration
+public class MaxRunDuration
 {
     public string Seconds = "21600";
 }

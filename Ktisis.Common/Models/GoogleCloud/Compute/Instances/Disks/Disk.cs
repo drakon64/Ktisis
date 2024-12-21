@@ -1,6 +1,6 @@
-namespace Ktisis.Receiver.Models.GoogleCloud.Compute.Instances.Disks;
+namespace Ktisis.Common.Models.GoogleCloud.Compute.Instances.Disks;
 
-internal class Disk
+public class Disk
 {
     public string? DeviceName { get; init; }
     public bool? Boot { get; init; }

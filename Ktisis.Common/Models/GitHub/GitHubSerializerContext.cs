@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Ktisis.Receiver.Models.GitHub;
+namespace Ktisis.Common.Models.GitHub;
 
 [JsonSerializable(typeof(InstallationAccessToken))]
 [JsonSerializable(typeof(RunnerRegistrationToken))]

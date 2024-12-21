@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Ktisis.Receiver.Models.GoogleCloud;
+namespace Ktisis.Common.Models.GoogleCloud;
 
 internal class AccessTokenResponse
 {

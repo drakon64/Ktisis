@@ -1,11 +1,11 @@
-namespace Ktisis.Receiver.Models.GoogleCloud.Compute.Instances;
+namespace Ktisis.Common.Models.GoogleCloud.Compute.Instances;
 
-internal class Metadata
+public class Metadata
 {
     public required MetadataItem[] Items { get; init; }
 }
 
-internal class MetadataItem
+public class MetadataItem
 {
     public required string Key { get; init; }
     public required string Value { get; init; }
