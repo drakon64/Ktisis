@@ -6,6 +6,10 @@ namespace Ktisis.Receiver;
 
 public class Program
 {
+    internal static readonly string ServiceAccountEmail =
+        Environment.GetEnvironmentVariable("COMPUTE_SERVICE_ACCOUNT")
+        ?? throw new InvalidOperationException("COMPUTE_SERVICE_ACCOUNT is null.");
+
     internal static readonly string TaskServiceUrl =
         Environment.GetEnvironmentVariable("TASK_SERVICE_URL")
         ?? throw new InvalidOperationException("TASK_SERVICE_URL is null.");

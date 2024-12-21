@@ -101,7 +101,7 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                         {
                             HttpRequest = new CloudTaskHttpRequest(
                                 JsonSerializer.Serialize(
-                                    new Instance
+                                    new Instance(Program.ServiceAccountEmail)
                                     {
                                         Name =
                                             $"{workflowJobEvent.Repository!.FullName.Replace('/', '-')}-{workflowJobEvent.WorkflowJob.RunId}-{workflowJobEvent.WorkflowJob.Id}",

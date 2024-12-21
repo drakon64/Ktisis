@@ -2,9 +2,7 @@ namespace Ktisis.Common.Models.GoogleCloud.Compute.Instances;
 
 public class ServiceAccount
 {
-    public readonly string Email =
-        Environment.GetEnvironmentVariable("COMPUTE_SERVICE_ACCOUNT")
-        ?? throw new InvalidOperationException("COMPUTE_SERVICE_ACCOUNT is null.");
+    public required string Email { get; init; }
     public readonly string[] Scopes =
     [
         "https://www.googleapis.com/auth/devstorage.read_only",
