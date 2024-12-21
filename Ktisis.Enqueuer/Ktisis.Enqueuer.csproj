@@ -12,4 +12,8 @@
     <PublishReadyToRunComposite>true</PublishReadyToRunComposite>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Ktisis.Common\Ktisis.Common.csproj" />
+  </ItemGroup>
+
 </Project>
