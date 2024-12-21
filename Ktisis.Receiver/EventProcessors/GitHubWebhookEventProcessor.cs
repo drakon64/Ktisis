@@ -111,12 +111,8 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                                         [
                                             new NetworkInterface
                                             {
-                                                Network = Environment.GetEnvironmentVariable(
-                                                    "NETWORK"
-                                                ),
-                                                Subnetwork = Environment.GetEnvironmentVariable(
-                                                    "SUBNETWORK"
-                                                ),
+                                                Network = Program.Network,
+                                                Subnetwork = Program.Subnetwork,
                                             },
                                         ],
                                         Disks =

@@ -6,6 +6,10 @@ namespace Ktisis.Receiver;
 
 public class Program
 {
+    internal static readonly string? Network = Environment.GetEnvironmentVariable("NETWORK");
+
+    internal static readonly string? Subnetwork = Environment.GetEnvironmentVariable("SUBNETWORK");
+
     internal static readonly string ServiceAccountEmail =
         Environment.GetEnvironmentVariable("COMPUTE_SERVICE_ACCOUNT")
         ?? throw new InvalidOperationException("COMPUTE_SERVICE_ACCOUNT is null.");
