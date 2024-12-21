@@ -101,7 +101,7 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                         {
                             HttpRequest = new CloudTaskHttpRequest(
                                 JsonSerializer.Serialize(
-                                    new Instance(Program.ServiceAccountEmail)
+                                    new Instance
                                     {
                                         Name =
                                             $"{workflowJobEvent.Repository!.FullName.Replace('/', '-')}-{workflowJobEvent.WorkflowJob.RunId}-{workflowJobEvent.WorkflowJob.Id}",
@@ -186,6 +186,13 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                                                 },
                                             ],
                                         },
+                                        ServiceAccounts =
+                                        [
+                                            new ServiceAccount
+                                            {
+                                                Email = Program.ServiceAccountEmail,
+                                            },
+                                        ],
                                     },
                                     GoogleCloudSerializerContext.Default.Instance
                                 )
