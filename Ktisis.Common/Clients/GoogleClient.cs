@@ -14,7 +14,7 @@ public static class GoogleClient
         ExpiresIn = 0,
         TokenType = "",
     };
-    
+
     // TODO: Make this async
     public static readonly string Project = Ktisis
         .HttpClient.Send(
