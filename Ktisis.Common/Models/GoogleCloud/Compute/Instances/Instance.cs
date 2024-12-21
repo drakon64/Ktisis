@@ -10,6 +10,6 @@ public class Instance
     public required NetworkInterface[] NetworkInterfaces { get; init; }
     public required Disk[] Disks { get; init; }
     public required Metadata Metadata { get; init; }
-    public ServiceAccount[] ServiceAccounts = [new()];
-    public Scheduling Scheduling = new();
+    public readonly ServiceAccount[] ServiceAccounts = [new()];
+    public readonly Scheduling Scheduling = new();
 }

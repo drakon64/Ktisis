@@ -5,5 +5,5 @@ public class Disk
     public string? DeviceName { get; init; }
     public bool? Boot { get; init; }
     public required DiskInitializeParams InitializeParams { get; init; }
-    public bool AutoDelete = true;
+    public const bool AutoDelete = true;
 }
