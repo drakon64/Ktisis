@@ -1,5 +1,3 @@
-using System.Text.Json.Serialization;
-
 namespace Ktisis.Common.Models.GoogleCloud.Tasks;
 
 public class CloudTaskHttpRequest(string body)
@@ -11,7 +9,4 @@ public class CloudTaskHttpRequest(string body)
         { "Content-Type", "application/json" },
     };
     public readonly string Body = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(body));
-
-    [JsonPropertyName("oauthToken")]
-    public required OAuthToken OAuthToken { get; init; }
 }

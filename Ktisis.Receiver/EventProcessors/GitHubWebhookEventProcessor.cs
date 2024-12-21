@@ -191,8 +191,7 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                                 )
                             )
                             {
-                                Url = "",
-                                OAuthToken = new OAuthToken { ServiceAccountEmail = "" },
+                                Url = Program.TaskServiceUrl,
                             },
                         },
                     }
