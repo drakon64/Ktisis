@@ -52,7 +52,7 @@ internal static class GoogleClient
                 ),
                 Headers =
                 {
-                    { "Authorization", $"{accessToken!.TokenType} {accessToken.AccessToken}" },
+                    { "Authorization", $"{accessToken.TokenType} {accessToken.AccessToken}" },
                 },
                 RequestUri = new Uri(
                     $"https://compute.googleapis.com/compute/v1/projects/{project}/zones/{zone}/instances"
@@ -73,7 +73,7 @@ internal static class GoogleClient
                 Method = HttpMethod.Delete,
                 Headers =
                 {
-                    { "Authorization", $"{accessToken!.TokenType} {accessToken.AccessToken}" },
+                    { "Authorization", $"{accessToken.TokenType} {accessToken.AccessToken}" },
                 },
                 RequestUri = new Uri(
                     $"https://compute.googleapis.com/compute/v1/projects/{project}/zones/{zone}/instances/{instance}"
