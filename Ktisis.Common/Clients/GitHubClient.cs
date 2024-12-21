@@ -7,34 +7,39 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Ktisis.Common.Clients;
 
-public class GitHubClient
+public static class GitHubClient
 {
-    private readonly SigningCredentials _githubSigningCredentials;
-    private readonly string _githubClientId;
+    private static readonly string GitHubClientId =
+        Environment.GetEnvironmentVariable("GITHUB_CLIENT_ID")
+        ?? throw new InvalidOperationException("GITHUB_CLIENT_ID is null.");
 
-    public GitHubClient(string githubPrivateKey, string githubClientId)
+    private static readonly SigningCredentials GitHubSigningCredentials;
+
+    static GitHubClient()
     {
+        var githubPrivateKey =
+            Environment.GetEnvironmentVariable("GITHUB_PRIVATE_KEY")
+            ?? throw new InvalidOperationException("GITHUB_PRIVATE_KEY is null.");
+
         var rsa = RSA.Create();
         rsa.ImportFromPem(githubPrivateKey);
 
-        _githubSigningCredentials = new SigningCredentials(
+        GitHubSigningCredentials = new SigningCredentials(
             new RsaSecurityKey(rsa),
             SecurityAlgorithms.RsaSha256
         )
         {
             CryptoProviderFactory = new CryptoProviderFactory { CacheSignatureProviders = false },
         };
-
-        _githubClientId = githubClientId;
     }
 
-    private string GenerateJwtSecurityToken()
+    private static string GenerateJwtSecurityToken()
     {
         var now = DateTime.UtcNow;
         var expires = now.AddSeconds(100);
 
         var jwt = new JwtSecurityToken(
-            issuer: _githubClientId,
+            issuer: GitHubClientId,
             claims:
             [
                 new Claim(
@@ -44,7 +49,7 @@ public class GitHubClient
                 ),
             ],
             expires: expires,
-            signingCredentials: _githubSigningCredentials
+            signingCredentials: GitHubSigningCredentials
         );
 
         return new JwtSecurityTokenHandler().WriteToken(jwt);
@@ -52,13 +57,13 @@ public class GitHubClient
 
     private const string GitHubApiUri = "https://api.github.com/";
 
-    private InstallationAccessToken _githubInstallationAccessToken = new()
+    private static InstallationAccessToken _githubInstallationAccessToken = new()
     {
         Token = "",
         ExpiresAt = DateTime.Now,
     };
 
-    private async Task<string> GetGitHubInstallationAccessToken(long installationId)
+    private static async Task<string> GetGitHubInstallationAccessToken(long installationId)
     {
         // If the current installation access token expires in less than a minute, generate a new one
         if (_githubInstallationAccessToken.ExpiresAt.Subtract(DateTime.Now).Minutes >= 1)
@@ -92,10 +97,7 @@ public class GitHubClient
         return _githubInstallationAccessToken.Token;
     }
 
-    public async Task<string> CreateRunnerRegistrationToken(
-        string repo,
-        long installationId
-    )
+    public static async Task<string> CreateRunnerRegistrationToken(string repo, long installationId)
     {
         var request = await Ktisis.HttpClient.SendAsync(
             new HttpRequestMessage
@@ -117,8 +119,10 @@ public class GitHubClient
             }
         );
 
-        return (await request.Content.ReadFromJsonAsync<RunnerRegistrationToken>(
-            GitHubSerializerContext.Default.RunnerRegistrationToken
-        ))!.Token;
+        return (
+            await request.Content.ReadFromJsonAsync<RunnerRegistrationToken>(
+                GitHubSerializerContext.Default.RunnerRegistrationToken
+            )
+        )!.Token;
     }
 }

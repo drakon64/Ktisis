@@ -176,7 +176,7 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                                                     tar xf actions-runner-linux-{runnerArchitecture}-2.321.0.tar.gz
                                                     rm actions-runner-linux-{runnerArchitecture}-2.321.0.tar.gz
 
-                                                    sudo -u runner ./config.sh --url https://github.com/{workflowJobEvent.Repository!.FullName} --token {await Program.GitHubClient.CreateRunnerRegistrationToken(
+                                                    sudo -u runner ./config.sh --url https://github.com/{workflowJobEvent.Repository!.FullName} --token {await GitHubClient.CreateRunnerRegistrationToken(
                                                         workflowJobEvent.Repository!.FullName,
                                                         workflowJobEvent.Installation!.Id
                                                     )} --ephemeral --labels ktisis,ktisis-{machineType},ktisis-{disk}GB
