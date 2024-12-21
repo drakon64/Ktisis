@@ -4,7 +4,7 @@ using Ktisis.Models.GoogleCloud.Tasks;
 
 namespace Ktisis.Models.GoogleCloud;
 
-[JsonSerializable(typeof(CreateTask))]
+[JsonSerializable(typeof(CreateCloudTask))]
 [JsonSerializable(typeof(Instance))]
 [JsonSourceGenerationOptions(
     IncludeFields = true,

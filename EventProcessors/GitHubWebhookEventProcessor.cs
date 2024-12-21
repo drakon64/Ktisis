@@ -8,8 +8,6 @@ using Ktisis.Models.GoogleCloud.Tasks;
 using Octokit.Webhooks;
 using Octokit.Webhooks.Events;
 using Octokit.Webhooks.Events.WorkflowJob;
-using HttpRequest = Ktisis.Models.GoogleCloud.Tasks.HttpRequest;
-using Task = System.Threading.Tasks.Task;
 
 namespace Ktisis.EventProcessors;
 
@@ -97,11 +95,11 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                 }
 
                 await GoogleClient.CreateTask(
-                    new CreateTask
+                    new CreateCloudTask
                     {
-                        Task = new Models.GoogleCloud.Tasks.Task
+                        Task = new CloudTask
                         {
-                            HttpRequest = new HttpRequest(
+                            HttpRequest = new CloudTaskHttpRequest(
                                 JsonSerializer.Serialize(
                                     new Instance
                                     {

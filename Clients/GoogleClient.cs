@@ -1,7 +1,6 @@
 using Ktisis.Models.GoogleCloud;
 using Ktisis.Models.GoogleCloud.Compute.Instances;
 using Ktisis.Models.GoogleCloud.Tasks;
-using Task = System.Threading.Tasks.Task;
 
 namespace Ktisis.Clients;
 
@@ -58,7 +57,7 @@ internal static class GoogleClient
         return _accessToken;
     }
 
-    public static async Task CreateTask(CreateTask task)
+    public static async Task CreateTask(CreateCloudTask task)
     {
         var accessToken = await GetAccessToken();
 
