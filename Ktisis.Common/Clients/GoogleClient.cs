@@ -2,7 +2,6 @@ using System.Net.Http.Json;
 using Ktisis.Common.Models.GoogleCloud;
 using Ktisis.Common.Models.GoogleCloud.Compute.Instances;
 using Ktisis.Common.Models.GoogleCloud.Tasks;
-using AccessTokenResponseSerializerContext = Ktisis.Common.Models.GoogleCloud.AccessTokenResponseSerializerContext;
 
 namespace Ktisis.Common.Clients;
 
