@@ -2,7 +2,11 @@
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ktisis.Common", "Ktisis.Common\Ktisis.Common.csproj", "{45EDD23D-C37F-4B1F-B8B4-21AE42964828}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ktisis.Receiver", "Ktisis.Receiver\Ktisis.Receiver.csproj", "{61A62303-8DFD-4391-A318-C4DE4CECB948}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ktisis.Enqueuer", "Ktisis.Enqueuer\Ktisis.Enqueuer.csproj", "{523CD1CC-A36D-45C5-B112-2EF9566274F4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,9 +17,17 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{45EDD23D-C37F-4B1F-B8B4-21AE42964828}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45EDD23D-C37F-4B1F-B8B4-21AE42964828}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45EDD23D-C37F-4B1F-B8B4-21AE42964828}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45EDD23D-C37F-4B1F-B8B4-21AE42964828}.Release|Any CPU.Build.0 = Release|Any CPU
 		{61A62303-8DFD-4391-A318-C4DE4CECB948}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{61A62303-8DFD-4391-A318-C4DE4CECB948}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61A62303-8DFD-4391-A318-C4DE4CECB948}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61A62303-8DFD-4391-A318-C4DE4CECB948}.Release|Any CPU.Build.0 = Release|Any CPU
+		{523CD1CC-A36D-45C5-B112-2EF9566274F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{523CD1CC-A36D-45C5-B112-2EF9566274F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{523CD1CC-A36D-45C5-B112-2EF9566274F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{523CD1CC-A36D-45C5-B112-2EF9566274F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
