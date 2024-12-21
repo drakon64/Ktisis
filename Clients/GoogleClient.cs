@@ -46,7 +46,10 @@ internal static class GoogleClient
             new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
-                Content = JsonContent.Create(instance, InstanceSerializerContext.Default.Instance),
+                Content = JsonContent.Create(
+                    instance,
+                    GoogleCloudSerializerContext.Default.Instance
+                ),
                 Headers =
                 {
                     { "Authorization", $"{accessToken!.TokenType} {accessToken.AccessToken}" },

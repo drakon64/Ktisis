@@ -1,4 +1,3 @@
-using System.Text.Json.Serialization;
 using Ktisis.Models.GoogleCloud.Compute.Instances.Disks;
 using Ktisis.Models.GoogleCloud.Compute.Instances.NetworkInterfaces;
 
@@ -14,10 +13,3 @@ internal class Instance
     public ServiceAccount[] ServiceAccounts = [new()];
     public Scheduling Scheduling = new();
 }
-
-[JsonSerializable(typeof(Instance))]
-[JsonSourceGenerationOptions(
-    IncludeFields = true,
-    PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase
-)]
-internal partial class InstanceSerializerContext : JsonSerializerContext;
