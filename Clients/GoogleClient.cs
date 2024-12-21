@@ -1,5 +1,7 @@
 using Ktisis.Models.GoogleCloud;
 using Ktisis.Models.GoogleCloud.Compute.Instances;
+using Ktisis.Models.GoogleCloud.Tasks;
+using Task = System.Threading.Tasks.Task;
 
 namespace Ktisis.Clients;
 
@@ -11,6 +13,24 @@ internal static class GoogleClient
         ExpiresIn = 0,
         TokenType = "",
     };
+
+    private static readonly string Region = Program
+        .HttpClient.Send(
+            new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                Headers = { { "Metadata-Flavor", "Google" } },
+                RequestUri = new Uri(
+                    "http://metadata.google.internal/computeMetadata/v1/instance/region"
+                ),
+            }
+        )
+        .Content.ReadAsStringAsync()
+        .Result;
+
+    private static readonly string Queue =
+        Environment.GetEnvironmentVariable("QUEUE")
+        ?? throw new InvalidOperationException("QUEUE is null");
 
     private static async Task<AccessTokenResponse> GetAccessToken()
     {
@@ -36,6 +56,28 @@ internal static class GoogleClient
         )!;
 
         return _accessToken;
+    }
+
+    public static async Task CreateTask(CreateTask task)
+    {
+        var accessToken = await GetAccessToken();
+
+        var request = await Program.HttpClient.SendAsync(
+            new HttpRequestMessage
+            {
+                Method = HttpMethod.Post,
+                Content = JsonContent.Create(task, GoogleCloudSerializerContext.Default.Instance),
+                Headers =
+                {
+                    { "Authorization", $"{accessToken.TokenType} {accessToken.AccessToken}" },
+                },
+                RequestUri = new Uri(
+                    $"https://cloudtasks.googleapis.com/v2/projects/{Program.Project}/locations/{Region}/queues/{Queue}/tasks"
+                ),
+            }
+        );
+
+        await Console.Out.WriteLineAsync(await request.Content.ReadAsStringAsync());
     }
 
     public static async Task CreateInstance(Instance instance, string project, string zone)

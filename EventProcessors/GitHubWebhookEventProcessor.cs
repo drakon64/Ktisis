@@ -1,10 +1,15 @@
+using System.Text.Json;
 using Ktisis.Clients;
+using Ktisis.Models.GoogleCloud;
 using Ktisis.Models.GoogleCloud.Compute.Instances;
 using Ktisis.Models.GoogleCloud.Compute.Instances.Disks;
 using Ktisis.Models.GoogleCloud.Compute.Instances.NetworkInterfaces;
+using Ktisis.Models.GoogleCloud.Tasks;
 using Octokit.Webhooks;
 using Octokit.Webhooks.Events;
 using Octokit.Webhooks.Events.WorkflowJob;
+using HttpRequest = Ktisis.Models.GoogleCloud.Tasks.HttpRequest;
+using Task = System.Threading.Tasks.Task;
 
 namespace Ktisis.EventProcessors;
 
@@ -91,84 +96,112 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                     }
                 }
 
-                await GoogleClient.CreateInstance(
-                    new Instance
+                await GoogleClient.CreateTask(
+                    new CreateTask
                     {
-                        Name =
-                            $"{workflowJobEvent.Repository!.FullName.Replace('/', '-')}-{workflowJobEvent.WorkflowJob.RunId}-{workflowJobEvent.WorkflowJob.Id}",
-                        MachineType =
-                            $"projects/{Program.Project}/zones/{zone}/machineTypes/{machineType}",
-                        NetworkInterfaces =
-                        [
-                            new NetworkInterface
-                            {
-                                Network = Environment.GetEnvironmentVariable("NETWORK"),
-                                Subnetwork = Environment.GetEnvironmentVariable("SUBNETWORK"),
-                            },
-                        ],
-                        Disks =
-                        [
-                            new Disk
-                            {
-                                Boot = true,
-                                InitializeParams = new DiskInitializeParams(zone)
-                                {
-                                    DiskSizeGb = disk,
-                                    SourceImage =
-                                        $"projects/ubuntu-os-cloud/global/images/ubuntu-minimal-2404-noble-{architecture}-v20241116", // TODO: Don't hardcode this
-                                },
-                            },
-                            new Disk
-                            {
-                                DeviceName = "swap",
-                                InitializeParams = new DiskInitializeParams(zone)
-                                {
-                                    DiskSizeGb = "16",
-                                },
-                            },
-                        ],
-                        Metadata = new Metadata
+                        Task = new Models.GoogleCloud.Tasks.Task
                         {
-                            Items =
-                            [
-                                new MetadataItem { Key = "enable-oslogin", Value = "true" },
-                                new MetadataItem { Key = "enable-oslogin-2fa", Value = "true" },
-                                new MetadataItem
-                                {
-                                    Key = "startup-script",
-                                    Value = $"""
-                                             #!/bin/sh -ex
+                            HttpRequest = new HttpRequest(
+                                JsonSerializer.Serialize(
+                                    new Instance
+                                    {
+                                        Name =
+                                            $"{workflowJobEvent.Repository!.FullName.Replace('/', '-')}-{workflowJobEvent.WorkflowJob.RunId}-{workflowJobEvent.WorkflowJob.Id}",
+                                        MachineType =
+                                            $"projects/{Program.Project}/zones/{zone}/machineTypes/{machineType}",
+                                        NetworkInterfaces =
+                                        [
+                                            new NetworkInterface
+                                            {
+                                                Network = Environment.GetEnvironmentVariable(
+                                                    "NETWORK"
+                                                ),
+                                                Subnetwork = Environment.GetEnvironmentVariable(
+                                                    "SUBNETWORK"
+                                                ),
+                                            },
+                                        ],
+                                        Disks =
+                                        [
+                                            new Disk
+                                            {
+                                                Boot = true,
+                                                InitializeParams = new DiskInitializeParams(zone)
+                                                {
+                                                    DiskSizeGb = disk,
+                                                    SourceImage =
+                                                        $"projects/ubuntu-os-cloud/global/images/ubuntu-minimal-2404-noble-{architecture}-v20241116", // TODO: Don't hardcode this
+                                                },
+                                            },
+                                            new Disk
+                                            {
+                                                DeviceName = "swap",
+                                                InitializeParams = new DiskInitializeParams(zone)
+                                                {
+                                                    DiskSizeGb = "16",
+                                                },
+                                            },
+                                        ],
+                                        Metadata = new Metadata
+                                        {
+                                            Items =
+                                            [
+                                                new MetadataItem
+                                                {
+                                                    Key = "enable-oslogin",
+                                                    Value = "true",
+                                                },
+                                                new MetadataItem
+                                                {
+                                                    Key = "enable-oslogin-2fa",
+                                                    Value = "true",
+                                                },
+                                                new MetadataItem
+                                                {
+                                                    Key = "startup-script",
+                                                    Value = $"""
+                                                    #!/bin/sh -ex
 
-                                             sysctl vm.swappiness=1
-                                             mkswap /dev/disk/by-id/google-swap
-                                             swapon /dev/disk/by-id/google-swap
+                                                    sysctl vm.swappiness=1
+                                                    mkswap /dev/disk/by-id/google-swap
+                                                    swapon /dev/disk/by-id/google-swap
 
-                                             curl -sSO https://dl.google.com/cloudagents/add-google-cloud-ops-agent-repo.sh
-                                             bash add-google-cloud-ops-agent-repo.sh --also-install
-                                             rm add-google-cloud-ops-agent-repo.sh
+                                                    curl -sSO https://dl.google.com/cloudagents/add-google-cloud-ops-agent-repo.sh
+                                                    bash add-google-cloud-ops-agent-repo.sh --also-install
+                                                    rm add-google-cloud-ops-agent-repo.sh
 
-                                             adduser --home /runner --shell /bin/sh runner
-                                             echo '%runner ALL=(ALL:ALL) NOPASSWD:ALL' > /etc/sudoers.d/runner
-                                             cd /runner
+                                                    adduser --home /runner --shell /bin/sh runner
+                                                    echo '%runner ALL=(ALL:ALL) NOPASSWD:ALL' > /etc/sudoers.d/runner
+                                                    cd /runner
 
-                                             wget https://github.com/actions/runner/releases/download/v2.321.0/actions-runner-linux-{runnerArchitecture}-2.321.0.tar.gz
-                                             tar xf actions-runner-linux-{runnerArchitecture}-2.321.0.tar.gz
-                                             rm actions-runner-linux-{runnerArchitecture}-2.321.0.tar.gz
+                                                    wget https://github.com/actions/runner/releases/download/v2.321.0/actions-runner-linux-{runnerArchitecture}-2.321.0.tar.gz
+                                                    tar xf actions-runner-linux-{runnerArchitecture}-2.321.0.tar.gz
+                                                    rm actions-runner-linux-{runnerArchitecture}-2.321.0.tar.gz
 
-                                             sudo -u runner ./config.sh --url https://github.com/{workflowJobEvent.Repository!.FullName} --token {(await Program.GitHubClient.CreateRunnerRegistrationToken(
-                                                 workflowJobEvent.Repository!.FullName,
-                                                 workflowJobEvent.Installation!.Id
-                                             ))!.Token} --ephemeral --labels ktisis,ktisis-{machineType},ktisis-{disk}GB
-                                             ./svc.sh install runner
-                                             ./svc.sh start
-                                             """,
-                                },
-                            ],
+                                                    sudo -u runner ./config.sh --url https://github.com/{workflowJobEvent.Repository!.FullName} --token {(
+                                                        await Program.GitHubClient.CreateRunnerRegistrationToken(
+                                                            workflowJobEvent.Repository!.FullName,
+                                                            workflowJobEvent.Installation!.Id
+                                                        )
+                                                    )!.Token} --ephemeral --labels ktisis,ktisis-{machineType},ktisis-{disk}GB
+                                                    ./svc.sh install runner
+                                                    ./svc.sh start
+                                                    """,
+                                                },
+                                            ],
+                                        },
+                                    },
+                                    GoogleCloudSerializerContext.Default.Instance
+                                )
+                            )
+                            {
+                                Url = "",
+                                OAuthToken = new OAuthToken { ServiceAccountEmail = "" },
+                            },
                         },
-                    },
-                    Program.Project,
-                    zone
+                    }
                 );
+
                 break;
             }
             case "completed":
@@ -189,6 +222,7 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                 await Console.Out.WriteLineAsync(
                     "Workflow action is neither `queued` nor `completed`."
                 );
+
                 break;
         }
     }
