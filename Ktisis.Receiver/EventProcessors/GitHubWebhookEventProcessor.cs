@@ -99,102 +99,111 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                     {
                         Task = new CloudTask
                         {
-                            HttpRequest = new CloudTaskHttpRequest(
-                                JsonSerializer.Serialize(
-                                    new Instance
-                                    {
-                                        Name =
-                                            $"{workflowJobEvent.Repository!.FullName.Replace('/', '-')}-{workflowJobEvent.WorkflowJob.RunId}-{workflowJobEvent.WorkflowJob.Id}",
-                                        MachineType =
-                                            $"projects/{GoogleClient.Project}/zones/{zone}/machineTypes/{machineType}",
-                                        NetworkInterfaces =
-                                        [
-                                            new NetworkInterface
-                                            {
-                                                Network = Program.Network,
-                                                Subnetwork = Program.Subnetwork,
-                                            },
-                                        ],
-                                        Disks =
-                                        [
-                                            new Disk
-                                            {
-                                                Boot = true,
-                                                InitializeParams = new DiskInitializeParams(zone)
-                                                {
-                                                    DiskSizeGb = disk,
-                                                    SourceImage =
-                                                        $"projects/ubuntu-os-cloud/global/images/ubuntu-minimal-2404-noble-{architecture}-v20241218a", // TODO: Don't hardcode this
-                                                },
-                                            },
-                                            new Disk
-                                            {
-                                                DeviceName = "swap",
-                                                InitializeParams = new DiskInitializeParams(zone)
-                                                {
-                                                    DiskSizeGb = "16",
-                                                },
-                                            },
-                                        ],
-                                        Metadata = new Metadata
-                                        {
-                                            Items =
-                                            [
-                                                new MetadataItem
-                                                {
-                                                    Key = "enable-oslogin",
-                                                    Value = "true",
-                                                },
-                                                new MetadataItem
-                                                {
-                                                    Key = "enable-oslogin-2fa",
-                                                    Value = "true",
-                                                },
-                                                new MetadataItem
-                                                {
-                                                    Key = "startup-script",
-                                                    Value = $"""
-                                                    #!/bin/sh -ex
-
-                                                    sysctl vm.swappiness=1
-                                                    mkswap /dev/disk/by-id/google-swap
-                                                    swapon /dev/disk/by-id/google-swap
-
-                                                    curl -sSO https://dl.google.com/cloudagents/add-google-cloud-ops-agent-repo.sh
-                                                    bash add-google-cloud-ops-agent-repo.sh --also-install
-                                                    rm add-google-cloud-ops-agent-repo.sh
-
-                                                    adduser --home /runner --shell /bin/sh runner
-                                                    echo '%runner ALL=(ALL:ALL) NOPASSWD:ALL' > /etc/sudoers.d/runner
-                                                    cd /runner
-
-                                                    wget https://github.com/actions/runner/releases/download/v2.321.0/actions-runner-linux-{runnerArchitecture}-2.321.0.tar.gz
-                                                    tar xf actions-runner-linux-{runnerArchitecture}-2.321.0.tar.gz
-                                                    rm actions-runner-linux-{runnerArchitecture}-2.321.0.tar.gz
-
-                                                    sudo -u runner ./config.sh --url https://github.com/{workflowJobEvent.Repository!.FullName} --token {await GitHubClient.CreateRunnerRegistrationToken(
-                                                        workflowJobEvent.Repository!.FullName,
-                                                        workflowJobEvent.Installation!.Id
-                                                    )} --ephemeral --labels ktisis,ktisis-{machineType},ktisis-{disk}GB
-                                                    ./svc.sh install runner
-                                                    ./svc.sh start
-                                                    """,
-                                                },
-                                            ],
-                                        },
-                                        ServiceAccounts =
-                                        [
-                                            new ServiceAccount
-                                            {
-                                                Email = Program.ServiceAccountEmail,
-                                            },
-                                        ],
-                                    },
-                                    GoogleCloudSerializerContext.Default.Instance
-                                )
-                            )
+                            HttpRequest = new CloudTaskHttpRequest
                             {
                                 Url = Program.TaskServiceUrl,
+                                Body = Convert.ToBase64String(
+                                    System.Text.Encoding.UTF8.GetBytes(
+                                        JsonSerializer.Serialize(
+                                            new InstanceTask
+                                            {
+                                                Zone = zone,
+                                                Instance = new Instance
+                                                {
+                                                    Name =
+                                                        $"{workflowJobEvent.Repository!.FullName.Replace('/', '-')}-{workflowJobEvent.WorkflowJob.RunId}-{workflowJobEvent.WorkflowJob.Id}",
+                                                    MachineType =
+                                                        $"projects/{GoogleClient.Project}/zones/{zone}/machineTypes/{machineType}",
+                                                    NetworkInterfaces =
+                                                    [
+                                                        new NetworkInterface
+                                                        {
+                                                            Network = Program.Network,
+                                                            Subnetwork = Program.Subnetwork,
+                                                        },
+                                                    ],
+                                                    Disks =
+                                                    [
+                                                        new Disk
+                                                        {
+                                                            Boot = true,
+                                                            InitializeParams =
+                                                                new DiskInitializeParams(zone)
+                                                                {
+                                                                    DiskSizeGb = disk,
+                                                                    SourceImage =
+                                                                        $"projects/ubuntu-os-cloud/global/images/ubuntu-minimal-2404-noble-{architecture}-v20241218a", // TODO: Don't hardcode this
+                                                                },
+                                                        },
+                                                        new Disk
+                                                        {
+                                                            DeviceName = "swap",
+                                                            InitializeParams =
+                                                                new DiskInitializeParams(zone)
+                                                                {
+                                                                    DiskSizeGb = "16",
+                                                                },
+                                                        },
+                                                    ],
+                                                    Metadata = new Metadata
+                                                    {
+                                                        Items =
+                                                        [
+                                                            new MetadataItem
+                                                            {
+                                                                Key = "enable-oslogin",
+                                                                Value = "true",
+                                                            },
+                                                            new MetadataItem
+                                                            {
+                                                                Key = "enable-oslogin-2fa",
+                                                                Value = "true",
+                                                            },
+                                                            new MetadataItem
+                                                            {
+                                                                Key = "startup-script",
+                                                                Value = $"""
+                                                                #!/bin/sh -ex
+
+                                                                sysctl vm.swappiness=1
+                                                                mkswap /dev/disk/by-id/google-swap
+                                                                swapon /dev/disk/by-id/google-swap
+
+                                                                curl -sSO https://dl.google.com/cloudagents/add-google-cloud-ops-agent-repo.sh
+                                                                bash add-google-cloud-ops-agent-repo.sh --also-install
+                                                                rm add-google-cloud-ops-agent-repo.sh
+
+                                                                adduser --home /runner --shell /bin/sh runner
+                                                                echo '%runner ALL=(ALL:ALL) NOPASSWD:ALL' > /etc/sudoers.d/runner
+                                                                cd /runner
+
+                                                                wget https://github.com/actions/runner/releases/download/v2.321.0/actions-runner-linux-{runnerArchitecture}-2.321.0.tar.gz
+                                                                tar xf actions-runner-linux-{runnerArchitecture}-2.321.0.tar.gz
+                                                                rm actions-runner-linux-{runnerArchitecture}-2.321.0.tar.gz
+
+                                                                sudo -u runner ./config.sh --url https://github.com/{workflowJobEvent.Repository!.FullName} --token {await GitHubClient.CreateRunnerRegistrationToken(
+                                                                    workflowJobEvent.Repository!.FullName,
+                                                                    workflowJobEvent.Installation!.Id
+                                                                )} --ephemeral --labels ktisis,ktisis-{machineType},ktisis-{disk}GB
+                                                                ./svc.sh install runner
+                                                                ./svc.sh start
+                                                                """,
+                                                            },
+                                                        ],
+                                                    },
+                                                    ServiceAccounts =
+                                                    [
+                                                        new ServiceAccount
+                                                        {
+                                                            Email = Program.ServiceAccountEmail,
+                                                        },
+                                                    ],
+                                                },
+                                            },
+                                            GoogleCloudSerializerContext.Default.Instance
+                                        )
+                                    )
+                                ),
                             },
                         },
                     }

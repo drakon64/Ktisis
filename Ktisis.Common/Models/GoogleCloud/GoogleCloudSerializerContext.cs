@@ -1,11 +1,10 @@
 using System.Text.Json.Serialization;
-using Ktisis.Common.Models.GoogleCloud.Compute.Instances;
 using Ktisis.Common.Models.GoogleCloud.Tasks;
 
 namespace Ktisis.Common.Models.GoogleCloud;
 
 [JsonSerializable(typeof(CreateCloudTask))]
-[JsonSerializable(typeof(Instance))]
+[JsonSerializable(typeof(InstanceTask))]
 [JsonSourceGenerationOptions(
     IncludeFields = true,
     PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase
