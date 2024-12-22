@@ -128,9 +128,11 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                                                         {
                                                             Boot = true,
                                                             InitializeParams =
-                                                                new DiskInitializeParams(zone)
+                                                                new DiskInitializeParams
                                                                 {
                                                                     DiskSizeGb = disk,
+                                                                    DiskType =
+                                                                        $"projects/{GoogleClient.Project}/zones/{zone}/diskTypes/hyperdisk-balanced",
                                                                     SourceImage =
                                                                         $"projects/ubuntu-os-cloud/global/images/ubuntu-minimal-2404-noble-{architecture}-v20241218a", // TODO: Don't hardcode this
                                                                 },
@@ -139,9 +141,11 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                                                         {
                                                             DeviceName = "swap",
                                                             InitializeParams =
-                                                                new DiskInitializeParams(zone)
+                                                                new DiskInitializeParams
                                                                 {
                                                                     DiskSizeGb = "16",
+                                                                    DiskType =
+                                                                        $"projects/{GoogleClient.Project}/zones/{zone}/diskTypes/hyperdisk-balanced",
                                                                 },
                                                         },
                                                     ],
