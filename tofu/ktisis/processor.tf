@@ -18,7 +18,7 @@ resource "google_cloud_run_v2_service" "ktisis_processor" {
         name  = "REGION"
         value = var.region
       }
-      
+
       resources {
         cpu_idle = true
 
