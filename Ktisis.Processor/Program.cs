@@ -68,6 +68,6 @@ public class Program
 
         app.MapGet("/", () => Results.Ok());
 
-        app.Run();
+        app.Run($"http://*:{Environment.GetEnvironmentVariable("PORT")}");
     }
 }
