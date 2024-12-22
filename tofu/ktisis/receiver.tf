@@ -110,5 +110,6 @@ resource "google_cloud_run_v2_service" "ktisis_receiver" {
     google_project_service.cloud_run,
     google_artifact_registry_repository_iam_member.ktisis,
     google_secret_manager_secret_iam_member.ktisis_receiver,
+    google_cloud_tasks_queue_iam_member.ktisis,
   ]
 }

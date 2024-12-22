@@ -15,6 +15,11 @@ resource "google_cloud_run_v2_service" "ktisis_processor" {
       }
 
       env {
+        name  = "QUEUE"
+        value = google_cloud_tasks_queue.cloud_tasks.name
+      }
+
+      env {
         name  = "REGION"
         value = var.region
       }
@@ -55,5 +60,6 @@ resource "google_cloud_run_v2_service" "ktisis_processor" {
   depends_on = [
     google_project_service.cloud_run,
     google_artifact_registry_repository_iam_member.ktisis,
+    google_project_iam_member.ktisis_processor,
   ]
 }

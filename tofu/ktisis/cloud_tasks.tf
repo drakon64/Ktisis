@@ -5,7 +5,7 @@ resource "google_project_service" "cloud_tasks" {
 resource "google_cloud_tasks_queue" "cloud_tasks" {
   location = var.region
 
-  name    = "ktisis"
+  name    = "ktisis-tasks-queue"
   project = data.google_project.project.project_id
 
   rate_limits {
