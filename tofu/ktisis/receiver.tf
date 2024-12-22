@@ -14,6 +14,11 @@ resource "google_cloud_run_v2_service" "ktisis_receiver" {
       }
 
       env {
+        name  = "QUEUE"
+        value = google_cloud_tasks_queue.cloud_tasks.name
+      }
+
+      env {
         name  = "REPOSITORY_OWNERS"
         value = join(" ", var.repository_owners)
       }
