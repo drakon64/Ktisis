@@ -2,10 +2,6 @@ variable "backend" {
   type = string
 }
 
-variable "branch" {
-  type = string
-}
-
 variable "built" {
   type    = bool
   default = false
@@ -20,10 +16,6 @@ variable "project" {
 }
 
 variable "region" {
-  type = string
-}
-
-variable "repository_owner" {
   type = string
 }
 
