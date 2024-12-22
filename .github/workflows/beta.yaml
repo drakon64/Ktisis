@@ -2,10 +2,20 @@ name: Ktisis Beta
 on:
   push:
     branches:
-     - beta
+      - beta
     paths:
-      - "**.cs"
-      - "**.nix"
+      - Ktisis.Common/**
+      - Ktisis.Receiver/**
+      - Ktisis.Processor/**
+      - npins/*
+
+  pull_request:
+    branches:
+      - main
+    paths:
+      - Ktisis.Common/**
+      - Ktisis.Receiver/**
+      - Ktisis.Processor/**
       - npins/*
 
   workflow_dispatch:
@@ -30,14 +40,19 @@ jobs:
           name: drakon64-ktisis
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
-      - run: nix-build docker.nix
+      - run: nix-build Ktisis.Processor/docker.nix Ktisis.Receiver/docker.nix
 
-      - run: docker load < result
+      - run: |
+          docker load < result
+          docker load < result-2
 
-      - run: docker tag ktisis:latest ${{ secrets.GOOGLE_ARTIFACT_REGISTRY }}/ktisis:beta
+      - run: |
+          docker tag ktisis-receiver:latest ${{ secrets.GOOGLE_ARTIFACT_REGISTRY }}/ktisis-receiver:beta
+          docker tag ktisis-processor:latest ${{ secrets.GOOGLE_ARTIFACT_REGISTRY }}/ktisis-processor:beta
 
       - uses: google-github-actions/auth@v2
         with:
+          project_id: ${{ secrets.GOOGLE_PROJECT_ID_BETA }}
           service_account: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
           workload_identity_provider: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
 
@@ -45,11 +60,20 @@ jobs:
 
       - run: gcloud auth configure-docker ${{ vars.GOOGLE_REGION }}-docker.pkg.dev
 
-      - run: docker push ${{ secrets.GOOGLE_ARTIFACT_REGISTRY }}/ktisis:beta
+      - run: |
+          docker push ${{ secrets.GOOGLE_ARTIFACT_REGISTRY }}/ktisis-receiver:beta
+          docker push ${{ secrets.GOOGLE_ARTIFACT_REGISTRY }}/ktisis-processor:beta
 
       - uses: google-github-actions/deploy-cloudrun@v2
         with:
-          service: ktisis
-          image: ${{ secrets.GOOGLE_ARTIFACT_REGISTRY }}/ktisis:beta
+          service: ktisis-receiver
+          image: ${{ secrets.GOOGLE_ARTIFACT_REGISTRY }}/ktisis-receiver:beta
+          project_id: ${{ secrets.GOOGLE_PROJECT_ID_BETA }}
+          region: ${{ vars.GOOGLE_REGION }}
+
+      - uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: ktisis-processor
+          image: ${{ secrets.GOOGLE_ARTIFACT_REGISTRY }}/ktisis-processor:beta
           project_id: ${{ secrets.GOOGLE_PROJECT_ID_BETA }}
           region: ${{ vars.GOOGLE_REGION }}

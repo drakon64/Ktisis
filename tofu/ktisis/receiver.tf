@@ -1,21 +1,12 @@
-resource "google_project_service" "cloud_run" {
-  service = "run.googleapis.com"
-}
-
-resource "google_cloud_run_v2_service" "ktisis" {
+resource "google_cloud_run_v2_service" "ktisis_receiver" {
   count = var.built ? 1 : 0
 
   location = var.region
-  name     = "ktisis"
+  name     = "ktisis-receiver"
 
   template {
     containers {
-      image = "${var.region}-docker.pkg.dev/${var.common_project}/ktisis/ktisis:${var.tag}"
-
-      env {
-        name  = "PROJECT"
-        value = var.project
-      }
+      image = "${var.region}-docker.pkg.dev/${var.common_project}/ktisis/ktisis-receiver:${var.tag}"
 
       env {
         name  = "REPOSITORY_OWNERS"
@@ -67,7 +58,7 @@ resource "google_cloud_run_v2_service" "ktisis" {
 
         limits = {
           cpu    = "1000m"
-          memory = "128Mi"
+          memory = "512Mi"
         }
       }
 
@@ -84,18 +75,20 @@ resource "google_cloud_run_v2_service" "ktisis" {
       }
     }
 
+    max_instance_request_concurrency = 100
+
     scaling {
       max_instance_count = 1
       min_instance_count = 0
     }
 
     session_affinity = true
-    service_account  = google_service_account.ktisis.email
+    service_account  = google_service_account.ktisis_receiver.email
   }
 
   depends_on = [
     google_project_service.cloud_run,
     google_artifact_registry_repository_iam_member.ktisis,
-    google_secret_manager_secret_iam_member.ktisis,
+    google_secret_manager_secret_iam_member.ktisis_receiver,
   ]
 }

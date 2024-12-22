@@ -22,10 +22,10 @@ resource "google_secret_manager_secret" "secret" {
   depends_on = [google_project_service.secret_manager]
 }
 
-resource "google_secret_manager_secret_iam_member" "ktisis" {
+resource "google_secret_manager_secret_iam_member" "ktisis_receiver" {
   for_each = local.secrets
 
-  member    = google_service_account.ktisis.member
+  member    = google_service_account.ktisis_receiver.member
   role      = "roles/secretmanager.secretAccessor"
   secret_id = google_secret_manager_secret.secret[each.value].secret_id
 }
