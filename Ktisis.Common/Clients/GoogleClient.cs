@@ -121,7 +121,7 @@ public static class GoogleClient
         await Console.Out.WriteLineAsync(await request.Content.ReadAsStringAsync());
     }
 
-    public static async Task DeleteInstance(string instance, string project, string zone)
+    public static async Task DeleteInstance(string instance, string zone)
     {
         var accessToken = await GetAccessToken();
 
@@ -134,7 +134,7 @@ public static class GoogleClient
                     { "Authorization", $"{accessToken.TokenType} {accessToken.AccessToken}" },
                 },
                 RequestUri = new Uri(
-                    $"https://compute.googleapis.com/compute/v1/projects/{project}/zones/{zone}/instances/{instance}"
+                    $"https://compute.googleapis.com/compute/v1/projects/{Project}/zones/{zone}/instances/{instance}"
                 ),
             }
         );

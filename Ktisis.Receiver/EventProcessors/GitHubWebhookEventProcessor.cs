@@ -218,7 +218,6 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                 {
                     await GoogleClient.DeleteInstance(
                         workflowJobEvent.WorkflowJob.RunnerName!,
-                        GoogleClient.Project,
                         zone
                     );
                 }
