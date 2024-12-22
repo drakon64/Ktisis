@@ -23,3 +23,9 @@ resource "google_cloud_tasks_queue" "cloud_tasks" {
 
   depends_on = [google_project_service.cloud_tasks]
 }
+
+resource "google_cloud_tasks_queue_iam_member" "ktisis" {
+  member = google_service_account.ktisis_receiver.member
+  name   = google_cloud_tasks_queue.cloud_tasks.name
+  role   = "roles/cloudtasks.enqueuer"
+}
