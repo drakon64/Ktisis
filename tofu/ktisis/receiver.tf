@@ -9,18 +9,23 @@ resource "google_cloud_run_v2_service" "ktisis_receiver" {
       image = "${var.region}-docker.pkg.dev/${var.common_project}/ktisis/ktisis-receiver:${var.tag}"
 
       env {
+        name  = "COMPUTE_SERVICE_ACCOUNT"
+        value = data.google_compute_default_service_account.compute.email
+      }
+
+      env {
         name  = "REPOSITORY_OWNERS"
         value = join(" ", var.repository_owners)
       }
 
       env {
-        name  = "ZONES"
-        value = join(" ", var.zones)
+        name  = "TASK_SERVICE_URL"
+        value = google_cloud_run_v2_service.ktisis_processor[0].uri
       }
 
       env {
-        name  = "COMPUTE_SERVICE_ACCOUNT"
-        value = data.google_compute_default_service_account.compute.email
+        name  = "ZONES"
+        value = join(" ", var.zones)
       }
 
       env {

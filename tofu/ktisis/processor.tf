@@ -1,6 +1,7 @@
 resource "google_cloud_run_v2_service" "ktisis_processor" {
   count = var.built ? 1 : 0
 
+  ingress  = "INGRESS_TRAFFIC_INTERNAL_ONLY"
   location = var.region
   name     = "ktisis-processor"
 
@@ -38,12 +39,11 @@ resource "google_cloud_run_v2_service" "ktisis_processor" {
     }
 
     session_affinity = true
-    service_account  = google_service_account.ktisis_receiver.email
+    service_account  = google_service_account.ktisis_processor.email
   }
 
   depends_on = [
     google_project_service.cloud_run,
     google_artifact_registry_repository_iam_member.ktisis,
-    google_secret_manager_secret_iam_member.ktisis_receiver,
   ]
 }

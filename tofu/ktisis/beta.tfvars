@@ -1,5 +1,5 @@
 backend           = "nixos-cosmic-tfstate-beta"
-built             = false
+built             = true
 common_project    = "drakon64-ktisis"
 project           = "nixos-cosmic-beta"
 region            = "europe-west2"
