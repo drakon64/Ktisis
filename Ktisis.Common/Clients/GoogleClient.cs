@@ -8,42 +8,20 @@ namespace Ktisis.Common.Clients;
 
 public static class GoogleClient
 {
+    public static readonly string Project =
+        Environment.GetEnvironmentVariable("PROJECT")
+        ?? throw new InvalidOperationException("PROJECT is null");
+
+    private static readonly string Region =
+        Environment.GetEnvironmentVariable("REGION")
+        ?? throw new InvalidOperationException("REGION is null");
+
     private static AccessTokenResponse _accessToken = new()
     {
         AccessToken = "",
         ExpiresIn = 0,
         TokenType = "",
     };
-
-    // TODO: Make this async
-    public static readonly string Project = Ktisis
-        .HttpClient.Send(
-            new HttpRequestMessage
-            {
-                Method = HttpMethod.Get,
-                Headers = { { "Metadata-Flavor", "Google" } },
-                RequestUri = new Uri(
-                    "http://metadata.google.internal/computeMetadata/v1/project/project-id"
-                ),
-            }
-        )
-        .Content.ReadAsStringAsync()
-        .Result;
-
-    // TODO: Make this async
-    private static readonly string Region = Ktisis
-        .HttpClient.Send(
-            new HttpRequestMessage
-            {
-                Method = HttpMethod.Get,
-                Headers = { { "Metadata-Flavor", "Google" } },
-                RequestUri = new Uri(
-                    "http://metadata.google.internal/computeMetadata/v1/instance/region"
-                ),
-            }
-        )
-        .Content.ReadAsStringAsync()
-        .Result;
 
     private static readonly string Queue =
         Environment.GetEnvironmentVariable("QUEUE")

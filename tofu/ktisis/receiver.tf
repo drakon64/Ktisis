@@ -14,8 +14,18 @@ resource "google_cloud_run_v2_service" "ktisis_receiver" {
       }
 
       env {
+        name  = "PROJECT"
+        value = data.google_project.project.project_id
+      }
+
+      env {
         name  = "QUEUE"
         value = google_cloud_tasks_queue.cloud_tasks.name
+      }
+
+      env {
+        name  = "REGION"
+        value = var.region
       }
 
       env {

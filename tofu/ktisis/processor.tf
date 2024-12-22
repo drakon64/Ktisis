@@ -9,6 +9,16 @@ resource "google_cloud_run_v2_service" "ktisis_processor" {
     containers {
       image = "${var.region}-docker.pkg.dev/${var.common_project}/ktisis/ktisis-processor:${var.tag}"
 
+      env {
+        name  = "PROJECT"
+        value = data.google_project.project.project_id
+      }
+
+      env {
+        name  = "REGION"
+        value = var.region
+      }
+      
       resources {
         cpu_idle = true
 
