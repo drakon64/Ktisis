@@ -58,7 +58,7 @@ public class Program
                         case InstanceStatus.Running:
                             return Results.Ok();
                         case InstanceStatus.Terminated:
-                            return Results.Problem();
+                            return Results.InternalServerError();
                     }
 
                     await Task.Delay(1000);
