@@ -19,7 +19,7 @@ resource "google_cloud_run_v2_service" "ktisis" {
 
       env {
         name  = "REPOSITORY_OWNERS"
-        value = "drakon64 lilyinstarlight"
+        value = join(" ", var.repository_owners)
       }
 
       env {
