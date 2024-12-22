@@ -51,7 +51,9 @@ public class Program
 
                 while (true)
                 {
-                    var instanceStatus = (await GoogleClient.GetInstance(task.TargetLink)).Status;
+                    var instanceStatus = (
+                        await GoogleClient.GetInstanceStatus(task.TargetLink)
+                    ).Status;
 
                     switch (instanceStatus)
                     {

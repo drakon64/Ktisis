@@ -78,7 +78,7 @@ public static class GoogleClient
         await Console.Out.WriteLineAsync(await request.Content.ReadAsStringAsync());
     }
 
-    public static async Task<ZoneOperation> CreateInstance(Instance instance, string zone)
+    public static async Task<ZoneOperation> CreateInstance(CreateInstance instance, string zone)
     {
         var accessToken = await GetAccessToken();
 
@@ -88,7 +88,7 @@ public static class GoogleClient
                 Method = HttpMethod.Post,
                 Content = JsonContent.Create(
                     instance,
-                    GoogleCloudSerializerContext.Default.Instance
+                    GoogleCloudSerializerContext.Default.CreateInstance
                 ),
                 Headers =
                 {
@@ -130,7 +130,7 @@ public static class GoogleClient
         )!;
     }
 
-    public static async Task<Instance> GetInstance(string instance)
+    public static async Task<GetInstance> GetInstanceStatus(string instance)
     {
         var accessToken = await GetAccessToken();
 
@@ -147,8 +147,8 @@ public static class GoogleClient
         );
 
         return (
-            await request.Content.ReadFromJsonAsync<Instance>(
-                GoogleCloudSerializerContext.Default.Instance
+            await request.Content.ReadFromJsonAsync<GetInstance>(
+                GoogleCloudSerializerContext.Default.GetInstance
             )
         )!;
     }

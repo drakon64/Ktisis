@@ -108,7 +108,7 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                                             new InstanceTask
                                             {
                                                 Zone = zone,
-                                                Instance = new Instance
+                                                Instance = new CreateInstance
                                                 {
                                                     Name =
                                                         $"{workflowJobEvent.Repository!.FullName.Replace('/', '-')}-{workflowJobEvent.WorkflowJob.RunId}-{workflowJobEvent.WorkflowJob.Id}",

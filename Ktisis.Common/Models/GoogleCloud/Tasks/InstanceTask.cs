@@ -5,5 +5,5 @@ namespace Ktisis.Common.Models.GoogleCloud.Tasks;
 public class InstanceTask
 {
     public required string Zone { get; init; }
-    public required Instance Instance { get; init; }
+    public required CreateInstance Instance { get; init; }
 }
