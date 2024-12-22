@@ -5,5 +5,5 @@ public class NetworkInterface
     public string? Network { get; init; }
     public string? Subnetwork { get; init; }
     public readonly NetworkInterfaceAccessConfig[] AccessConfigs = [new()];
-    public const string NicType = "GVNIC";
+    public readonly string NicType = "GVNIC";
 }
