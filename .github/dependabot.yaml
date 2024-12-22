@@ -1,6 +1,10 @@
 version: 2
 updates:
-  - directory: "/"
+  - directory: "/Ktisis.Common"
+    package-ecosystem: "nuget"
+    schedule:
+      interval: "daily"
+  - directory: "/Ktisis.Receiver"
     package-ecosystem: "nuget"
     schedule:
       interval: "daily"
