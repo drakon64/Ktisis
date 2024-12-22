@@ -6,7 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ktisis.Common", "Ktisis.Com
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ktisis.Receiver", "Ktisis.Receiver\Ktisis.Receiver.csproj", "{61A62303-8DFD-4391-A318-C4DE4CECB948}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ktisis.Enqueuer", "Ktisis.Enqueuer\Ktisis.Enqueuer.csproj", "{523CD1CC-A36D-45C5-B112-2EF9566274F4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ktisis.Processor", "Ktisis.Processor\Ktisis.Processor.csproj", "{523CD1CC-A36D-45C5-B112-2EF9566274F4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

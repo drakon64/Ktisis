@@ -16,7 +16,7 @@ let
   ];
 in
 pkgs.buildDotnetModule {
-  pname = "ktisis-enqueuer";
+  pname = "ktisis-processor";
   version = "0.0.1";
 
   src = fs.toSource {
@@ -24,7 +24,7 @@ pkgs.buildDotnetModule {
     root = ../.;
   };
 
-  projectFile = "Ktisis.Enqueuer/Ktisis.Enqueuer.csproj";
+  projectFile = "Ktisis.Processor/Ktisis.Processor.csproj";
   #nugetDeps = ./deps.nix;
 
   dotnet-sdk = pkgs.dotnetCorePackages.sdk_9_0;

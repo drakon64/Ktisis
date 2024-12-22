@@ -6,12 +6,12 @@
     import npins.nixpkgs { },
 }:
 let
-  ktisis-enqueuer = pkgs.callPackage ./. { };
+  ktisis-processor = pkgs.callPackage ./. { };
 in
 pkgs.dockerTools.buildLayeredImage {
-  name = "ktisis-enqueuer";
+  name = "ktisis-processor";
 
-  config.Entrypoint = [ "${ktisis-enqueuer}/lib/ktisis-enqueuer/Ktisis.Enqueuer" ];
+  config.Entrypoint = [ "${ktisis-processor}/lib/ktisis-processor/Ktisis.Processor" ];
 
   contents = with pkgs; [ cacert ];
 
