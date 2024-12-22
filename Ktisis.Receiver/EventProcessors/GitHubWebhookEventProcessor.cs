@@ -200,7 +200,7 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                                                     ],
                                                 },
                                             },
-                                            GoogleCloudSerializerContext.Default.Instance
+                                            GoogleCloudSerializerContext.Default.InstanceTask
                                         )
                                     )
                                 ),
