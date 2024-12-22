@@ -34,6 +34,12 @@ resource "google_service_account_iam_member" "ktisis_processor" {
   service_account_id = google_service_account.ktisis_processor.id
 }
 
+resource "google_project_iam_member" "ktisis_receiver" {
+  member  = google_service_account.ktisis_receiver.member
+  project = data.google_project.project.id
+  role    = "roles/compute.instanceAdmin"
+}
+
 resource "google_project_iam_member" "ktisis_processor" {
   member  = google_service_account.ktisis_processor.member
   project = data.google_project.project.id
