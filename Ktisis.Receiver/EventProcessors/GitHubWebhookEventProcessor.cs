@@ -1,3 +1,5 @@
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 using Ktisis.Common.Clients;
 using Ktisis.Common.Models.GoogleCloud;
@@ -94,11 +96,16 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                     }
                 }
 
+                var name =
+                    $"{workflowJobEvent.Repository!.FullName.Replace('/', '-')}-{workflowJobEvent.WorkflowJob.RunId}-{workflowJobEvent.WorkflowJob.Id}";
+
                 await GoogleClient.CreateTask(
                     new CreateCloudTask
                     {
                         Task = new CloudTask
                         {
+                            Name =
+                                $"projects/{Program.Project}/locations/{Program.Region}/queues/{Program.Queue}/tasks/{Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(name)))}",
                             HttpRequest = new CloudTaskHttpRequest
                             {
                                 Url = Program.TaskServiceUrl,
@@ -110,8 +117,7 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                                                 Zone = zone,
                                                 Instance = new CreateInstance
                                                 {
-                                                    Name =
-                                                        $"{workflowJobEvent.Repository!.FullName.Replace('/', '-')}-{workflowJobEvent.WorkflowJob.RunId}-{workflowJobEvent.WorkflowJob.Id}",
+                                                    Name = name,
                                                     MachineType =
                                                         $"projects/{GoogleClient.Project}/zones/{zone}/machineTypes/{machineType}",
                                                     NetworkInterfaces =

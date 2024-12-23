@@ -6,6 +6,18 @@ namespace Ktisis.Receiver;
 
 public class Program
 {
+    internal static readonly string Project =
+        Environment.GetEnvironmentVariable("PROJECT")
+        ?? throw new InvalidOperationException("PROJECT is null");
+
+    internal static readonly string Region =
+        Environment.GetEnvironmentVariable("REGION")
+        ?? throw new InvalidOperationException("REGION is null");
+
+    internal static readonly string Queue =
+        Environment.GetEnvironmentVariable("QUEUE")
+        ?? throw new InvalidOperationException("QUEUE is null");
+
     internal static readonly string? Network = Environment.GetEnvironmentVariable("NETWORK");
 
     internal static readonly string? Subnetwork = Environment.GetEnvironmentVariable("SUBNETWORK");
