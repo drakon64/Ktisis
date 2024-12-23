@@ -78,6 +78,25 @@ public static class GoogleClient
         await Console.Out.WriteLineAsync(await request.Content.ReadAsStringAsync());
     }
 
+    public static async Task DeleteTask(string task)
+    {
+        var accessToken = await GetAccessToken();
+
+        var request = await Ktisis.HttpClient.SendAsync(
+            new HttpRequestMessage
+            {
+                Method = HttpMethod.Delete,
+                Headers =
+                {
+                    { "Authorization", $"{accessToken.TokenType} {accessToken.AccessToken}" },
+                },
+                RequestUri = new Uri($"https://cloudtasks.googleapis.com/v2/{task}"),
+            }
+        );
+
+        await Console.Out.WriteLineAsync(await request.Content.ReadAsStringAsync());
+    }
+
     public static async Task<ZoneOperation> CreateInstance(CreateInstance instance, string zone)
     {
         var accessToken = await GetAccessToken();

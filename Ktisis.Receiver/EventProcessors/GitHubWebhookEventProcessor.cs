@@ -10,6 +10,7 @@ using Ktisis.Common.Models.GoogleCloud.Tasks;
 using Octokit.Webhooks;
 using Octokit.Webhooks.Events;
 using Octokit.Webhooks.Events.WorkflowJob;
+using Octokit.Webhooks.Models.WorkflowJobEvent;
 
 namespace Ktisis.Receiver.EventProcessors;
 
@@ -41,6 +42,11 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
 
             return;
         }
+
+        var instanceName =
+            $"{workflowJobEvent.Repository!.FullName.Replace('/', '-')}-{workflowJobEvent.WorkflowJob.RunId}-{workflowJobEvent.WorkflowJob.Id}";
+        var taskName =
+            $"projects/{Program.Project}/locations/{Program.Region}/queues/{Program.Queue}/tasks/{Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(instanceName)))}";
 
         switch (workflowJobEvent.Action)
         {
@@ -96,16 +102,12 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                     }
                 }
 
-                var name =
-                    $"{workflowJobEvent.Repository!.FullName.Replace('/', '-')}-{workflowJobEvent.WorkflowJob.RunId}-{workflowJobEvent.WorkflowJob.Id}";
-
                 await GoogleClient.CreateTask(
                     new CreateCloudTask
                     {
                         Task = new CloudTask
                         {
-                            Name =
-                                $"projects/{Program.Project}/locations/{Program.Region}/queues/{Program.Queue}/tasks/{Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(name)))}",
+                            Name = taskName,
                             HttpRequest = new CloudTaskHttpRequest
                             {
                                 Url = Program.TaskServiceUrl,
@@ -117,7 +119,7 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                                                 Zone = zone,
                                                 Instance = new CreateInstance
                                                 {
-                                                    Name = name,
+                                                    Name = instanceName,
                                                     MachineType =
                                                         $"projects/{GoogleClient.Project}/zones/{zone}/machineTypes/{machineType}",
                                                     NetworkInterfaces =
@@ -223,14 +225,18 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
             }
             case "completed":
             {
+                if (
+                    workflowJobEvent.WorkflowJob.Conclusion!.Value
+                    == WorkflowJobConclusion.Cancelled
+                )
+                    await GoogleClient.DeleteTask(taskName);
+
                 // TODO: Get the instance zone rather than brute-forcing
                 foreach (var zone in Program.Zones)
-                {
                     await GoogleClient.DeleteInstance(
                         workflowJobEvent.WorkflowJob.RunnerName!,
                         zone
                     );
-                }
 
                 break;
             }
