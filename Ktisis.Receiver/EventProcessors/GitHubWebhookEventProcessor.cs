@@ -112,7 +112,7 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                             {
                                 Url = Program.TaskServiceUrl,
                                 Body = Convert.ToBase64String(
-                                    System.Text.Encoding.UTF8.GetBytes(
+                                    Encoding.UTF8.GetBytes(
                                         JsonSerializer.Serialize(
                                             new InstanceTask
                                             {
