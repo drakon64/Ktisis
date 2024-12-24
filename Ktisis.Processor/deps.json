@@ -1,0 +1,27 @@
+[
+  {
+    "pname": "Microsoft.IdentityModel.Abstractions",
+    "version": "8.3.0",
+    "hash": "sha256-LSZ91DbPswCWibHNSGWC3Jh3KQwAthVaU3r7XQJyutM="
+  },
+  {
+    "pname": "Microsoft.IdentityModel.JsonWebTokens",
+    "version": "8.3.0",
+    "hash": "sha256-Hiiv10LSOMIt7KsQSsteJV4DFkLebHMYmoISn/pl2F8="
+  },
+  {
+    "pname": "Microsoft.IdentityModel.Logging",
+    "version": "8.3.0",
+    "hash": "sha256-0P14ilpV+9yp+nqZWI/ilkTnRas4pic8NjNVcYxuXWs="
+  },
+  {
+    "pname": "Microsoft.IdentityModel.Tokens",
+    "version": "8.3.0",
+    "hash": "sha256-+TzBeZH2Tgs0EMoU5QuCdOD/5V8xM7MHClX578AUIxw="
+  },
+  {
+    "pname": "System.IdentityModel.Tokens.Jwt",
+    "version": "8.3.0",
+    "hash": "sha256-dKBMVbKT8sf6dZPEioClYwHT/0PccwbXThUOOeCaihU="
+  }
+]

@@ -25,7 +25,7 @@ pkgs.buildDotnetModule {
   };
 
   projectFile = "Ktisis.Processor/Ktisis.Processor.csproj";
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   dotnet-sdk = pkgs.dotnetCorePackages.sdk_9_0;
   dotnet-runtime = null;
