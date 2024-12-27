@@ -17,7 +17,7 @@ let
 in
 pkgs.buildDotnetModule {
   pname = "ktisis-receiver";
-  version = "0.0.1";
+  version = "1.0.0";
 
   src = fs.toSource {
     fileset = sourceFiles;
