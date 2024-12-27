@@ -1,9 +1,11 @@
 {
   pkgs ?
-    let
-      npins = import ../npins;
-    in
-    import npins.nixpkgs { },
+    (
+      let
+        npins = import ../npins;
+      in
+      import npins.nixpkgs { }
+    ).pkgsCross.musl64,
 }:
 let
   ktisis-processor = pkgs.callPackage ./. { };
