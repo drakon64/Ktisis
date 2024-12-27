@@ -9,15 +9,6 @@ on:
       - Ktisis.Processor/**
       - npins/*
 
-  pull_request:
-    branches:
-      - main
-    paths:
-      - Ktisis.Common/**
-      - Ktisis.Receiver/**
-      - Ktisis.Processor/**
-      - npins/*
-
   workflow_dispatch:
 
 jobs:
@@ -46,8 +37,8 @@ jobs:
           docker load < result-2
 
       - run: |
-          docker tag ktisis-receiver:latest ${{ secrets.GOOGLE_ARTIFACT_REGISTRY }}/ktisis-receiver:beta
-          docker tag ktisis-processor:latest ${{ secrets.GOOGLE_ARTIFACT_REGISTRY }}/ktisis-processor:beta
+          docker tag ktisis-receiver:1.0.0 ${{ secrets.GOOGLE_ARTIFACT_REGISTRY }}/ktisis-receiver:beta
+          docker tag ktisis-processor:1.0.0 ${{ secrets.GOOGLE_ARTIFACT_REGISTRY }}/ktisis-processor:beta
 
       - uses: google-github-actions/auth@v2
         with:

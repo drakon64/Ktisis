@@ -1,30 +1,12 @@
 name: Ktisis
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - Ktisis.Common/**
-      - Ktisis.Receiver/**
-      - Ktisis.Processor/**
-      - npins/*
-
-  pull_request:
-    branches:
-      - main
-    paths:
-      - Ktisis.Common/**
-      - Ktisis.Receiver/**
-      - Ktisis.Processor/**
-      - npins/*
-
   workflow_dispatch:
 
 jobs:
-  Deploy:
+  Docker:
     permissions:
+      packages: write
       contents: read
-      id-token: write
 
     runs-on: ubuntu-latest
     steps:
@@ -44,35 +26,19 @@ jobs:
       - run: |
           docker load < result
           docker load < result-2
+          
+      - run: echo "REPOSITORY_LC=$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
 
       - run: |
-          docker tag ktisis-receiver:latest ${{ secrets.GOOGLE_ARTIFACT_REGISTRY }}/ktisis-receiver:latest
-          docker tag ktisis-processor:latest ${{ secrets.GOOGLE_ARTIFACT_REGISTRY }}/ktisis-processor:latest
+          docker tag ktisis-processor:1.0.0 ghcr.io/${{ env.REPOSITORY_LC }}/ktisis-processor:1.0.0
+          docker tag ktisis-receiver:1.0.0 ghcr.io/${{ env.REPOSITORY_LC }}/ktisis-receiver:1.0.0
 
-      - uses: google-github-actions/auth@v2
+      - uses: docker/login-action@v3
         with:
-          project_id: ${{ secrets.GOOGLE_PROJECT_ID }}
-          service_account: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
-          workload_identity_provider: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
-
-      - uses: google-github-actions/setup-gcloud@v2
-
-      - run: gcloud auth configure-docker ${{ vars.GOOGLE_REGION }}-docker.pkg.dev
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - run: |
-          docker push ${{ secrets.GOOGLE_ARTIFACT_REGISTRY }}/ktisis-receiver:latest
-          docker push ${{ secrets.GOOGLE_ARTIFACT_REGISTRY }}/ktisis-processor:latest
-
-      - uses: google-github-actions/deploy-cloudrun@v2
-        with:
-          service: ktisis-receiver
-          image: ${{ secrets.GOOGLE_ARTIFACT_REGISTRY }}/ktisis-receiver:latest
-          project_id: ${{ secrets.GOOGLE_PROJECT_ID }}
-          region: ${{ vars.GOOGLE_REGION }}
-
-      - uses: google-github-actions/deploy-cloudrun@v2
-        with:
-          service: ktisis-processor
-          image: ${{ secrets.GOOGLE_ARTIFACT_REGISTRY }}/ktisis-processor:latest
-          project_id: ${{ secrets.GOOGLE_PROJECT_ID }}
-          region: ${{ vars.GOOGLE_REGION }}
+          docker push ghcr.io/${{ env.REPOSITORY_LC }}/ktisis-processor:1.0.0
+          docker push ghcr.io/${{ env.REPOSITORY_LC }}/ktisis-receiver:1.0.0

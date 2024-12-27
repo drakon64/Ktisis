@@ -15,5 +15,5 @@ pkgs.dockerTools.buildLayeredImage {
 
   contents = with pkgs; [ cacert ];
 
-  tag = "latest";
+  tag = "1.0.0";
 }
