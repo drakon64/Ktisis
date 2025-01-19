@@ -22,6 +22,12 @@ jobs:
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
       - run: nix-build Ktisis.Processor/docker.nix Ktisis.Receiver/docker.nix
+        
+      - run: cachix pin drakon64-ktisis receiver "$(nix-build Ktisis.Receiver/docker.nix)" --keep-revisions 1
+        if: ${{ github.ref == 'refs/heads/main' }}
+        
+      - run: cachix pin drakon64-ktisis processor "$(nix-build Ktisis.Processor/docker.nix)" --keep-revisions 1
+        if: ${{ github.ref == 'refs/heads/main' }}
 
       - run: |
           docker load < result
