@@ -174,7 +174,7 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                                                             new MetadataItem
                                                             {
                                                                 Key = "startup-script",
-                                                                Value = $"""
+                                                                Value = $$"""
                                                                 #!/bin/sh -ex
 
                                                                 sysctl vm.swappiness=1
@@ -189,14 +189,18 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                                                                 echo '%runner ALL=(ALL:ALL) NOPASSWD:ALL' > /etc/sudoers.d/runner
                                                                 cd /runner
 
-                                                                wget https://github.com/actions/runner/releases/download/v2.322.0/actions-runner-linux-{runnerArchitecture}-2.322.0.tar.gz
-                                                                tar xf actions-runner-linux-{runnerArchitecture}-2.322.0.tar.gz
-                                                                rm actions-runner-linux-{runnerArchitecture}-2.322.0.tar.gz
+                                                                wget https://github.com/actions/runner/releases/download/v2.322.0/actions-runner-linux-{{runnerArchitecture}}-2.322.0.tar.gz
+                                                                tar xf actions-runner-linux-{{runnerArchitecture}}-2.322.0.tar.gz
+                                                                rm actions-runner-linux-{{runnerArchitecture}}-2.322.0.tar.gz
 
-                                                                sudo -u runner ./config.sh --url https://github.com/{workflowJobEvent.Repository!.FullName} --token {await GitHubClient.CreateRunnerRegistrationToken(
-                                                                    workflowJobEvent.Repository!.FullName,
-                                                                    workflowJobEvent.Installation!.Id
-                                                                )} --ephemeral --labels ktisis,ktisis-{machineType},ktisis-{disk}GB
+                                                                config () {
+                                                                    sudo -u runner ./config.sh --url https://github.com/{{workflowJobEvent.Repository!.FullName}} --token {{await GitHubClient.CreateRunnerRegistrationToken(
+                                                                        workflowJobEvent.Repository!.FullName,
+                                                                        workflowJobEvent.Installation!.Id
+                                                                    )}} --ephemeral --labels ktisis,ktisis-{{machineType}},ktisis-{{disk}}GB || echo "Runner registration failed, retrying in 60 seconds" && return 1
+                                                                }
+
+                                                                config || config || config
                                                                 ./svc.sh install runner
                                                                 ./svc.sh start
                                                                 """,
