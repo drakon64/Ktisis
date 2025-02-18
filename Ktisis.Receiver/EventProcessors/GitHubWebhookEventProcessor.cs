@@ -142,7 +142,7 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                                                                     DiskType =
                                                                         $"projects/{GoogleClient.Project}/zones/{zone}/diskTypes/hyperdisk-balanced",
                                                                     SourceImage =
-                                                                        $"projects/ubuntu-os-cloud/global/images/ubuntu-minimal-2404-noble-{architecture}-v20241218a", // TODO: Don't hardcode this
+                                                                        $"projects/ubuntu-os-cloud/global/images/ubuntu-minimal-2404-noble-{architecture}-v20250213", // TODO: Don't hardcode this
                                                                 },
                                                         },
                                                         new Disk
