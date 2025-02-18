@@ -189,9 +189,9 @@ public sealed class GitHubWebhookEventProcessor : WebhookEventProcessor
                                                                 echo '%runner ALL=(ALL:ALL) NOPASSWD:ALL' > /etc/sudoers.d/runner
                                                                 cd /runner
 
-                                                                wget https://github.com/actions/runner/releases/download/v2.321.0/actions-runner-linux-{runnerArchitecture}-2.321.0.tar.gz
-                                                                tar xf actions-runner-linux-{runnerArchitecture}-2.321.0.tar.gz
-                                                                rm actions-runner-linux-{runnerArchitecture}-2.321.0.tar.gz
+                                                                wget https://github.com/actions/runner/releases/download/v2.322.0/actions-runner-linux-{runnerArchitecture}-2.322.0.tar.gz
+                                                                tar xf actions-runner-linux-{runnerArchitecture}-2.322.0.tar.gz
+                                                                rm actions-runner-linux-{runnerArchitecture}-2.322.0.tar.gz
 
                                                                 sudo -u runner ./config.sh --url https://github.com/{workflowJobEvent.Repository!.FullName} --token {await GitHubClient.CreateRunnerRegistrationToken(
                                                                     workflowJobEvent.Repository!.FullName,
