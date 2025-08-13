@@ -5,9 +5,13 @@ import PackageDescription
 
 let package = Package(
   name: "Ktisis",
+  platforms: [
+    .macOS(.v14)
+  ],
   dependencies: [
     .package(
       url: "https://github.com/apple/swift-argument-parser.git", .upToNextMajor(from: "1.6.1")),
+    .package(url: "https://github.com/hummingbird-project/hummingbird.git", from: "2.0.0"),
   ],
   targets: [
     // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -16,6 +20,7 @@ let package = Package(
       name: "Ktisis",
       dependencies: [
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
+        .product(name: "Hummingbird", package: "hummingbird"),
       ])
   ]
 )
