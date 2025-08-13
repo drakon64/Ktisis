@@ -21,8 +21,8 @@ struct Ktisis: AsyncParsableCommand {
     if processor {
 
     } else if receiver {
-      let router = Router().get { req, context in
-        return "Hello, Swift!"
+      let router = Router().post("/api/github/webhooks") { req, context in
+        return ReceiverRoute()
       }
 
       let app = Application(router: router)
