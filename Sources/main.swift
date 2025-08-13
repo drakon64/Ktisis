@@ -1,25 +1,26 @@
 import ArgumentParser
+import Hummingbird
 
 @main
-struct Repeat: ParsableCommand {
-  @Flag(help: "Include a counter with each repetition.")
-  var includeCounter = false
+struct Ktisis: AsyncParsableCommand {
+  // TODO: Replace with subcommand
+  @Flag(help: "Run the Receiver service.")
+  var receiver = false
 
-  @Option(name: .shortAndLong, help: "The number of times to repeat 'phrase'.")
-  var count: Int? = nil
+  // TODO: Replace with subcommand
+  @Flag(help: "Run the Processor job.")
+  var processor = false
 
-  @Argument(help: "The phrase to repeat.")
-  var phrase: String
+  mutating func run() async throws {
+    if processor {
 
-  mutating func run() throws {
-    let repeatCount = count ?? 2
-
-    for i in 1...repeatCount {
-      if includeCounter {
-        print("\(i): \(phrase)")
-      } else {
-        print(phrase)
+    } else if receiver {
+      let router = Router().get { req, context in
+        return "Hello, Swift!"
       }
+
+      let app = Application(router: router)
+      try await app.runService()
     }
   }
 }
