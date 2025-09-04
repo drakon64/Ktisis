@@ -54,14 +54,14 @@ jobs:
           docker push ${{ secrets.GOOGLE_ARTIFACT_REGISTRY }}/ktisis-receiver:beta
           docker push ${{ secrets.GOOGLE_ARTIFACT_REGISTRY }}/ktisis-processor:beta
 
-      - uses: google-github-actions/deploy-cloudrun@v2
+      - uses: google-github-actions/deploy-cloudrun@v3
         with:
           service: ktisis-receiver
           image: ${{ secrets.GOOGLE_ARTIFACT_REGISTRY }}/ktisis-receiver:beta
           project_id: ${{ secrets.GOOGLE_PROJECT_ID_BETA }}
           region: ${{ vars.GOOGLE_REGION }}
 
-      - uses: google-github-actions/deploy-cloudrun@v2
+      - uses: google-github-actions/deploy-cloudrun@v3
         with:
           service: ktisis-processor
           image: ${{ secrets.GOOGLE_ARTIFACT_REGISTRY }}/ktisis-processor:beta
