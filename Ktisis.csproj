@@ -17,4 +17,10 @@
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="src\obj\Ktisis.csproj.nuget.dgspec.json" />
+    <_ContentIncludedByDefault Remove="src\obj\project.assets.json" />
+    <_ContentIncludedByDefault Remove="src\obj\project.packagespec.json" />
+  </ItemGroup>
+
 </Project>
