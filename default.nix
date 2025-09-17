@@ -33,6 +33,11 @@ rec {
       dotnet-runtime = pkgs.dotnetCorePackages.aspnetcore_9_0;
 
       executables = [ "Ktisis" ];
+
+      meta = {
+        mainProgram = "Ktisis";
+        maintainers = with pkgs.lib.maintainers; [ drakon64 ];
+      };
     };
 
   docker = pkgs.dockerTools.buildLayeredImage {
