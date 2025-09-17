@@ -5,17 +5,6 @@ rec {
   ktisis =
     let
       fs = pkgs.lib.fileset;
-
-      sourceFiles = fs.difference ./. (
-        fs.unions [
-          (fs.maybeMissing ./result)
-          ./default.nix
-          ./shell.nix
-          ./deps.json
-          ./lon.lock
-          ./lon.nix
-        ]
-      );
     in
     pkgs.buildDotnetModule {
       pname = "ktisis";
@@ -23,7 +12,26 @@ rec {
 
       src = fs.toSource {
         root = ./.;
-        fileset = sourceFiles;
+
+        fileset = fs.difference (fs.gitTracked ./.) (
+          fs.unions [
+            ./default.nix
+            ./shell.nix
+            ./deps.json
+            ./lon.lock
+            ./lon.nix
+
+            ./.editorconfig
+            ./.envrc
+            ./.gitattributes
+            ./.gitignore
+            ./appsettings.Development.json
+            ./LICENSE
+            ./README.md
+
+            ./.github
+          ]
+        );
       };
 
       projectFile = "Ktisis.csproj";
