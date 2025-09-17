@@ -16,6 +16,6 @@ public class Program
 
         var app = builder.Build();
         app.MapGitHubWebhooks(secret: Environment.GetEnvironmentVariable("KTISIS_GITHUB_WEBHOOK_SECRET"));
-        app.Run();
+        app.Run($"http://*:{Environment.GetEnvironmentVariable("PORT")}");
     }
 }
