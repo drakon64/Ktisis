@@ -12,6 +12,13 @@ public class PullRequestWebhookEventProcessor(ILogger<PullRequestWebhookEventPro
         PullRequestAction action,
         CancellationToken cancellationToken = default)
     {
+        if (Program.Repositories != null && !Program.Repositories.Contains(pullRequestEvent.Repository!.FullName))
+        {
+            logger.LogWarning("Invalid repository: {FullName}", pullRequestEvent.Repository!.FullName);
+
+            return;
+        }
+
         switch (action)
         {
             case PullRequestActionValue.Opened:

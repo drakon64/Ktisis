@@ -7,6 +7,8 @@ namespace Ktisis;
 
 public class Program
 {
+    internal static readonly string[]? Repositories = Environment.GetEnvironmentVariable("KTISIS_GITHUB_REPOSITORIES")?.Split(" ");
+
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateSlimBuilder(args);
