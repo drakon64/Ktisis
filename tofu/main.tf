@@ -13,4 +13,6 @@ provider "google" {
 
 module "ktisis" {
   source = "./module"
+
+  region = var.region
 }
