@@ -2,20 +2,38 @@
   pkgs ? import (import ./lon.nix).nixpkgs { },
 }:
 rec {
-  ktisis = pkgs.buildDotnetModule {
-    pname = "ktisis";
-    version = "0.0.1";
+  ktisis =
+    let
+      fs = pkgs.lib.fileset;
 
-    src = ./.;
+      sourceFiles = fs.difference ./. (
+        fs.unions [
+          (fs.maybeMissing ./result)
+          ./default.nix
+          ./shell.nix
+          ./deps.json
+          ./lon.lock
+          ./lon.nix
+        ]
+      );
+    in
+    pkgs.buildDotnetModule {
+      pname = "ktisis";
+      version = "0.0.1";
 
-    projectFile = "Ktisis.csproj";
-    nugetDeps = ./deps.json;
+      src = fs.toSource {
+        root = ./.;
+        fileset = sourceFiles;
+      };
 
-    dotnet-sdk = pkgs.dotnetCorePackages.sdk_9_0;
-    dotnet-runtime = pkgs.dotnetCorePackages.runtime_9_0;
+      projectFile = "Ktisis.csproj";
+      nugetDeps = ./deps.json;
 
-    executables = [ "Ktisis" ];
-  };
+      dotnet-sdk = pkgs.dotnetCorePackages.sdk_9_0;
+      dotnet-runtime = pkgs.dotnetCorePackages.runtime_9_0;
+
+      executables = [ "Ktisis" ];
+    };
 
   docker = pkgs.dockerTools.buildLayeredImage {
     name = "ktisis";
