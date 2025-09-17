@@ -17,15 +17,17 @@ rec {
           fs.unions [
             ./default.nix
             ./shell.nix
-            ./deps.json
             ./lon.lock
             ./lon.nix
+
+            ./src/appsettings.Development.json
+            ./src/deps.json
 
             ./.editorconfig
             ./.envrc
             ./.gitattributes
             ./.gitignore
-            ./appsettings.Development.json
+            ./Ktisis.slnx
             ./LICENSE
             ./README.md
 
@@ -34,8 +36,8 @@ rec {
         );
       };
 
-      projectFile = "Ktisis.csproj";
-      nugetDeps = ./deps.json;
+      projectFile = "src/Ktisis.csproj";
+      nugetDeps = ./src/deps.json;
 
       dotnet-sdk = pkgs.dotnetCorePackages.sdk_9_0;
       dotnet-runtime = pkgs.dotnetCorePackages.aspnetcore_9_0;
