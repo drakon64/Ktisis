@@ -23,7 +23,6 @@ rec {
             ./src/appsettings.Development.json
             ./src/deps.json
 
-            ./.editorconfig
             ./.envrc
             ./.gitattributes
             ./.gitignore
