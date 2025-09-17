@@ -1,3 +1,5 @@
+using Google.Cloud.Tasks.V2;
+
 using Octokit.Webhooks;
 using Octokit.Webhooks.Events;
 using Octokit.Webhooks.Events.PullRequest;
@@ -6,6 +8,8 @@ namespace Ktisis.Webhook;
 
 public class PullRequestWebhookEventProcessor(ILogger<PullRequestWebhookEventProcessor> logger) : WebhookEventProcessor
 {
+    private static readonly Task<CloudTasksClient> TasksClient = CloudTasksClient.CreateAsync();
+
     protected override async ValueTask ProcessPullRequestWebhookAsync(
         WebhookHeaders headers,
         PullRequestEvent pullRequestEvent,
@@ -29,6 +33,6 @@ public class PullRequestWebhookEventProcessor(ILogger<PullRequestWebhookEventPro
                 break;
         }
 
-        await Task.Delay(1000, cancellationToken);
+        var tasksClient = await TasksClient;
     }
 }
