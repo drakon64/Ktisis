@@ -43,6 +43,7 @@ rec {
       executables = [ "Ktisis" ];
 
       meta = {
+        license = pkgs.lib.licenses.eupl12;
         mainProgram = "Ktisis";
         maintainers = with pkgs.lib.maintainers; [ drakon64 ];
       };
