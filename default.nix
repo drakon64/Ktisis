@@ -39,8 +39,6 @@ rec {
     name = "ktisis";
     tag = "latest";
 
-    contents = [ ktisis ];
-
     config.Cmd = [ (pkgs.lib.getExe ktisis) ];
   };
 }
