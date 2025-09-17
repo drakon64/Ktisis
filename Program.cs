@@ -13,7 +13,7 @@ public class Program
         builder.Services.AddSingleton<WebhookEventProcessor, PullRequestWebhookEventProcessor>();
 
         var app = builder.Build();
-        app.MapGitHubWebhooks();
+        app.MapGitHubWebhooks(secret: Environment.GetEnvironmentVariable("KTISIS_GITHUB_WEBHOOK_SECRET"));
         app.Run();
     }
 }
