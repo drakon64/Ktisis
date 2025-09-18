@@ -3,7 +3,7 @@ resource "google_project_service" "firestore" {
 }
 
 resource "google_firestore_database" "firestore" {
-  location_id = var.region
+  location_id = coalesce(var.firestore_region, var.region)
   name        = "ktisis"
   type        = "FIRESTORE_NATIVE"
 
