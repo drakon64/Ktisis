@@ -16,4 +16,9 @@ resource "google_project_iam_member" "firestore" {
   member  = google_service_account.ktisis.member
   project = data.google_project.project.project_id
   role    = "roles/datastore.user"
+
+  condition {
+    expression = "resource.name == \"${google_firestore_database.firestore.id}\""
+    title      = "Ktisis database"
+  }
 }
