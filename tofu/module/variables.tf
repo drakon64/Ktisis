@@ -10,3 +10,8 @@ variable "firestore_region" {
 variable "region" {
   type = string
 }
+
+variable "secret_replica_regions" {
+  default = null
+  type    = set(string)
+}

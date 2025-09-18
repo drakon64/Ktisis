@@ -15,6 +15,11 @@ variable "region" {
   type = string
 }
 
+variable "secret_replica_regions" {
+  default = null
+  type    = set(string)
+}
+
 variable "state_bucket" {
   type = string
 }

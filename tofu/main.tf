@@ -14,7 +14,8 @@ provider "google" {
 module "ktisis" {
   source = "./module"
 
-  domain           = var.domain
-  firestore_region = var.firestore_region
-  region           = var.region
+  domain                 = var.domain
+  firestore_region       = var.firestore_region
+  region                 = var.region
+  secret_replica_regions = var.secret_replica_regions
 }
