@@ -3,7 +3,7 @@ resource "google_project_service" "cloud_run" {
 }
 
 data "google_artifact_registry_docker_image" "ktisis" {
-  image_name    = "ktisis"
+  image_name    = "ktisis:latest"
   location      = var.region
   repository_id = google_artifact_registry_repository.artifact_registry.repository_id
 }
