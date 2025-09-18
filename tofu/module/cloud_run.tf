@@ -12,9 +12,11 @@ resource "google_cloud_run_v2_service" "ktisis" {
   location = var.region
   name     = "ktisis"
 
-  scaling {
-    max_instance_count = 1
-  }
+  ingress = "INGRESS_TRAFFIC_INTERNAL_LOAD_BALANCER"
+
+  # scaling {
+  #   max_instance_count = 1
+  # }
 
   template {
     containers {
@@ -47,4 +49,10 @@ resource "google_cloud_run_v2_service" "ktisis" {
   }
 
   depends_on = [google_project_service.cloud_run]
+}
+
+resource "google_cloud_run_v2_service_iam_member" "ktisis" {
+  member = "allUsers"
+  name   = google_cloud_run_v2_service.ktisis.name
+  role   = "roles/run.invoker"
 }
