@@ -45,6 +45,8 @@ resource "google_cloud_run_v2_service" "ktisis" {
       max_instance_count = 1
     }
 
+    service_account = google_service_account.ktisis.email
+
     timeout = "10s"
   }
 

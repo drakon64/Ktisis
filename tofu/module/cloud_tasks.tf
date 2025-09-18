@@ -14,3 +14,14 @@ resource "google_cloud_tasks_queue" "cloud_tasks" {
 
   depends_on = [google_project_service.cloud_tasks]
 }
+
+resource "google_cloud_tasks_queue_iam_member" "ktisis" {
+  for_each = toset([
+    "enqueuer",
+    "taskDeleter",
+  ])
+
+  member = google_service_account.ktisis.member
+  name   = google_cloud_tasks_queue.cloud_tasks.name
+  role   = "roles/cloudtasks.${each.value}"
+}
