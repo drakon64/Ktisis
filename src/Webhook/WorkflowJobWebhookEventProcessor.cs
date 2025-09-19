@@ -8,7 +8,7 @@ namespace Ktisis.Webhook;
 public class WorkflowJobWebhookEventProcessor(ILogger<WorkflowJobWebhookEventProcessor> logger)
     : WebhookEventProcessor
 {
-    private static readonly Task<CloudTasksClient> TasksClient = CloudTasksClient.CreateAsync();
+    // private static readonly Task<CloudTasksClient> TasksClient = CloudTasksClient.CreateAsync();
 
     protected override async ValueTask ProcessWorkflowJobWebhookAsync(
         WebhookHeaders headers,
@@ -30,7 +30,7 @@ public class WorkflowJobWebhookEventProcessor(ILogger<WorkflowJobWebhookEventPro
             return;
         }
 
-        var tasksClient = await TasksClient;
+        // var tasksClient = await TasksClient;
 
         logger.LogInformation("Repository: {FullName}", workflowJobEvent.Repository!.FullName);
     }
