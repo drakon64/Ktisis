@@ -31,5 +31,7 @@ public class WorkflowJobWebhookEventProcessor(ILogger<WorkflowJobWebhookEventPro
         }
 
         var tasksClient = await TasksClient;
+
+        logger.LogInformation("Repository: {FullName}", workflowJobEvent.Repository!.FullName);
     }
 }
