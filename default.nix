@@ -39,9 +39,11 @@ rec {
       nugetDeps = ./src/deps.json;
 
       dotnet-sdk = pkgs.dotnetCorePackages.sdk_9_0;
-      dotnet-runtime = pkgs.dotnetCorePackages.aspnetcore_9_0;
+      dotnet-runtime = null;
 
       executables = [ "Ktisis" ];
+      
+      selfContainedBuild = true;
 
       meta = {
         license = pkgs.lib.licenses.eupl12;
