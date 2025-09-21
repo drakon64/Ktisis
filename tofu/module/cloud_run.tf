@@ -22,6 +22,28 @@ resource "google_cloud_run_v2_service" "ktisis" {
     containers {
       image = data.google_artifact_registry_docker_image.ktisis.self_link
 
+      env {
+        name = "KTISIS_GITHUB_WEBHOOK_SECRET"
+
+        value_source {
+          secret_key_ref {
+            secret = "github-webhook-secret"
+
+            version = "latest"
+          }
+        }
+      }
+
+      dynamic "env" {
+        for_each = var.allowed_repositories != null ? var.allowed_repositories : []
+
+        content {
+          name = "KTISIS_GITHUB_REPOSITORIES"
+
+          value = join(" ", var.allowed_repositories)
+        }
+      }
+
       resources {
         cpu_idle = true
 

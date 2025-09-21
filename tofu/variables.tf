@@ -1,3 +1,8 @@
+variable "allowed_repositories" {
+  default = null
+  type    = set(string)
+}
+
 variable "domain" {
   type = string
 }
