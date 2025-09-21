@@ -4,7 +4,7 @@ using Octokit.Webhooks.AspNetCore;
 
 namespace Ktisis;
 
-public class Program
+public static class Program
 {
     internal static readonly string[]? Repositories = Environment
         .GetEnvironmentVariable("KTISIS_GITHUB_REPOSITORIES")
