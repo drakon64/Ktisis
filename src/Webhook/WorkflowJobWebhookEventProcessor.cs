@@ -30,8 +30,11 @@ public class WorkflowJobWebhookEventProcessor(ILogger<WorkflowJobWebhookEventPro
             return;
         }
 
-        var tasksClient = await TasksClient;
+        if (action != WorkflowJobAction.Queued || action != WorkflowJobAction.Completed)
+            return;
 
         logger.LogInformation("Repository: {FullName}", workflowJobEvent.Repository!.FullName);
+
+        var tasksClient = await TasksClient;
     }
 }
