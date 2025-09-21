@@ -50,7 +50,10 @@ resource "google_cloud_run_v2_service" "ktisis" {
     timeout = "10s"
   }
 
-  depends_on = [google_project_service.cloud_run]
+  depends_on = [
+    google_project_service.cloud_run,
+    google_secret_manager_secret_iam_member.secret,
+  ]
 }
 
 resource "google_cloud_run_v2_service_iam_member" "ktisis" {
