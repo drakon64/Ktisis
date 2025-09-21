@@ -11,6 +11,10 @@ resource "google_cloud_tasks_queue" "cloud_tasks" {
     max_concurrent_dispatches = 100
     max_dispatches_per_second = floor(80 / 60)
   }
+  
+  retry_config {
+    max_retry_duration = "${24 * 60 * 60}s"
+  }
 
   depends_on = [google_project_service.cloud_tasks]
 }
