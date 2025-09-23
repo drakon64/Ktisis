@@ -10,17 +10,15 @@ public static class Program
         .GetEnvironmentVariable("KTISIS_GITHUB_REPOSITORIES")
         ?.Split(" ");
 
-    internal static readonly string Processor =
-        Environment.GetEnvironmentVariable("KTISIS_PROCESSOR")
-        ?? throw new InvalidOperationException("KTISIS_PROCESSOR is null");
+    internal static readonly string? Processor = Environment.GetEnvironmentVariable(
+        "KTISIS_PROCESSOR"
+    );
 
-    internal static readonly string Queue =
-        Environment.GetEnvironmentVariable("KTISIS_QUEUE")
-        ?? throw new InvalidOperationException("KTISIS_QUEUE is null");
+    internal static readonly string? Queue = Environment.GetEnvironmentVariable("KTISIS_QUEUE");
 
-    internal static readonly string ServiceAccount =
-        Environment.GetEnvironmentVariable("KTISIS_SERVICE_ACCOUNT")
-        ?? throw new InvalidOperationException("KTISIS_SERVICE_ACCOUNT is null");
+    internal static readonly string? ServiceAccount = Environment.GetEnvironmentVariable(
+        "KTISIS_SERVICE_ACCOUNT"
+    );
 
     internal static readonly HttpClient HttpClient = new();
 

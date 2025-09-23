@@ -22,13 +22,13 @@ internal static class CloudTasksClient
 
     private class HttpRequest
     {
-        public readonly string Url = Program.Processor;
+        public readonly string Url = Program.Processor!;
         public required string Body { get; init; }
         public readonly OidcToken OidcToken = new();
     }
 
     private class OidcToken
     {
-        public readonly string ServiceAccountEmail = Program.ServiceAccount;
+        public readonly string ServiceAccountEmail = Program.ServiceAccount!;
     }
 }
