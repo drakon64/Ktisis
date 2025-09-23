@@ -11,7 +11,7 @@ resource "google_cloud_run_v2_service" "receiver" {
       env {
         name = "KTISIS_CLOUD_TASKS_QUEUE"
 
-        value = google_cloud_tasks_queue.cloud_tasks.name
+        value = google_cloud_tasks_queue.cloud_tasks.id
       }
 
       dynamic "env" {
