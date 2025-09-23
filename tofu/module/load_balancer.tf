@@ -20,7 +20,7 @@ module "lb-http" {
         region = var.region
 
         service = {
-          name = google_cloud_run_v2_service.ktisis.name
+          name = google_cloud_run_v2_service.receiver.name
         }
 
         type = "cloud-run"

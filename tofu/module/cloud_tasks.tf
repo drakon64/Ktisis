@@ -11,7 +11,7 @@ resource "google_cloud_tasks_queue" "cloud_tasks" {
     max_concurrent_dispatches = 100
     max_dispatches_per_second = floor(80 / 60)
   }
-  
+
   retry_config {
     max_retry_duration = "${24 * 60 * 60}s"
   }
@@ -25,7 +25,7 @@ resource "google_cloud_tasks_queue_iam_member" "ktisis" {
     "taskDeleter",
   ])
 
-  member = google_service_account.ktisis.member
+  member = google_service_account.ktisis["receiver"].member
   name   = google_cloud_tasks_queue.cloud_tasks.name
   role   = "roles/cloudtasks.${each.value}"
 }

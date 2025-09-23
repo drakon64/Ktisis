@@ -6,6 +6,13 @@ terraform {
   }
 }
 
+locals {
+  services = toset([
+    "receiver",
+    "processor",
+  ])
+}
+
 data "google_project" "project" {}
 
 resource "google_project_service" "compute" {

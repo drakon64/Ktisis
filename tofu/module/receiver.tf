@@ -1,12 +1,8 @@
-resource "google_cloud_run_v2_service" "ktisis" {
+resource "google_cloud_run_v2_service" "receiver" {
   location = var.region
-  name     = "ktisis"
+  name     = "ktisis-receiver"
 
   ingress = "INGRESS_TRAFFIC_INTERNAL_LOAD_BALANCER"
-
-  # scaling {
-  #   max_instance_count = 1
-  # }
 
   template {
     containers {
@@ -59,23 +55,19 @@ resource "google_cloud_run_v2_service" "ktisis" {
       }
     }
 
-    scaling {
-      max_instance_count = 1
-    }
-
-    service_account = google_service_account.ktisis.email
+    service_account = google_service_account.ktisis["receiver"].email
 
     timeout = "10s"
   }
 
   depends_on = [
     google_project_service.cloud_run,
-    google_secret_manager_secret_iam_member.secret,
+    google_secret_manager_secret_iam_member.receiver_secret,
   ]
 }
 
-resource "google_cloud_run_v2_service_iam_member" "ktisis" {
+resource "google_cloud_run_v2_service_iam_member" "receiver" {
   member = "allUsers"
-  name   = google_cloud_run_v2_service.ktisis.name
+  name   = google_cloud_run_v2_service.receiver.name
   role   = "roles/run.invoker"
 }
