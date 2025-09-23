@@ -41,6 +41,12 @@ resource "google_cloud_run_v2_service" "receiver" {
 
         value = google_cloud_run_v2_service.processor.uri
       }
+      
+      env {
+        name = "KTISIS_SERVICE_ACCOUNT"
+        
+        value = google_service_account.ktisis["receiver"].email
+      }
 
       resources {
         cpu_idle = true

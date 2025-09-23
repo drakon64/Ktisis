@@ -9,12 +9,7 @@ internal static class CloudTasksClient
             new CloudTask
             {
                 Name = "test",
-                HttpRequest = new HttpRequest
-                {
-                    Url = "",
-                    Body = "",
-                    OidcToken = new OidcToken { ServiceAccountEmail = "" },
-                },
+                HttpRequest = new HttpRequest { Body = "" },
             }
         );
     }
@@ -22,19 +17,18 @@ internal static class CloudTasksClient
     private class CloudTask
     {
         public required string Name { get; init; }
-
         public required HttpRequest HttpRequest { get; init; }
     }
 
     private class HttpRequest
     {
-        public required string Url { get; init; }
+        public readonly string Url = Program.Processor;
         public required string Body { get; init; }
-        public required OidcToken OidcToken { get; init; }
+        public readonly OidcToken OidcToken = new();
     }
 
     private class OidcToken
     {
-        public required string ServiceAccountEmail { get; init; }
+        public readonly string ServiceAccountEmail = Program.ServiceAccount;
     }
 }
