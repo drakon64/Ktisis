@@ -9,18 +9,6 @@ resource "google_cloud_run_v2_service" "receiver" {
       image = data.google_artifact_registry_docker_image.ktisis.self_link
 
       env {
-        name = "KTISIS_GITHUB_WEBHOOK_SECRET"
-
-        value_source {
-          secret_key_ref {
-            secret = "github-webhook-secret"
-
-            version = "latest"
-          }
-        }
-      }
-
-      env {
         name = "KTISIS_CLOUD_TASKS_QUEUE"
 
         value = google_cloud_tasks_queue.cloud_tasks.name
@@ -34,6 +22,24 @@ resource "google_cloud_run_v2_service" "receiver" {
 
           value = join(" ", var.allowed_repositories)
         }
+      }
+
+      env {
+        name = "KTISIS_GITHUB_WEBHOOK_SECRET"
+
+        value_source {
+          secret_key_ref {
+            secret = "github-webhook-secret"
+
+            version = "latest"
+          }
+        }
+      }
+
+      env {
+        name = "KTISIS_PROCESSOR"
+
+        value = google_cloud_run_v2_service.processor.uri
       }
 
       resources {
@@ -53,6 +59,11 @@ resource "google_cloud_run_v2_service" "receiver" {
           port = 8080
         }
       }
+    }
+
+    scaling {
+      max_instance_count = 100
+      min_instance_count = 0
     }
 
     service_account = google_service_account.ktisis["receiver"].email

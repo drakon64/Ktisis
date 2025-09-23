@@ -2,7 +2,7 @@ resource "google_cloud_run_v2_service" "processor" {
   location = var.region
   name     = "ktisis-processor"
 
-  ingress = "INGRESS_TRAFFIC_INTERNAL_ONLY"
+  ingress = "INGRESS_TRAFFIC_ALL"
 
   template {
     containers {
@@ -35,6 +35,11 @@ resource "google_cloud_run_v2_service" "processor" {
           port = 8080
         }
       }
+    }
+
+    scaling {
+      max_instance_count = 100
+      min_instance_count = 0
     }
 
     service_account = google_service_account.ktisis["processor"].email
