@@ -1,10 +1,5 @@
 [
   {
-    "pname": "CSharpier",
-    "version": "1.1.2",
-    "hash": "sha256-dlWIqlErXT0l8WaLwtgKb7xpYVunkZihaJ3EzKqaqFE="
-  },
-  {
     "pname": "Google.Api.CommonProtos",
     "version": "2.17.0",
     "hash": "sha256-OwmbvR8rhoER0zlESUkNhfeRRHNUr7oZZtFhU2oY1q8="
@@ -60,24 +55,9 @@
     "hash": "sha256-zZoGBywDmF2dFm8YYiEK/e6SLRxJztHj89P6Klds3I0="
   },
   {
-    "pname": "Google.Cloud.Iam.V1",
-    "version": "3.2.0",
-    "hash": "sha256-VZY2UYVqIMGu8m0YOJA+Bjgwx6alerbv9lEI0GTkXO8="
-  },
-  {
-    "pname": "Google.Cloud.Location",
-    "version": "2.2.0",
-    "hash": "sha256-mh+fHgijIF8ON7dIwYRouyVqRSAPZEUaBfla+oJEvww="
-  },
-  {
     "pname": "Google.Cloud.Location",
     "version": "2.3.0",
     "hash": "sha256-NvRoE4hPxZSD0h71Eg7TUKv5NabRcyyEm/ZIeSxuBLU="
-  },
-  {
-    "pname": "Google.Cloud.Tasks.V2",
-    "version": "3.5.0",
-    "hash": "sha256-bn/WC4q3da4HjAoK/jsS6ViiFcdG0dtOB4DCGcEgj0w="
   },
   {
     "pname": "Google.LongRunning",
