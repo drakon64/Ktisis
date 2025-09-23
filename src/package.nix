@@ -21,7 +21,7 @@ buildDotnetModule {
         (lib.fileset.maybeMissing ./bin)
         (lib.fileset.maybeMissing ./config)
         (lib.fileset.maybeMissing ./obj)
-      
+
         (lib.fileset.maybeMissing ./deps.json)
         ./package.nix
       ]

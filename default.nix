@@ -1,8 +1,11 @@
 {
   pkgs ? import (import ./lon.nix).nixpkgs { },
 }:
-rec {
+let
   ktisis = pkgs.callPackage ./src/package.nix { };
+in
+{
+  inherit ktisis;
 
   docker = pkgs.dockerTools.buildLayeredImage {
     name = "ktisis";
