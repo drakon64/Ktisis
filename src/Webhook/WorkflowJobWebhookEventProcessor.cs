@@ -1,3 +1,4 @@
+using Ktisis.Clients;
 using Octokit.Webhooks;
 using Octokit.Webhooks.Events;
 using Octokit.Webhooks.Events.WorkflowJob;
@@ -31,5 +32,7 @@ public class WorkflowJobWebhookEventProcessor(ILogger<WorkflowJobWebhookEventPro
             return;
 
         logger.LogInformation("Repository: {FullName}", workflowJobEvent.Repository!.FullName);
+
+        await CloudTasksClient.CreateTask();
     }
 }
