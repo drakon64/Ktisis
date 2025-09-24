@@ -33,6 +33,6 @@ public class WorkflowJobWebhookEventProcessor(ILogger<WorkflowJobWebhookEventPro
 
         logger.LogInformation("Repository: {FullName}", workflowJobEvent.Repository!.FullName);
 
-        await CloudTasksClient.CreateTask();
+        await CloudTasksClient.CreateTask(workflowJobEvent.Repository.FullName);
     }
 }

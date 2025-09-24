@@ -1,16 +1,16 @@
+using System.Text;
+using System.Text.Json;
+using Microsoft.AspNetCore.WebUtilities;
+
 namespace Ktisis.Clients;
 
 internal static class CloudTasksClient
 {
-    public static async Task CreateTask()
+    public static async Task CreateTask(string repository)
     {
         await Program.HttpClient.PostAsJsonAsync(
             $"https://cloudtasks.googleapis.com/v2/{Program.Queue}/tasks",
-            new CloudTask
-            {
-                Name = "test",
-                HttpRequest = new HttpRequest { Body = "" },
-            }
+            new CloudTask { Name = "test", HttpRequest = new HttpRequest(repository) }
         );
     }
 
@@ -20,11 +20,22 @@ internal static class CloudTasksClient
         public required HttpRequest HttpRequest { get; init; }
     }
 
-    private class HttpRequest
+    private class HttpRequest(string repository)
     {
         public readonly string Url = Program.Processor!;
-        public required string Body { get; init; }
+
+        public readonly string Body = WebEncoders.Base64UrlEncode(
+            Encoding.Default.GetBytes(
+                JsonSerializer.Serialize(new HttpRequestBody { Repository = repository })
+            )
+        );
+
         public readonly OidcToken OidcToken = new();
+    }
+
+    private class HttpRequestBody
+    {
+        public required string Repository { get; init; }
     }
 
     private class OidcToken
