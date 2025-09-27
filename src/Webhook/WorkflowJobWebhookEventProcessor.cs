@@ -33,6 +33,11 @@ public class WorkflowJobWebhookEventProcessor(ILogger<WorkflowJobWebhookEventPro
 
         logger.LogInformation("Repository: {FullName}", workflowJobEvent.Repository!.FullName);
 
-        await CloudTasksClient.CreateTask(workflowJobEvent.Repository.FullName);
+        var task = await CloudTasksClient.CreateTask(workflowJobEvent.Repository.FullName);
+
+        if (!task.IsSuccessStatusCode)
+        {
+            logger.LogCritical(await task.Content.ReadAsStringAsync(cancellationToken));
+        }
     }
 }

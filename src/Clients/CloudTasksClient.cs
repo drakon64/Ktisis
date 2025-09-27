@@ -6,9 +6,9 @@ namespace Ktisis.Clients;
 
 internal static class CloudTasksClient
 {
-    public static async Task CreateTask(string repository)
+    public static async Task<HttpResponseMessage> CreateTask(string repository)
     {
-        await Program.HttpClient.PostAsJsonAsync(
+        return await Program.HttpClient.PostAsJsonAsync(
             $"https://cloudtasks.googleapis.com/v2/{Program.Queue}/tasks",
             new CloudTask { Name = "test", HttpRequest = new HttpRequest(repository) }
         );
