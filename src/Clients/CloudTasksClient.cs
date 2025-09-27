@@ -10,21 +10,19 @@ internal static class CloudTasksClient
     {
         var task = new CloudTask { Name = "test", HttpRequest = new HttpRequest(repository) };
 
-        Console.WriteLine(task.ToString());
-
         return await Program.HttpClient.PostAsJsonAsync(
             $"https://cloudtasks.googleapis.com/v2/{Program.Queue}/tasks",
             task
         );
     }
 
-    private record CloudTask
+    private class CloudTask
     {
         public required string Name { get; init; }
         public required HttpRequest HttpRequest { get; init; }
     }
 
-    private record HttpRequest(string repository)
+    private class HttpRequest(string repository)
     {
         public readonly string Url = Program.Processor!;
 
@@ -37,12 +35,12 @@ internal static class CloudTasksClient
         public readonly OidcToken OidcToken = new();
     }
 
-    private record HttpRequestBody
+    private class HttpRequestBody
     {
         public required string Repository { get; init; }
     }
 
-    private record OidcToken
+    private class OidcToken
     {
         public readonly string ServiceAccountEmail = Program.ServiceAccount!;
     }
