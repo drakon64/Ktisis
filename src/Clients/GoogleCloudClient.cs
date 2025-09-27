@@ -1,0 +1,40 @@
+using System.Text.Json;
+
+namespace Ktisis.Clients;
+
+internal static class GoogleCloudClient
+{
+    public class AccessTokenResponse
+    {
+        public required string AccessToken { get; init; }
+        public required ushort ExpiresIn { get; init; }
+        public required string TokenType { get; init; }
+    }
+
+    // TODO: Make this thread-safe
+    // TODO: Reuse tokens if they haven't expired
+    public static async Task<AccessTokenResponse> RefreshAccessToken()
+    {
+        var response = await Program.HttpClient.SendAsync(
+            new HttpRequestMessage
+            {
+                RequestUri = new Uri(
+                    "http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token"
+                ),
+                Headers = { { "Metadata-Flavor", "Google" } },
+                Method = HttpMethod.Get,
+            }
+        );
+
+        if (response.IsSuccessStatusCode)
+        {
+            return (
+                await JsonSerializer.DeserializeAsync<AccessTokenResponse>(
+                    await response.Content.ReadAsStreamAsync()
+                )
+            )!;
+        }
+
+        throw new Exception(await response.Content.ReadAsStringAsync());
+    }
+}

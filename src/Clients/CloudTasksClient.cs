@@ -8,11 +8,16 @@ internal static class CloudTasksClient
 {
     public static async Task<HttpResponseMessage> CreateTask(string repository)
     {
-        var task = new CloudTask { Name = "test", HttpRequest = new HttpRequest(repository) };
+        var token = await GoogleCloudClient.RefreshAccessToken();
 
-        return await Program.HttpClient.PostAsJsonAsync(
+        var content = JsonContent.Create(
+            new CloudTask { Name = "test", HttpRequest = new HttpRequest(repository) }
+        );
+        content.Headers.Add("Authorization", $"{token.TokenType} {token.AccessToken}");
+
+        return await Program.HttpClient.PostAsync(
             $"https://cloudtasks.googleapis.com/v2/{Program.Queue}/tasks",
-            task
+            content
         );
     }
 
