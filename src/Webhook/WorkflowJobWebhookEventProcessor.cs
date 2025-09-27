@@ -28,9 +28,9 @@ public class WorkflowJobWebhookEventProcessor(ILogger<WorkflowJobWebhookEventPro
             return;
         }
 
-        if (action != WorkflowJobAction.Queued || action != WorkflowJobAction.Completed)
+        if (!(action == WorkflowJobAction.Queued || action == WorkflowJobAction.Completed))
         {
-            logger.LogInformation("Not responding to {WorkflowJobAction} event from {FullName}", action, workflowJobEvent.Repository!.FullName);
+            logger.LogInformation("Not responding to {WorkflowJobAction} event from {FullName}", action.ToString(), workflowJobEvent.Repository!.FullName);
 
             return;
         }
