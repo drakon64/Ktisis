@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Ktisis.Clients;
 
@@ -30,7 +31,8 @@ internal static class GoogleCloudClient
         {
             return (
                 await JsonSerializer.DeserializeAsync<AccessTokenResponse>(
-                    await response.Content.ReadAsStreamAsync()
+                    await response.Content.ReadAsStreamAsync(),
+                    SourceGenerationContext.Default.AccessTokenResponse
                 )
             )!;
         }
@@ -38,3 +40,7 @@ internal static class GoogleCloudClient
         throw new Exception(await response.Content.ReadAsStringAsync());
     }
 }
+
+[JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.SnakeCaseLower)]
+[JsonSerializable(typeof(GoogleCloudClient.AccessTokenResponse))]
+internal partial class SourceGenerationContext : JsonSerializerContext;
