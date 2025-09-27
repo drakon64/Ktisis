@@ -24,13 +24,6 @@ public static class Program
 
     internal static readonly HttpClient HttpClient = new();
 
-    internal static string Token;
-
-    static Program()
-    {
-        Token = "";
-    }
-
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateSlimBuilder(args);
