@@ -12,5 +12,7 @@ in
     tag = "latest";
 
     config.Cmd = [ (pkgs.lib.getExe ktisis) ];
+
+    contents = [ pkgs.dockerTools.caCertificates ];
   };
 }
