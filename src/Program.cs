@@ -14,7 +14,9 @@ public static class Program
         "KTISIS_PROCESSOR"
     );
 
-    internal static readonly string? Queue = Environment.GetEnvironmentVariable("KTISIS_QUEUE");
+    internal static readonly string? Queue = Environment.GetEnvironmentVariable(
+        "KTISIS_CLOUD_TASKS_QUEUE"
+    );
 
     internal static readonly string? ServiceAccount = Environment.GetEnvironmentVariable(
         "KTISIS_SERVICE_ACCOUNT"
