@@ -24,6 +24,7 @@ buildDotnetModule {
 
         (lib.fileset.maybeMissing ./deps.json)
         ./package.nix
+        ./docker.nix
       ]
     );
   };

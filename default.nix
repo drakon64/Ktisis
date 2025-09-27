@@ -1,18 +1,7 @@
 {
   pkgs ? import (import ./lon.nix).nixpkgs { },
 }:
-let
-  ktisis = pkgs.callPackage ./src/package.nix { };
-in
 {
-  inherit ktisis;
-
-  docker = pkgs.dockerTools.buildLayeredImage {
-    name = "ktisis";
-    tag = "latest";
-
-    config.Cmd = [ (pkgs.lib.getExe ktisis) ];
-
-    contents = [ pkgs.dockerTools.caCertificates ];
-  };
+  ktisis = pkgs.callPackage ./src/package.nix { };
+  docker = pkgs.callPackage ./src/docker.nix { };
 }
