@@ -12,8 +12,7 @@ internal static class GoogleCloudClient
         public required string TokenType { get; init; }
     }
 
-    // TODO: Make this thread-safe
-    // TODO: Reuse tokens if they haven't expired
+    // TODO: Reuse tokens if they haven't expired in a thread-safe way
     public static async Task<AccessTokenResponse> RefreshAccessToken()
     {
         var response = await Program.HttpClient.SendAsync(
