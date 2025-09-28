@@ -22,7 +22,7 @@ internal static class CloudTasksClient
                     {
                         Task = new CloudTask
                         {
-                            Name = "test",
+                            Name = $"{Program.Queue}/tasks/test",
                             HttpRequest = new HttpRequest(repository),
                         },
                     }
