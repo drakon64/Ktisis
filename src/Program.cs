@@ -10,18 +10,6 @@ public static class Program
         .GetEnvironmentVariable("KTISIS_GITHUB_REPOSITORIES")
         ?.Split(" ");
 
-    internal static readonly string? Processor = Environment.GetEnvironmentVariable(
-        "KTISIS_PROCESSOR"
-    );
-
-    internal static readonly string? Queue = Environment.GetEnvironmentVariable(
-        "KTISIS_CLOUD_TASKS_QUEUE"
-    );
-
-    internal static readonly string? ServiceAccount = Environment.GetEnvironmentVariable(
-        "KTISIS_SERVICE_ACCOUNT"
-    );
-
     internal static readonly HttpClient HttpClient = new();
 
     public static void Main(string[] args)
