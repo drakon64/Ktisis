@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.WebUtilities;
 
 namespace Ktisis.Clients;
@@ -46,14 +47,17 @@ internal static class CloudTasksClient
 
     private class HttpRequest(string repository)
     {
+        [JsonInclude]
         public readonly string Url = Program.Processor!;
 
+        [JsonInclude]
         public readonly string Body = WebEncoders.Base64UrlEncode(
             Encoding.Default.GetBytes(
                 JsonSerializer.Serialize(new HttpRequestBody { Repository = repository })
             )
         );
 
+        [JsonInclude]
         public readonly OidcToken OidcToken = new();
     }
 
@@ -64,6 +68,7 @@ internal static class CloudTasksClient
 
     private class OidcToken
     {
+        [JsonInclude]
         public readonly string ServiceAccountEmail = Program.ServiceAccount!;
     }
 }
