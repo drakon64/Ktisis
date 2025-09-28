@@ -36,12 +36,17 @@ resource "google_compute_instance_template" "runner" {
   disk {
     disk_size_gb = 14
     disk_type    = "pd-standard"
-    source_image = "ubuntu-os-cloud/ubuntu-minimal-2404-lts-amd64"
+    source_image = "projects/ubuntu-os-cloud/global/images/family/ubuntu-minimal-2404-lts-amd64"
   }
 
   metadata = {
     enable-oslogin     = true
     enable-oslogin-2fa = true
+
+    startup-script = templatefile("${path.module}/startup-script.sh.tftpl", {
+      runner_url     = local.runner["browser_download_url"]
+      runner_tarball = local.runner["name"]
+    })
   }
 
   name = "ktisis"
