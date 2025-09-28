@@ -150,11 +150,6 @@
     "hash": "sha256-hy/BieY4qxBWVVsDqqOPaLy1QobiIapkbrESm6v2PHc="
   },
   {
-    "pname": "Octokit",
-    "version": "14.0.0",
-    "hash": "sha256-pTSI7Tz5VFd4Ydx1laE+VkZfhsl7Rbgw42PBqhyVvyI="
-  },
-  {
     "pname": "Octokit.Webhooks",
     "version": "3.2.1",
     "hash": "sha256-faCweS7w1CGCszPt7xfE7UhO21HpmgHcFQBgeB/RgO0="
