@@ -10,6 +10,17 @@ internal static class CloudTasksClient
     {
         var token = await GoogleCloudClient.RefreshAccessToken();
 
+        var task = new CreateCloudTask
+        {
+            Task = new CloudTask
+            {
+                Name = $"{Program.Queue}/tasks/test",
+                HttpRequest = new HttpRequest(repository),
+            },
+        };
+
+        Console.WriteLine(JsonSerializer.Serialize(task));
+
         return await Program.HttpClient.SendAsync(
             new HttpRequestMessage
             {
@@ -17,16 +28,7 @@ internal static class CloudTasksClient
                 Headers = { { "Authorization", $"{token.TokenType} {token.AccessToken}" } },
                 Method = HttpMethod.Post,
 
-                Content = JsonContent.Create(
-                    new CreateCloudTask
-                    {
-                        Task = new CloudTask
-                        {
-                            Name = $"{Program.Queue}/tasks/test",
-                            HttpRequest = new HttpRequest(repository),
-                        },
-                    }
-                ),
+                Content = JsonContent.Create(task),
             }
         );
     }
