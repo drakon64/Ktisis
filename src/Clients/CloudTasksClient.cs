@@ -18,10 +18,22 @@ internal static class CloudTasksClient
                 Method = HttpMethod.Post,
 
                 Content = JsonContent.Create(
-                    new CloudTask { Name = "test", HttpRequest = new HttpRequest(repository) }
+                    new CreateCloudTask
+                    {
+                        Task = new CloudTask
+                        {
+                            Name = "test",
+                            HttpRequest = new HttpRequest(repository),
+                        },
+                    }
                 ),
             }
         );
+    }
+
+    private class CreateCloudTask
+    {
+        public required CloudTask Task { get; init; }
     }
 
     private class CloudTask
