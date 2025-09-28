@@ -9,12 +9,9 @@ terraform {
 locals {
   services = toset([
     "receiver",
+    "runner",
     "processor",
   ])
 }
 
 data "google_project" "project" {}
-
-resource "google_project_service" "compute" {
-  service = "compute.googleapis.com"
-}
