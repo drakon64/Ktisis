@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -7,13 +8,21 @@ namespace Ktisis.Clients;
 
 internal static class CloudTasksClient
 {
-    public static async Task<HttpResponseMessage> CreateTask(string repository)
+    public static async Task<HttpResponseMessage> CreateTask(
+        string repository,
+        long runId,
+        long jobId
+    )
     {
         var queue =
             Environment.GetEnvironmentVariable("KTISIS_CLOUD_TASKS_QUEUE")
             ?? throw new InvalidOperationException("KTISIS_CLOUD_TASKS_QUEUE is null");
 
         var token = await GoogleCloudClient.RefreshAccessToken();
+
+        var taskName = Encoding.Default.GetString(
+            SHA256.HashData(Encoding.Default.GetBytes($"{repository}/{runId}/{jobId}"))
+        );
 
         return await Program.HttpClient.SendAsync(
             new HttpRequestMessage
@@ -27,7 +36,7 @@ internal static class CloudTasksClient
                     {
                         Task = new CloudTask
                         {
-                            Name = $"{queue}/tasks/test",
+                            Name = $"{queue}/tasks/{taskName}",
                             HttpRequest = new HttpRequest(repository),
                         },
                     },

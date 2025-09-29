@@ -41,7 +41,11 @@ public class WorkflowJobWebhookEventProcessor(ILogger<WorkflowJobWebhookEventPro
 
         logger.LogInformation("Repository: {FullName}", workflowJobEvent.Repository!.FullName);
 
-        var task = await CloudTasksClient.CreateTask(workflowJobEvent.Repository.FullName);
+        var task = await CloudTasksClient.CreateTask(
+            workflowJobEvent.Repository.FullName,
+            workflowJobEvent.WorkflowJob.RunId,
+            workflowJobEvent.WorkflowJob.Id
+        );
 
         if (!task.IsSuccessStatusCode)
         {
