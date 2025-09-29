@@ -20,8 +20,10 @@ internal static class CloudTasksClient
 
         var token = await GoogleCloudClient.RefreshAccessToken();
 
-        var taskName = Encoding.Default.GetString(
-            SHA256.HashData(Encoding.Default.GetBytes($"{repository}/{runId}/{jobId}"))
+        var taskName = Convert.ToHexString(
+            SHA256.HashData(
+                Encoding.Default.GetBytes($"{repository.Replace("/", "-")}-{runId}-{jobId}")
+            )
         );
 
         return await Program.HttpClient.SendAsync(
