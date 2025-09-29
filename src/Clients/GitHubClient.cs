@@ -7,6 +7,17 @@ namespace Ktisis.Clients;
 
 internal static class GitHubClient
 {
+    private class InstallationAccessToken
+    {
+        public required string Token { get; init; }
+        public required DateTime ExpiresAt { get; init; }
+    }
+
+    private class RunnerRegistrationToken
+    {
+        public required string Token { get; init; }
+    }
+
     private static readonly string GitHubClientId =
         Environment.GetEnvironmentVariable("GITHUB_CLIENT_ID")
         ?? throw new InvalidOperationException("GITHUB_CLIENT_ID is null");
@@ -113,16 +124,5 @@ internal static class GitHubClient
         );
 
         return (await request.Content.ReadFromJsonAsync<RunnerRegistrationToken>())!.Token;
-    }
-
-    private class InstallationAccessToken
-    {
-        public required string Token { get; init; }
-        public required DateTime ExpiresAt { get; init; }
-    }
-
-    private class RunnerRegistrationToken
-    {
-        public required string Token { get; init; }
     }
 }
