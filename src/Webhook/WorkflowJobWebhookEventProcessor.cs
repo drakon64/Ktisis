@@ -22,7 +22,7 @@ public class WorkflowJobWebhookEventProcessor(ILogger<WorkflowJobWebhookEventPro
         {
             logger.LogWarning(
                 "Invalid repository: {FullName}",
-                workflowJobEvent.Repository!.FullName
+                workflowJobEvent.Repository.FullName
             );
 
             return;
