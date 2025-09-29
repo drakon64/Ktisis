@@ -30,24 +30,25 @@ internal static class CloudTasksClient
                             Name = $"{queue}/tasks/test",
                             HttpRequest = new HttpRequest(repository),
                         },
-                    }
+                    },
+                    CloudTasksClientSourceGenerationContext.Default.CreateCloudTask
                 ),
             }
         );
     }
 
-    private class CreateCloudTask
+    internal class CreateCloudTask
     {
         public required CloudTask Task { get; init; }
     }
 
-    private class CloudTask
+    internal class CloudTask
     {
         public required string Name { get; init; }
         public required HttpRequest HttpRequest { get; init; }
     }
 
-    private class HttpRequest(string repository)
+    internal class HttpRequest(string repository)
     {
         [JsonInclude]
         public readonly string Url =
@@ -65,12 +66,12 @@ internal static class CloudTasksClient
         public readonly OidcToken OidcToken = new();
     }
 
-    private class HttpRequestBody
+    internal class HttpRequestBody
     {
         public required string Repository { get; init; }
     }
 
-    private class OidcToken
+    internal class OidcToken
     {
         [JsonInclude]
         public readonly string ServiceAccountEmail =
@@ -78,3 +79,6 @@ internal static class CloudTasksClient
             ?? throw new InvalidOperationException("KTISIS_SERVICE_ACCOUNT is null");
     }
 }
+
+[JsonSerializable(typeof(CloudTasksClient.CreateCloudTask))]
+internal partial class CloudTasksClientSourceGenerationContext : JsonSerializerContext;

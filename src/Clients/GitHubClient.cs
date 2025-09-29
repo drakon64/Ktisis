@@ -1,23 +1,13 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Text.Json.Serialization;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Ktisis.Clients;
 
 internal static class GitHubClient
 {
-    private class InstallationAccessToken
-    {
-        public required string Token { get; init; }
-        public required DateTime ExpiresAt { get; init; }
-    }
-
-    private class RunnerRegistrationToken
-    {
-        public required string Token { get; init; }
-    }
-
     private static readonly string GitHubClientId =
         Environment.GetEnvironmentVariable("GITHUB_CLIENT_ID")
         ?? throw new InvalidOperationException("GITHUB_CLIENT_ID is null");
@@ -95,7 +85,9 @@ internal static class GitHubClient
 
         // TODO: Make this thread-safe
         _githubInstallationAccessToken = (
-            await responseMessage.Content.ReadFromJsonAsync<InstallationAccessToken>()
+            await responseMessage.Content.ReadFromJsonAsync<InstallationAccessToken>(
+                GitHubClientSourceGenerationContext.Default.InstallationAccessToken
+            )
         )!;
     }
 
@@ -123,6 +115,25 @@ internal static class GitHubClient
             }
         );
 
-        return (await request.Content.ReadFromJsonAsync<RunnerRegistrationToken>())!.Token;
+        return (
+            await request.Content.ReadFromJsonAsync<RunnerRegistrationToken>(
+                GitHubClientSourceGenerationContext.Default.RunnerRegistrationToken
+            )
+        )!.Token;
+    }
+
+    internal class InstallationAccessToken
+    {
+        public required string Token { get; init; }
+        public required DateTime ExpiresAt { get; init; }
+    }
+
+    internal class RunnerRegistrationToken
+    {
+        public required string Token { get; init; }
     }
 }
+
+[JsonSerializable(typeof(GitHubClient.InstallationAccessToken))]
+[JsonSerializable(typeof(GitHubClient.RunnerRegistrationToken))]
+internal partial class GitHubClientSourceGenerationContext : JsonSerializerContext;

@@ -5,7 +5,7 @@ namespace Ktisis.Clients;
 
 internal static class GoogleCloudClient
 {
-    public class AccessTokenResponse
+    internal class AccessTokenResponse
     {
         public required string AccessToken { get; init; }
         public required ushort ExpiresIn { get; init; }
@@ -31,7 +31,7 @@ internal static class GoogleCloudClient
             return (
                 await JsonSerializer.DeserializeAsync<AccessTokenResponse>(
                     await response.Content.ReadAsStreamAsync(),
-                    SourceGenerationContext.Default.AccessTokenResponse
+                    GoogleCloudClientSourceGenerationContext.Default.AccessTokenResponse
                 )
             )!;
         }
@@ -42,4 +42,4 @@ internal static class GoogleCloudClient
 
 [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.SnakeCaseLower)]
 [JsonSerializable(typeof(GoogleCloudClient.AccessTokenResponse))]
-internal partial class SourceGenerationContext : JsonSerializerContext;
+internal partial class GoogleCloudClientSourceGenerationContext : JsonSerializerContext;
