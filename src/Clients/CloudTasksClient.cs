@@ -39,7 +39,7 @@ internal static class CloudTasksClient
                         Task = new CloudTask
                         {
                             Name = $"{queue}/tasks/{taskName}",
-                            HttpRequest = new HttpRequest(repository),
+                            HttpRequest = new HttpRequest(repository, runId, jobId),
                         },
                     },
                     CloudTasksClientSourceGenerationContext.Default.CreateCloudTask
@@ -59,7 +59,7 @@ internal static class CloudTasksClient
         public required HttpRequest HttpRequest { get; init; }
     }
 
-    internal class HttpRequest(string repository)
+    internal class HttpRequest(string repository, long runId, long jobId)
     {
         [JsonInclude]
         public readonly string Url =
@@ -69,7 +69,14 @@ internal static class CloudTasksClient
         [JsonInclude]
         public readonly string Body = WebEncoders.Base64UrlEncode(
             Encoding.Default.GetBytes(
-                JsonSerializer.Serialize(new HttpRequestBody { Repository = repository })
+                JsonSerializer.Serialize(
+                    new HttpRequestBody
+                    {
+                        Repository = repository,
+                        RunId = runId,
+                        JobId = jobId,
+                    }
+                )
             )
         );
 
@@ -80,6 +87,8 @@ internal static class CloudTasksClient
     internal class HttpRequestBody
     {
         public required string Repository { get; init; }
+        public required long RunId { get; init; }
+        public required long JobId { get; init; }
     }
 
     internal class OidcToken
