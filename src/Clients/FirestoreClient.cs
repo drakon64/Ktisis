@@ -52,10 +52,9 @@ internal static class FirestoreClient
 
     internal interface ITransactionOptions;
 
-    internal class ReadOnly(DateTime? readTime) : ITransactionOptions
+    internal class ReadOnly : ITransactionOptions
     {
-        [JsonInclude]
-        public readonly string? ReadTime = readTime?.ToString("O");
+        public DateTime? ReadTime { get; init; }
     }
 
     internal class ReadWrite : ITransactionOptions
