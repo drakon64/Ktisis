@@ -31,7 +31,7 @@ internal static class GitHubClient
         };
     }
 
-    private static string GenerateJwtSecurityToken()
+    private static string GenerateJwt()
     {
         var now = DateTime.UtcNow;
         var expires = now.AddSeconds(100);
@@ -59,7 +59,7 @@ internal static class GitHubClient
         ExpiresAt = DateTime.Now,
     };
 
-    private static async Task GetGitHubInstallationAccessToken(ulong installationId)
+    private static async Task RefreshGitHubInstallationAccessToken(ulong installationId)
     {
         // If the current installation access token expires in less than a minute, generate a new one
         if (_githubInstallationAccessToken.ExpiresAt.Subtract(DateTime.Now).Minutes >= 1)
@@ -71,7 +71,7 @@ internal static class GitHubClient
                 Method = HttpMethod.Post,
                 Headers =
                 {
-                    { "Authorization", $"Bearer {GenerateJwtSecurityToken()}" },
+                    { "Authorization", $"Bearer {GenerateJwt()}" },
                     { "User-Agent", "Ktisis/0.0.1" },
                     { "Accept", "application/vnd.github+json" },
                     { "X-GitHub-Api-Version", "2022-11-28" },
@@ -93,7 +93,7 @@ internal static class GitHubClient
         ulong installationId
     )
     {
-        await GetGitHubInstallationAccessToken(installationId);
+        await RefreshGitHubInstallationAccessToken(installationId);
 
         var request = await Program.HttpClient.SendAsync(
             new HttpRequestMessage
