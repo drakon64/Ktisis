@@ -134,6 +134,7 @@ internal static class GitHubClient
     }
 }
 
+[JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
 [JsonSerializable(typeof(GitHubClient.InstallationAccessToken))]
 [JsonSerializable(typeof(GitHubClient.RunnerRegistrationToken))]
 internal partial class GitHubClientSourceGenerationContext : JsonSerializerContext;

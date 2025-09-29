@@ -80,5 +80,6 @@ internal static class CloudTasksClient
     }
 }
 
+[JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
 [JsonSerializable(typeof(CloudTasksClient.CreateCloudTask))]
 internal partial class CloudTasksClientSourceGenerationContext : JsonSerializerContext;
