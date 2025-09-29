@@ -28,3 +28,7 @@ variable "secret_replica_regions" {
 variable "state_bucket" {
   type = string
 }
+
+variable "zones" {
+  type = set(string)
+}

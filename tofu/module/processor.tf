@@ -18,6 +18,24 @@ resource "google_cloud_run_v2_service" "processor" {
         }
       }
 
+      env {
+        name = "KTISIS_PROJECT"
+
+        value = data.google_project.project.project_id
+      }
+
+      env {
+        name = "KTISIS_ZONES"
+
+        value = join(" ", var.zones)
+      }
+
+      env {
+        name = "KTISIS_SOURCE_INSTANCE_TEMPLATE"
+
+        value = google_compute_instance_template.runner.id
+      }
+
       resources {
         cpu_idle = true
 

@@ -20,3 +20,7 @@ variable "secret_replica_regions" {
   default = null
   type    = set(string)
 }
+
+variable "zones" {
+  type = set(string)
+}
