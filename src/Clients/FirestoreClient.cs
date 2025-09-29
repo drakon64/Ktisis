@@ -4,11 +4,16 @@ namespace Ktisis.Clients;
 
 internal static class FirestoreClient
 {
-    private static readonly string Database =
-        Environment.GetEnvironmentVariable("KTISIS_FIRESTORE_DATABASE")
-        ?? throw new InvalidOperationException("KTISIS_FIRESTORE_DATABASE is null");
+    private static readonly string Url;
 
-    private static readonly string Url = $"https://firestore.googleapis.com/v1/{Database}";
+    static FirestoreClient()
+    {
+        var database =
+            Environment.GetEnvironmentVariable("KTISIS_FIRESTORE_DATABASE")
+            ?? throw new InvalidOperationException("KTISIS_FIRESTORE_DATABASE is null");
+
+        Url = $"https://firestore.googleapis.com/v1/{database}";
+    }
 
     public static async Task<string> BeginTransaction(ITransactionOptions? transactionOptions)
     {
