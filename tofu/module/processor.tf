@@ -22,8 +22,8 @@ resource "google_cloud_run_v2_service" "processor" {
         cpu_idle = true
 
         limits = {
-          cpu    = "80m"
-          memory = "128Mi"
+          cpu    = "1000m"
+          memory = "1024Mi"
         }
       }
 
@@ -37,8 +37,10 @@ resource "google_cloud_run_v2_service" "processor" {
       }
     }
 
+    max_instance_request_concurrency = 100
+
     scaling {
-      max_instance_count = 100
+      max_instance_count = 1
       min_instance_count = 0
     }
 
