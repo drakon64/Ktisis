@@ -66,9 +66,39 @@ internal static class FirestoreClient
     {
         public required string Transaction { get; init; }
     }
+
+    public static async Task CommitTransaction(string transaction)
+    {
+        var token = await GoogleCloudClient.RefreshAccessToken();
+
+        var response = await Program.HttpClient.SendAsync(
+            new HttpRequestMessage
+            {
+                RequestUri = new Uri($"{Url}/documents:commit"),
+                Headers = { { "Authorization", $"{token.TokenType} {token.AccessToken}" } },
+                Method = HttpMethod.Post,
+
+                Content = JsonContent.Create(
+                    new CommitTransactionRequest { Transaction = transaction },
+                    FirestoreClientSourceGenerationContext.Default.CommitTransactionRequest
+                ),
+            }
+        );
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(); // TODO: Useful exception
+        }
+    }
+
+    internal class CommitTransactionRequest
+    {
+        public required string Transaction { get; init; }
+    }
 }
 
 [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
 [JsonSerializable(typeof(FirestoreClient.BeginTransactionRequest))]
 [JsonSerializable(typeof(FirestoreClient.BeginTransactionResponse))]
+[JsonSerializable(typeof(FirestoreClient.CommitTransactionRequest))]
 internal partial class FirestoreClientSourceGenerationContext : JsonSerializerContext;
