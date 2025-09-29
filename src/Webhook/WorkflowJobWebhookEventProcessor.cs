@@ -21,7 +21,7 @@ public class WorkflowJobWebhookEventProcessor(ILogger<WorkflowJobWebhookEventPro
         )
         {
             logger.LogWarning(
-                "Invalid repository: {FullName}",
+                "Repository not allowed: {FullName}",
                 workflowJobEvent.Repository.FullName
             );
 
