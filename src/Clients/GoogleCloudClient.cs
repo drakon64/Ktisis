@@ -5,13 +5,6 @@ namespace Ktisis.Clients;
 
 internal static class GoogleCloudClient
 {
-    internal class AccessTokenResponse
-    {
-        public required string AccessToken { get; init; }
-        public required ushort ExpiresIn { get; init; }
-        public required string TokenType { get; init; }
-    }
-
     // TODO: Reuse tokens if they haven't expired in a thread-safe way
     public static async Task<AccessTokenResponse> RefreshAccessToken()
     {
@@ -37,6 +30,13 @@ internal static class GoogleCloudClient
         }
 
         throw new Exception(await response.Content.ReadAsStringAsync());
+    }
+    
+    internal class AccessTokenResponse
+    {
+        public required string AccessToken { get; init; }
+        public required ushort ExpiresIn { get; init; }
+        public required string TokenType { get; init; }
     }
 }
 
