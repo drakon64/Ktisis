@@ -25,6 +25,12 @@ resource "google_cloud_run_v2_service" "receiver" {
       }
 
       env {
+        name = "KTISIS_FIRESTORE_DATABASE"
+
+        value = google_firestore_database.firestore.id
+      }
+
+      env {
         name = "KTISIS_GITHUB_WEBHOOK_SECRET"
 
         value_source {
