@@ -4,14 +4,10 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.WebUtilities;
 
-namespace Ktisis.Clients;
+namespace Ktisis.Clients.CloudTasks;
 
-internal static class CloudTasksClient
+internal static partial class CloudTasksClient
 {
-    private static readonly string Queue =
-        Environment.GetEnvironmentVariable("KTISIS_CLOUD_TASKS_QUEUE")
-        ?? throw new InvalidOperationException("KTISIS_CLOUD_TASKS_QUEUE is null");
-
     public static async Task<HttpResponseMessage> CreateTask(
         string repository,
         long runId,
@@ -34,26 +30,26 @@ internal static class CloudTasksClient
                 Method = HttpMethod.Post,
 
                 Content = JsonContent.Create(
-                    new CreateCloudTask
+                    new TaskRequest
                     {
-                        Task = new CloudTask
+                        Task = new Task
                         {
                             Name = $"{Queue}/tasks/{taskName}",
                             HttpRequest = new HttpRequest(repository, runId, jobId),
                         },
                     },
-                    CloudTasksClientSourceGenerationContext.Default.CreateCloudTask
+                    CloudTasksClientSourceGenerationContext.Default.Task
                 ),
             }
         );
     }
 
-    internal class CreateCloudTask
+    internal class TaskRequest
     {
-        public required CloudTask Task { get; init; }
+        public required Task Task { get; init; }
     }
 
-    internal class CloudTask
+    internal class Task
     {
         public required string Name { get; init; }
         public required HttpRequest HttpRequest { get; init; }
@@ -99,7 +95,3 @@ internal static class CloudTasksClient
             ?? throw new InvalidOperationException("KTISIS_SERVICE_ACCOUNT is null");
     }
 }
-
-[JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
-[JsonSerializable(typeof(CloudTasksClient.CreateCloudTask))]
-internal partial class CloudTasksClientSourceGenerationContext : JsonSerializerContext;
