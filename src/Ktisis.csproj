@@ -5,8 +5,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
     <InvariantGlobalization>true</InvariantGlobalization>
-    <!--<PublishReadyToRun>true</PublishReadyToRun>-->
-    <!--<PublishReadyToRunComposite>true</PublishReadyToRunComposite>-->
+  </PropertyGroup>
+  <PropertyGroup>
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <PublishReadyToRunComposite>true</PublishReadyToRunComposite>
+    <!--<PublishTrimmed>true</PublishTrimmed>-->
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Octokit.Webhooks.AspNetCore" Version="3.2.1" />
