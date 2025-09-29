@@ -8,16 +8,16 @@ namespace Ktisis.Clients;
 
 internal static class CloudTasksClient
 {
+    private static readonly string Queue =
+        Environment.GetEnvironmentVariable("KTISIS_CLOUD_TASKS_QUEUE")
+        ?? throw new InvalidOperationException("KTISIS_CLOUD_TASKS_QUEUE is null");
+
     public static async Task<HttpResponseMessage> CreateTask(
         string repository,
         long runId,
         long jobId
     )
     {
-        var queue =
-            Environment.GetEnvironmentVariable("KTISIS_CLOUD_TASKS_QUEUE")
-            ?? throw new InvalidOperationException("KTISIS_CLOUD_TASKS_QUEUE is null");
-
         var token = await GoogleCloudClient.RefreshAccessToken();
 
         var taskName = Convert.ToHexString(
@@ -29,7 +29,7 @@ internal static class CloudTasksClient
         return await Program.HttpClient.SendAsync(
             new HttpRequestMessage
             {
-                RequestUri = new Uri($"https://cloudtasks.googleapis.com/v2/{queue}/tasks"),
+                RequestUri = new Uri($"https://cloudtasks.googleapis.com/v2/{Queue}/tasks"),
                 Headers = { { "Authorization", $"{token.TokenType} {token.AccessToken}" } },
                 Method = HttpMethod.Post,
 
@@ -38,7 +38,7 @@ internal static class CloudTasksClient
                     {
                         Task = new CloudTask
                         {
-                            Name = $"{queue}/tasks/{taskName}",
+                            Name = $"{Queue}/tasks/{taskName}",
                             HttpRequest = new HttpRequest(repository, runId, jobId),
                         },
                     },
