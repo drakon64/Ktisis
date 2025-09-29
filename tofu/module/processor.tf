@@ -18,12 +18,6 @@ resource "google_cloud_run_v2_service" "processor" {
         }
       }
 
-      env {
-        name = "KTISIS_FIRESTORE_DATABASE"
-
-        value = google_firestore_database.firestore.id
-      }
-
       resources {
         cpu_idle = true
 
