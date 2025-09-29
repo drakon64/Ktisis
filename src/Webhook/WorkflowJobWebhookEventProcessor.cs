@@ -45,7 +45,7 @@ public class WorkflowJobWebhookEventProcessor(ILogger<WorkflowJobWebhookEventPro
 
         if (!task.IsSuccessStatusCode)
         {
-            logger.LogCritical(await task.Content.ReadAsStringAsync(cancellationToken));
+            logger.LogError(await task.Content.ReadAsStringAsync(cancellationToken));
         }
     }
 }
