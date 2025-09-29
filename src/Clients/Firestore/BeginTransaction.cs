@@ -15,7 +15,7 @@ internal static partial class FirestoreClient
 
                 Content = JsonContent.Create(
                     new BeginTransactionRequest { Options = transactionOptions },
-                    SourceGenerationContext.Default.BeginTransactionRequest
+                    FirestoreClientSourceGenerationContext.Default.BeginTransactionRequest
                 ),
             }
         );
@@ -27,7 +27,7 @@ internal static partial class FirestoreClient
 
         return (
             await response.Content.ReadFromJsonAsync<BeginTransactionResponse>(
-                SourceGenerationContext.Default.BeginTransactionResponse
+                FirestoreClientSourceGenerationContext.Default.BeginTransactionResponse
             )
         )!.Transaction;
     }

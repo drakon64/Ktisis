@@ -15,7 +15,7 @@ internal static partial class FirestoreClient
 
                 Content = JsonContent.Create(
                     new CommitTransactionRequest { Transaction = transaction },
-                    SourceGenerationContext.Default.CommitTransactionRequest
+                    FirestoreClientSourceGenerationContext.Default.CommitTransactionRequest
                 ),
             }
         );
