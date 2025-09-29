@@ -27,7 +27,8 @@ internal static class FirestoreClient
                 Method = HttpMethod.Post,
 
                 Content = JsonContent.Create(
-                    new BeginTransactionRequest { Options = transactionOptions }
+                    new BeginTransactionRequest { Options = transactionOptions },
+                    FirestoreClientSourceGenerationContext.Default.BeginTransactionRequest
                 ),
             }
         );
