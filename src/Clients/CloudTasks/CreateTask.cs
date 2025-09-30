@@ -64,7 +64,9 @@ internal static partial class CloudTasksClient
             (
                 Environment.GetEnvironmentVariable("KTISIS_PROCESSOR")
                 ?? throw new InvalidOperationException("KTISIS_PROCESSOR is null")
-            ) + "/api/ktisis/" + action;
+            )
+            + "/api/ktisis/"
+            + action;
 
         [JsonInclude]
         public readonly string Body = WebEncoders.Base64UrlEncode(
