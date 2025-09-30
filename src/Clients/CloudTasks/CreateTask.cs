@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.WebUtilities;
+using Octokit.Webhooks.Events.WorkflowJob;
 
 namespace Ktisis.Clients.CloudTasks;
 
@@ -11,7 +12,8 @@ internal static partial class CloudTasksClient
     public static async Task<HttpResponseMessage> CreateTask(
         string repository,
         long runId,
-        long jobId
+        long jobId,
+        WorkflowJobAction action
     )
     {
         var token = await GoogleCloudClient.RefreshAccessToken();
@@ -35,7 +37,7 @@ internal static partial class CloudTasksClient
                         Task = new Task
                         {
                             Name = $"{Queue}/tasks/{taskName}",
-                            HttpRequest = new HttpRequest(repository, runId, jobId),
+                            HttpRequest = new HttpRequest(repository, runId, jobId, action),
                         },
                     },
                     CloudTasksClientSourceGenerationContext.Default.TaskRequest
@@ -55,12 +57,14 @@ internal static partial class CloudTasksClient
         public required HttpRequest HttpRequest { get; init; }
     }
 
-    private class HttpRequest(string repository, long runId, long jobId)
+    private class HttpRequest(string repository, long runId, long jobId, WorkflowJobAction action)
     {
         [JsonInclude]
         public readonly string Url =
-            Environment.GetEnvironmentVariable("KTISIS_PROCESSOR")
-            ?? throw new InvalidOperationException("KTISIS_PROCESSOR is null");
+            (
+                Environment.GetEnvironmentVariable("KTISIS_PROCESSOR")
+                ?? throw new InvalidOperationException("KTISIS_PROCESSOR is null")
+            ) + $"/api/ktisis/{action}";
 
         [JsonInclude]
         public readonly string Body = WebEncoders.Base64UrlEncode(

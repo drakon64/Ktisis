@@ -44,7 +44,8 @@ public class WorkflowJobWebhookEventProcessor(ILogger<WorkflowJobWebhookEventPro
         var task = await CloudTasksClient.CreateTask(
             workflowJobEvent.Repository.FullName,
             workflowJobEvent.WorkflowJob.RunId,
-            workflowJobEvent.WorkflowJob.Id
+            workflowJobEvent.WorkflowJob.Id,
+            action
         );
 
         if (!task.IsSuccessStatusCode)
