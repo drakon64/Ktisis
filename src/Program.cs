@@ -18,9 +18,17 @@ public static class Program
         builder.Services.AddSingleton<WebhookEventProcessor, WorkflowJobWebhookEventProcessor>();
 
         var app = builder.Build();
+
+        // Receiver
         app.MapGitHubWebhooks(
             secret: Environment.GetEnvironmentVariable("KTISIS_GITHUB_WEBHOOK_SECRET")
         );
+
+        // Processor
+        var apiGroup = app.MapGroup("/api/ktisis");
+        apiGroup.MapPost("/queued", () => "Hello World!");
+        apiGroup.MapPost("/completed", () => "Hello World!");
+
         app.Run($"http://*:{Environment.GetEnvironmentVariable("PORT")}");
     }
 }
