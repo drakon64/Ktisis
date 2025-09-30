@@ -1,4 +1,4 @@
-using System.Security.Cryptography;
+using System.IO.Hashing;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -17,7 +17,7 @@ internal static partial class CloudTasksClient
         var token = await GoogleCloudClient.RefreshAccessToken();
 
         var taskName = Convert.ToHexString(
-            SHA256.HashData(
+            XxHash3.Hash(
                 Encoding.Default.GetBytes($"{repository.Replace("/", "-")}-{runId}-{jobId}")
             )
         );

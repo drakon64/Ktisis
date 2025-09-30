@@ -53,5 +53,10 @@
     "pname": "System.IdentityModel.Tokens.Jwt",
     "version": "8.14.0",
     "hash": "sha256-huaZiEg+jXsWnVA+kYmMbajYhagqi08mwZ0WhNml7ek="
+  },
+  {
+    "pname": "System.IO.Hashing",
+    "version": "9.0.9",
+    "hash": "sha256-2s9p+zrN21Cu0bhIcV/RQcbreAWyW4e7kadH0T0BuKs="
   }
 ]
