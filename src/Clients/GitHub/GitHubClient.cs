@@ -8,9 +8,13 @@ namespace Ktisis.Clients.GitHub;
 
 internal static partial class GitHubClient
 {
-    private static readonly string GitHubClientId =
+    private static readonly string ClientId =
         Environment.GetEnvironmentVariable("GITHUB_CLIENT_ID")
         ?? throw new InvalidOperationException("GITHUB_CLIENT_ID is null");
+
+    private static readonly string InstallationId =
+        Environment.GetEnvironmentVariable("GITHUB_INSTALLATION_ID")
+        ?? throw new InvalidOperationException("GITHUB_INSTALLATION_ID is null");
 
     private static readonly SigningCredentials GitHubSigningCredentials;
 
@@ -38,7 +42,7 @@ internal static partial class GitHubClient
         var expires = now.AddSeconds(100);
 
         var jwt = new JwtSecurityToken(
-            issuer: GitHubClientId,
+            issuer: ClientId,
             claims:
             [
                 new Claim(
@@ -60,7 +64,7 @@ internal static partial class GitHubClient
         ExpiresAt = DateTime.Now,
     };
 
-    private static async Task RefreshGitHubInstallationAccessToken(ulong installationId)
+    private static async Task RefreshGitHubInstallationAccessToken()
     {
         // If the current installation access token expires in less than a minute, generate a new one
         if (_githubInstallationAccessToken.ExpiresAt.Subtract(DateTime.Now).Minutes >= 1)
@@ -78,7 +82,7 @@ internal static partial class GitHubClient
                     { "X-GitHub-Api-Version", "2022-11-28" },
                 },
                 RequestUri = new Uri(
-                    $"https://api.github.com/app/installations/{installationId}/access_tokens"
+                    $"https://api.github.com/app/installations/{InstallationId}/access_tokens"
                 ),
             }
         );

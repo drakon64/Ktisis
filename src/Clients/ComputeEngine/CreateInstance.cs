@@ -1,3 +1,5 @@
+using Ktisis.Clients.GitHub;
+
 namespace Ktisis.Clients.ComputeEngine;
 
 internal static partial class ComputeEngineClient
@@ -6,7 +8,7 @@ internal static partial class ComputeEngineClient
         Environment.GetEnvironmentVariable("KTISIS_SOURCE_INSTANCE_TEMPLATE")
         ?? throw new InvalidOperationException("KTISIS_SOURCE_INSTANCE_TEMPLATE is null");
 
-    public static async Task CreateInstance(string name)
+    public static async Task CreateInstance(string name, string repository)
     {
         var token = await GoogleCloudClient.RefreshAccessToken();
 
@@ -22,7 +24,24 @@ internal static partial class ComputeEngineClient
                 Method = HttpMethod.Post,
 
                 Content = JsonContent.Create(
-                    new CreateInstanceRequest { Name = name },
+                    new CreateInstanceRequest
+                    {
+                        Name = name,
+                        Metadata = new Metadata
+                        {
+                            Items =
+                            [
+                                new MetadataItem { Key = "REPOSITORY", Value = repository },
+                                new MetadataItem
+                                {
+                                    Key = "TOKEN",
+                                    Value = await GitHubClient.CreateRunnerRegistrationToken(
+                                        repository
+                                    ),
+                                },
+                            ],
+                        },
+                    },
                     ComputeEngineClientClientSourceGenerationContext.Default.CreateInstanceRequest
                 ),
             }
@@ -37,5 +56,17 @@ internal static partial class ComputeEngineClient
     private class CreateInstanceRequest
     {
         public required string Name { get; init; }
+        public required Metadata Metadata { get; init; }
+    }
+
+    private class Metadata
+    {
+        public required MetadataItem[] Items { get; init; }
+    }
+
+    private class MetadataItem
+    {
+        public required string Key { get; init; }
+        public required string Value { get; init; }
     }
 }

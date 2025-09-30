@@ -2,12 +2,9 @@ namespace Ktisis.Clients.GitHub;
 
 internal static partial class GitHubClient
 {
-    public static async Task<string> CreateRunnerRegistrationToken(
-        string repo,
-        ulong installationId
-    )
+    public static async Task<string> CreateRunnerRegistrationToken(string repo)
     {
-        await RefreshGitHubInstallationAccessToken(installationId);
+        await RefreshGitHubInstallationAccessToken();
 
         var request = await Program.HttpClient.SendAsync(
             new HttpRequestMessage
@@ -33,7 +30,7 @@ internal static partial class GitHubClient
         )!.Token;
     }
 
-    internal class RunnerRegistrationToken
+    private class RunnerRegistrationToken
     {
         public required string Token { get; init; }
     }
