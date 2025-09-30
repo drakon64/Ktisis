@@ -38,7 +38,7 @@ internal static partial class CloudTasksClient
                             HttpRequest = new HttpRequest(repository, runId, jobId),
                         },
                     },
-                    CloudTasksClientSourceGenerationContext.Default.Task
+                    CloudTasksClientSourceGenerationContext.Default.TaskRequest
                 ),
             }
         );
