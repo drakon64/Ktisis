@@ -44,18 +44,18 @@ internal static partial class CloudTasksClient
         );
     }
 
-    internal class TaskRequest
+    private class TaskRequest
     {
         public required Task Task { get; init; }
     }
 
-    internal class Task
+    private class Task
     {
         public required string Name { get; init; }
         public required HttpRequest HttpRequest { get; init; }
     }
 
-    internal class HttpRequest(string repository, long runId, long jobId)
+    private class HttpRequest(string repository, long runId, long jobId)
     {
         [JsonInclude]
         public readonly string Url =
@@ -80,14 +80,14 @@ internal static partial class CloudTasksClient
         public readonly OidcToken OidcToken = new();
     }
 
-    internal class HttpRequestBody
+    private class HttpRequestBody
     {
         public required string Repository { get; init; }
         public required long RunId { get; init; }
         public required long JobId { get; init; }
     }
 
-    internal class OidcToken
+    private class OidcToken
     {
         [JsonInclude]
         public readonly string ServiceAccountEmail =
