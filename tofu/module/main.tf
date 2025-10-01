@@ -8,9 +8,9 @@ terraform {
 
 locals {
   services = toset([
+    "processor",
     "receiver",
     "runner",
-    "processor",
   ])
 }
 

@@ -79,3 +79,9 @@ resource "google_compute_instance_template" "runner" {
 
   depends_on = [google_project_service.compute]
 }
+
+resource "google_service_account_iam_member" "runner" {
+  member             = google_service_account.ktisis["processor"].member
+  role               = "roles/iam.serviceAccountUser"
+  service_account_id = google_service_account.ktisis["runner"].id
+}
