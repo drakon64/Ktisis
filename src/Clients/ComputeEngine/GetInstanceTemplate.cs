@@ -10,7 +10,7 @@ internal static partial class ComputeEngineClient
             new HttpRequestMessage
             {
                 RequestUri = new Uri(
-                    $"https://compute.googleapis.com/compute/v1/projects/{Project}/global/instanceTemplates/{SourceInstanceTemplate}"
+                    $"https://compute.googleapis.com/compute/v1/{SourceInstanceTemplate}"
                 ),
                 Headers = { { "Authorization", $"{token.TokenType} {token.AccessToken}" } },
                 Method = HttpMethod.Get,
