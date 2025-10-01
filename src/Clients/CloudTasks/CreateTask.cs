@@ -77,7 +77,8 @@ internal static partial class CloudTasksClient
                         Repository = repository,
                         RunId = runId,
                         JobId = jobId,
-                    }
+                    },
+                    CloudTasksClientSourceGenerationContext.Default.HttpRequestBody
                 )
             )
         );
