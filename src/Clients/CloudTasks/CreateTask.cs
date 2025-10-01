@@ -64,9 +64,11 @@ internal static partial class CloudTasksClient
             (
                 Environment.GetEnvironmentVariable("KTISIS_PROCESSOR")
                 ?? throw new InvalidOperationException("KTISIS_PROCESSOR is null")
-            )
-            + "/api/ktisis/"
-            + action;
+            ) + "/api/ktisis";
+
+        [JsonInclude]
+        public readonly TasksHttpMethod HttpMethod =
+            action == WorkflowJobAction.Queued ? TasksHttpMethod.Post : TasksHttpMethod.Delete;
 
         [JsonInclude]
         public readonly string Body = WebEncoders.Base64UrlEncode(
@@ -85,6 +87,15 @@ internal static partial class CloudTasksClient
 
         [JsonInclude]
         public readonly OidcToken OidcToken = new();
+    }
+
+    private enum TasksHttpMethod
+    {
+        [JsonPropertyName("POST")]
+        Post,
+
+        [JsonPropertyName("DELETE")]
+        Delete,
     }
 
     private class HttpRequestBody
