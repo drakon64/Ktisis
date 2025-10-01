@@ -66,7 +66,7 @@ internal static partial class GitHubClient
         if (_githubInstallationAccessToken.ExpiresAt.Subtract(DateTime.Now).Minutes >= 1)
             return;
 
-        var responseMessage = await Program.HttpClient.SendAsync(
+        var response = await Program.HttpClient.SendAsync(
             new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
@@ -83,9 +83,16 @@ internal static partial class GitHubClient
             }
         );
 
+        if (!response.IsSuccessStatusCode)
+        {
+            await Console.Out.WriteLineAsync(await response.Content.ReadAsStringAsync());
+
+            throw new Exception(); // TODO: Useful exception
+        }
+
         // TODO: Make this thread-safe
         _githubInstallationAccessToken = (
-            await responseMessage.Content.ReadFromJsonAsync<InstallationAccessToken>(
+            await response.Content.ReadFromJsonAsync<InstallationAccessToken>(
                 GitHubClientSourceGenerationContext.Default.InstallationAccessToken
             )
         )!;
