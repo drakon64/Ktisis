@@ -2,9 +2,9 @@ namespace Ktisis.Clients.GitHub;
 
 internal static partial class GitHubClient
 {
-    public static async Task<string> CreateRunnerRegistrationToken(string repo)
+    public static async Task<string> CreateRunnerRegistrationToken(string repo, long installationId)
     {
-        await RefreshGitHubInstallationAccessToken();
+        await RefreshGitHubInstallationAccessToken(installationId);
 
         var request = await Program.HttpClient.SendAsync(
             new HttpRequestMessage

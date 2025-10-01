@@ -17,6 +17,30 @@ resource "google_cloud_run_v2_service" "processor" {
           value = join(" ", var.allowed_repositories)
         }
       }
+      
+      env {
+        name = "KTISIS_GITHUB_CLIENT_ID"
+        
+        value_source {
+          secret_key_ref {
+            secret = google_secret_manager_secret.secret["github-client-id"].name
+            
+            version = "latest"
+          }
+        }
+      }
+
+      env {
+        name = "KTISIS_GITHUB_PRIVATE_KEY"
+
+        value_source {
+          secret_key_ref {
+            secret = google_secret_manager_secret.secret["github-private-key"].name
+
+            version = "latest"
+          }
+        }
+      }
 
       env {
         name = "KTISIS_PROJECT"

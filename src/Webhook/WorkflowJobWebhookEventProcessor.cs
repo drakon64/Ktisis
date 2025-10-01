@@ -45,6 +45,7 @@ public class WorkflowJobWebhookEventProcessor(ILogger<WorkflowJobWebhookEventPro
             workflowJobEvent.Repository.FullName,
             workflowJobEvent.WorkflowJob.RunId,
             workflowJobEvent.WorkflowJob.Id,
+            workflowJobEvent.Installation!.Id,
             action
         );
 

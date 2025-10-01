@@ -8,7 +8,7 @@ internal static partial class ComputeEngineClient
         Environment.GetEnvironmentVariable("KTISIS_SOURCE_INSTANCE_TEMPLATE")
         ?? throw new InvalidOperationException("KTISIS_SOURCE_INSTANCE_TEMPLATE is null");
 
-    public static async Task CreateInstance(string name, string repository)
+    public static async Task CreateInstance(string name, string repository, long installationId)
     {
         var token = await GoogleCloudClient.RefreshAccessToken();
 
@@ -36,7 +36,8 @@ internal static partial class ComputeEngineClient
                                 {
                                     Key = "TOKEN",
                                     Value = await GitHubClient.CreateRunnerRegistrationToken(
-                                        repository
+                                        repository,
+                                        installationId
                                     ),
                                 },
                             ],

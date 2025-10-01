@@ -28,8 +28,8 @@ public static class Program
         // Processor
         app.MapPost(
             "/api/ktisis",
-            async (string name, string repository) =>
-                await ComputeEngineClient.CreateInstance(name, repository)
+            async (string name, string repository, long installationId) =>
+                await ComputeEngineClient.CreateInstance(name, repository, installationId)
         );
         app.MapDelete("/api/ktisis", () => "Hello World!");
 

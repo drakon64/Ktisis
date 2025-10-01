@@ -4,7 +4,8 @@ locals {
   ])
 
   processor_secrets = toset([
-    "github-private-key"
+    "github-client-id",
+    "github-private-key",
   ])
 }
 

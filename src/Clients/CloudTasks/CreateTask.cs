@@ -11,6 +11,7 @@ internal static partial class CloudTasksClient
         string repository,
         long runId,
         long jobId,
+        long installationId,
         WorkflowJobAction action
     )
     {
@@ -35,7 +36,12 @@ internal static partial class CloudTasksClient
                         Task = new Task
                         {
                             Name = $"{Queue}/tasks/{taskName}",
-                            HttpRequest = new HttpRequest(taskName, repository, action),
+                            HttpRequest = new HttpRequest(
+                                taskName,
+                                repository,
+                                installationId,
+                                action
+                            ),
                         },
                     },
                     CloudTasksClientSourceGenerationContext.Default.TaskRequest
@@ -66,7 +72,12 @@ internal static partial class CloudTasksClient
         [JsonInclude]
         public readonly OidcToken OidcToken = new();
 
-        public HttpRequest(string name, string repository, WorkflowJobAction action)
+        public HttpRequest(
+            string name,
+            string repository,
+            long installationId,
+            WorkflowJobAction action
+        )
             : this()
         {
             var url =
@@ -78,6 +89,7 @@ internal static partial class CloudTasksClient
             var queryString = System.Web.HttpUtility.ParseQueryString(string.Empty);
             queryString.Add("name", name);
             queryString.Add("repository", repository);
+            queryString.Add("installationId", installationId.ToString());
 
             Url = $"{url}?{queryString}";
 
