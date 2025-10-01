@@ -26,7 +26,7 @@ internal static partial class ComputeEngineClient
                 Content = JsonContent.Create(
                     new CreateInstanceRequest
                     {
-                        Name = name,
+                        Name = $"i-{name}",
                         Metadata = new Metadata
                         {
                             Items =
