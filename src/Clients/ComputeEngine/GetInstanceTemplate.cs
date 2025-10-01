@@ -28,6 +28,11 @@ internal static partial class ComputeEngineClient
 
     private class InstanceTemplate
     {
-        public required CreateInstanceRequest Properties { get; init; }
+        public required InstanceTemplateProperties Properties { get; init; }
+    }
+
+    private class InstanceTemplateProperties
+    {
+        public required Metadata Metadata { get; init; }
     }
 }
