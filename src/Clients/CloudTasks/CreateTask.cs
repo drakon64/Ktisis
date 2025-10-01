@@ -17,7 +17,7 @@ internal static partial class CloudTasksClient
     {
         var token = await GoogleCloudClient.RefreshAccessToken();
 
-        var taskName = Convert.ToHexString(
+        var name = Convert.ToHexStringLower(
             XxHash3.Hash(
                 Encoding.Default.GetBytes($"{repository.Replace("/", "-")}-{runId}-{jobId}")
             )
@@ -35,13 +35,8 @@ internal static partial class CloudTasksClient
                     {
                         Task = new Task
                         {
-                            Name = $"{Queue}/tasks/{taskName}",
-                            HttpRequest = new HttpRequest(
-                                taskName,
-                                repository,
-                                installationId,
-                                action
-                            ),
+                            Name = $"{Queue}/tasks/{name}",
+                            HttpRequest = new HttpRequest(name, repository, installationId, action),
                         },
                     },
                     CloudTasksClientSourceGenerationContext.Default.TaskRequest
