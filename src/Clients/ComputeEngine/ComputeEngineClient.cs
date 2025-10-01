@@ -12,7 +12,12 @@ internal static partial class ComputeEngineClient
         Environment.GetEnvironmentVariable("KTISIS_ZONES")?.Split(" ")
         ?? throw new InvalidOperationException("KTISIS_ZONES is null");
 
+    private static readonly string SourceInstanceTemplate =
+        Environment.GetEnvironmentVariable("KTISIS_SOURCE_INSTANCE_TEMPLATE")
+        ?? throw new InvalidOperationException("KTISIS_SOURCE_INSTANCE_TEMPLATE is null");
+
     [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
     [JsonSerializable(typeof(CreateInstanceRequest))]
+    [JsonSerializable(typeof(InstanceTemplate))]
     private partial class ComputeEngineClientClientSourceGenerationContext : JsonSerializerContext;
 }
