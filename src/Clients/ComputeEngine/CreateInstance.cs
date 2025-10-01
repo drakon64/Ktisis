@@ -4,15 +4,25 @@ namespace Ktisis.Clients.ComputeEngine;
 
 internal static partial class ComputeEngineClient
 {
-    private static readonly string SourceInstanceTemplate =
-        Environment.GetEnvironmentVariable("KTISIS_SOURCE_INSTANCE_TEMPLATE")
-        ?? throw new InvalidOperationException("KTISIS_SOURCE_INSTANCE_TEMPLATE is null");
-
     public static async Task CreateInstance(string name, string repository, long installationId)
     {
         var token = await GoogleCloudClient.RefreshAccessToken();
 
         var zone = Zones[0]; // TODO: Pick a random element
+
+        var metadata = new List<MetadataItem>
+        {
+            new() { Key = "REPOSITORY", Value = repository },
+            new()
+            {
+                Key = "TOKEN",
+                Value = await GitHubClient.CreateRunnerRegistrationToken(
+                    repository,
+                    installationId
+                ),
+            },
+        };
+        metadata.AddRange((await GetInstanceTemplate())!.Properties.Metadata.Items);
 
         var response = await Program.HttpClient.SendAsync(
             new HttpRequestMessage
@@ -27,21 +37,7 @@ internal static partial class ComputeEngineClient
                     new CreateInstanceRequest
                     {
                         Name = $"i-{name}",
-                        Metadata = new Metadata
-                        {
-                            Items =
-                            [
-                                new MetadataItem { Key = "REPOSITORY", Value = repository },
-                                new MetadataItem
-                                {
-                                    Key = "TOKEN",
-                                    Value = await GitHubClient.CreateRunnerRegistrationToken(
-                                        repository,
-                                        installationId
-                                    ),
-                                },
-                            ],
-                        },
+                        Metadata = new Metadata { Items = metadata },
                     },
                     ComputeEngineClientClientSourceGenerationContext.Default.CreateInstanceRequest
                 ),
@@ -64,7 +60,7 @@ internal static partial class ComputeEngineClient
 
     private class Metadata
     {
-        public required MetadataItem[] Items { get; init; }
+        public required List<MetadataItem> Items { get; init; }
     }
 
     private class MetadataItem
