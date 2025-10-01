@@ -104,7 +104,7 @@ internal static partial class GitHubClient
         public required DateTime ExpiresAt { get; init; }
     }
 
-    [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
+    [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.SnakeCaseLower)]
     [JsonSerializable(typeof(InstallationAccessToken))]
     [JsonSerializable(typeof(RunnerRegistrationToken))]
     private partial class GitHubClientSourceGenerationContext : JsonSerializerContext;
