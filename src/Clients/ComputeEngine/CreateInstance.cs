@@ -51,7 +51,7 @@ internal static partial class ComputeEngineClient
         if (!response.IsSuccessStatusCode)
         {
             await Console.Out.WriteLineAsync(await response.Content.ReadAsStringAsync());
-            
+
             throw new Exception(); // TODO: Useful exception
         }
     }
