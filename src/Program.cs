@@ -12,9 +12,9 @@ public static class Program
 
     internal static readonly HttpClient HttpClient = new();
 
-    public static void Main(string[] args)
+    public static void Main()
     {
-        var builder = WebApplication.CreateSlimBuilder(args);
+        var builder = WebApplication.CreateSlimBuilder();
         builder.Services.AddSingleton<WebhookEventProcessor, WorkflowJobWebhookEventProcessor>();
 
         var app = builder.Build();
