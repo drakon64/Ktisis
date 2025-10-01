@@ -35,7 +35,7 @@ resource "google_compute_instance_template" "runner" {
 
   disk {
     disk_size_gb = 14
-    disk_type    = "pd-standard"
+    disk_type    = "hyperdisk-balanced"
     source_image = "projects/ubuntu-os-cloud/global/images/family/ubuntu-minimal-2404-lts-amd64"
   }
 
