@@ -1,8 +1,6 @@
 using System.IO.Hashing;
 using System.Text;
-using System.Text.Json;
 using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.WebUtilities;
 using Octokit.Webhooks.Events.WorkflowJob;
 
 namespace Ktisis.Clients.CloudTasks;
@@ -37,7 +35,7 @@ internal static partial class CloudTasksClient
                         Task = new Task
                         {
                             Name = $"{Queue}/tasks/{taskName}",
-                            HttpRequest = new HttpRequest(repository, runId, jobId, action),
+                            HttpRequest = new HttpRequest(taskName, repository, action),
                         },
                     },
                     CloudTasksClientSourceGenerationContext.Default.TaskRequest
@@ -57,36 +55,35 @@ internal static partial class CloudTasksClient
         public required HttpRequest HttpRequest { get; init; }
     }
 
-    private class HttpRequest(string repository, long runId, long jobId, WorkflowJobAction action)
+    private class HttpRequest()
     {
         [JsonInclude]
-        public readonly string Url =
-            (
-                Environment.GetEnvironmentVariable("KTISIS_PROCESSOR")
-                ?? throw new InvalidOperationException("KTISIS_PROCESSOR is null")
-            ) + "/api/ktisis";
+        public string Url;
 
         [JsonInclude]
-        public readonly TasksHttpMethod HttpMethod =
-            action == WorkflowJobAction.Queued ? TasksHttpMethod.Post : TasksHttpMethod.Delete;
-
-        [JsonInclude]
-        public readonly string Body = WebEncoders.Base64UrlEncode(
-            Encoding.Default.GetBytes(
-                JsonSerializer.Serialize(
-                    new HttpRequestBody
-                    {
-                        Repository = repository,
-                        RunId = runId,
-                        JobId = jobId,
-                    },
-                    CloudTasksClientSourceGenerationContext.Default.HttpRequestBody
-                )
-            )
-        );
+        public TasksHttpMethod HttpMethod;
 
         [JsonInclude]
         public readonly OidcToken OidcToken = new();
+
+        public HttpRequest(string name, string repository, WorkflowJobAction action)
+            : this()
+        {
+            var url =
+                (
+                    Environment.GetEnvironmentVariable("KTISIS_PROCESSOR")
+                    ?? throw new InvalidOperationException("KTISIS_PROCESSOR is null")
+                ) + "/api/ktisis";
+
+            var queryString = System.Web.HttpUtility.ParseQueryString(string.Empty);
+            queryString.Add("name", name);
+            queryString.Add("repository", repository);
+
+            Url = $"{url}?{queryString}";
+
+            HttpMethod =
+                action == WorkflowJobAction.Queued ? TasksHttpMethod.Post : TasksHttpMethod.Delete;
+        }
     }
 
     private enum TasksHttpMethod
@@ -96,13 +93,6 @@ internal static partial class CloudTasksClient
 
         [JsonPropertyName("DELETE")]
         Delete,
-    }
-
-    private class HttpRequestBody
-    {
-        public required string Repository { get; init; }
-        public required long RunId { get; init; }
-        public required long JobId { get; init; }
     }
 
     private class OidcToken

@@ -1,3 +1,4 @@
+using Ktisis.Clients.ComputeEngine;
 using Ktisis.Webhook;
 using Octokit.Webhooks;
 using Octokit.Webhooks.AspNetCore;
@@ -25,7 +26,11 @@ public static class Program
         );
 
         // Processor
-        app.MapPost("/api/ktisis", () => "Hello World!");
+        app.MapPost(
+            "/api/ktisis",
+            async (string name, string repository) =>
+                await ComputeEngineClient.CreateInstance(name, repository)
+        );
         app.MapDelete("/api/ktisis", () => "Hello World!");
 
         app.Run($"http://*:{Environment.GetEnvironmentVariable("PORT")}");
