@@ -35,7 +35,7 @@ internal static partial class GitHubClient
     private static string GenerateJwt()
     {
         var now = DateTime.UtcNow;
-        var expires = now.AddSeconds(100);
+        var expires = now.AddSeconds(60);
 
         var jwt = new JwtSecurityToken(
             issuer: ClientId,
