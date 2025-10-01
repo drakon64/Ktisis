@@ -5,9 +5,14 @@ resource "google_service_account" "ktisis" {
 }
 
 resource "google_service_account_iam_member" "iam" {
-  member             = google_service_account.ktisis["receiver"].member
+  for_each = toset([
+    "processor",
+    "receiver",
+  ])
+
+  member             = google_service_account.ktisis[each.value].member
   role               = "roles/iam.serviceAccountUser"
-  service_account_id = google_service_account.ktisis["receiver"].id
+  service_account_id = google_service_account.ktisis[each.value].id
 }
 
 resource "google_project_iam_member" "compute" {
