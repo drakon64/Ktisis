@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -x
 
 REPOSITORY=$(curl "http://metadata.google.internal/computeMetadata/v1/instance/attributes/ktisis-repository")
 TOKEN=$(curl "http://metadata.google.internal/computeMetadata/v1/instance/attributes/ktisis-token")
