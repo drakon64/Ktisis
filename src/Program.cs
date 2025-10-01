@@ -25,9 +25,8 @@ public static class Program
         );
 
         // Processor
-        var apiGroup = app.MapGroup("/api/ktisis");
-        apiGroup.MapPost("/queued", () => "Hello World!");
-        apiGroup.MapPost("/completed", () => "Hello World!");
+        app.MapPost("/api/ktisis", () => "Hello World!");
+        app.MapDelete("/api/ktisis", () => "Hello World!");
 
         app.Run($"http://*:{Environment.GetEnvironmentVariable("PORT")}");
     }
