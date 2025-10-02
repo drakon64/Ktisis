@@ -29,7 +29,7 @@ resource "google_cloud_run_v2_service" "receiver" {
 
         value_source {
           secret_key_ref {
-            secret = google_secret_manager_secret.secret["github-webhook-secret"].name
+            secret = google_secret_manager_secret.secret["github-webhook-secret"].secret_id
 
             version = "latest"
           }

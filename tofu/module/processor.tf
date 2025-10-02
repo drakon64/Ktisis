@@ -23,7 +23,7 @@ resource "google_cloud_run_v2_service" "processor" {
 
         value_source {
           secret_key_ref {
-            secret = google_secret_manager_secret.secret["github-client-id"].name
+            secret = google_secret_manager_secret.secret["github-client-id"].secret_id
 
             version = "latest"
           }
@@ -35,7 +35,7 @@ resource "google_cloud_run_v2_service" "processor" {
 
         value_source {
           secret_key_ref {
-            secret = google_secret_manager_secret.secret["github-private-key"].name
+            secret = google_secret_manager_secret.secret["github-private-key"].secret_id
 
             version = "latest"
           }
