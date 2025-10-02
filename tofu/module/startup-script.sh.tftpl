@@ -1,17 +1,21 @@
-#!/bin/sh -x
+#!/bin/sh -ex
 
-REPOSITORY=$(curl "http://metadata.google.internal/computeMetadata/v1/instance/attributes/ktisis-repository")
-TOKEN=$(curl "http://metadata.google.internal/computeMetadata/v1/instance/attributes/ktisis-token")
+REPOSITORY=$(curl -H "Metadata-Flavor: Google" "http://metadata.google.internal/computeMetadata/v1/instance/attributes/ktisis-repository")
+TOKEN=$(curl -H "Metadata-Flavor: Google" "http://metadata.google.internal/computeMetadata/v1/instance/attributes/ktisis-token")
 
 mkdir -p /opt/runner
 cd /opt/runner
 
+adduser runner
+adduser runner sudo
+
+sudo chown runner:runner /opt/runner
+
 wget ${runner_url}
-tar xf ${runner_tarball}
-rm ${runner_tarball}
+sudo -u runner tar xf ${runner_tarball}
 
-adduser --add-extra-groups wheel runner
-
-./config.sh --url "https://github.com/$${REPOSITORY}" --token "$${TOKEN}" --ephemeral
+sudo -u runner ./config.sh --url "https://github.com/$${REPOSITORY}" --token "$${TOKEN}" --ephemeral
 ./svc.sh install runner
 ./svc.sh start
+
+rm ${runner_tarball}
