@@ -18,7 +18,7 @@ internal static partial class CloudTasksClient
     {
         var token = await GoogleCloudClient.RefreshAccessToken();
 
-        var name = Convert.ToHexStringLower(
+        var taskName = Convert.ToHexStringLower(
             XxHash3.Hash(
                 Encoding.Default.GetBytes(
                     action == WorkflowJobAction.Queued
@@ -28,14 +28,25 @@ internal static partial class CloudTasksClient
             )
         );
 
+        var instanceName = Convert.ToHexStringLower(
+            XxHash3.Hash(
+                Encoding.Default.GetBytes($"{repository.Replace("/", "-")}-{runId}-{jobId}")
+            )
+        );
+
         Console.WriteLine(
             JsonSerializer.Serialize(
                 new TaskRequest
                 {
                     Task = new Task
                     {
-                        Name = $"{Queue}/tasks/{name}",
-                        HttpRequest = new HttpRequest(name, repository, installationId, action),
+                        Name = $"{Queue}/tasks/{taskName}",
+                        HttpRequest = new HttpRequest(
+                            instanceName,
+                            repository,
+                            installationId,
+                            action
+                        ),
                     },
                 },
                 CloudTasksClientSourceGenerationContext.Default.TaskRequest
@@ -54,8 +65,13 @@ internal static partial class CloudTasksClient
                     {
                         Task = new Task
                         {
-                            Name = $"{Queue}/tasks/{name}",
-                            HttpRequest = new HttpRequest(name, repository, installationId, action),
+                            Name = $"{Queue}/tasks/{taskName}",
+                            HttpRequest = new HttpRequest(
+                                instanceName,
+                                repository,
+                                installationId,
+                                action
+                            ),
                         },
                     },
                     CloudTasksClientSourceGenerationContext.Default.TaskRequest
