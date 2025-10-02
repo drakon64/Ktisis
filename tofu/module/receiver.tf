@@ -77,6 +77,15 @@ resource "google_cloud_run_v2_service" "receiver" {
     service_account = google_service_account.ktisis["receiver"].email
 
     timeout = "10s"
+
+    vpc_access {
+      egress = "ALL_TRAFFIC"
+
+      network_interfaces {
+        network = google_compute_network.network.name
+        subnetwork = google_compute_subnetwork.subnetwork.name
+      }
+    }
   }
 
   depends_on = [

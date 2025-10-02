@@ -89,6 +89,15 @@ resource "google_cloud_run_v2_service" "processor" {
     service_account = google_service_account.ktisis["processor"].email
 
     timeout = "60s"
+    
+    vpc_access {
+      egress = "ALL_TRAFFIC"
+      
+      network_interfaces {
+        network = google_compute_network.network.name
+        subnetwork = google_compute_subnetwork.subnetwork.name
+      }
+    }
   }
 
   depends_on = [
