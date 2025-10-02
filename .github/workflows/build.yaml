@@ -32,29 +32,11 @@ jobs:
       - name: Build
         run: nix-build -A docker
 
-      - name: Set up Docker's apt repository
-        run: |
-          # Add Docker's official GPG key:
+      - run: |
           sudo apt-get update
-          sudo apt-get install ca-certificates curl
-          sudo install -m 0755 -d /etc/apt/keyrings
-          sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-          sudo chmod a+r /etc/apt/keyrings/docker.asc
+          sudo apt-get -y install podman
 
-          # Add the repository to Apt sources:
-          echo \
-          "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-          $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
-          sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-          sudo apt-get update
-
-      - name: Install the Docker packages
-        run: sudo apt-get -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-
-      - run: sudo usermod -aG docker $USER
-        shell: bash
-
-      - run: docker load < result
+      - run: podman load < result
 
       - uses: google-github-actions/auth@v3
         with:
@@ -67,5 +49,5 @@ jobs:
 
       - name: Upload to Artifact Registry
         run: |
-          docker tag ktisis europe-west2-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/ktisis/ktisis
-          docker push europe-west2-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/ktisis/ktisis
+          podman tag ktisis europe-west2-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/ktisis/ktisis
+          podman push europe-west2-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/ktisis/ktisis
