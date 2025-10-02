@@ -21,9 +21,8 @@ internal static partial class CloudTasksClient
         var taskName = Convert.ToHexStringLower(
             XxHash3.Hash(
                 Encoding.Default.GetBytes(
-                    action == WorkflowJobAction.Queued
-                        ? "c"
-                        : "d" + $"-{repository.Replace("/", "-")}-{runId}-{jobId}"
+                    (action == WorkflowJobAction.Queued ? "c" : "d")
+                        + $"-{repository.Replace("/", "-")}-{runId}-{jobId}"
                 )
             )
         );
@@ -31,25 +30,6 @@ internal static partial class CloudTasksClient
         var instanceName = Convert.ToHexStringLower(
             XxHash3.Hash(
                 Encoding.Default.GetBytes($"{repository.Replace("/", "-")}-{runId}-{jobId}")
-            )
-        );
-
-        Console.WriteLine(
-            JsonSerializer.Serialize(
-                new TaskRequest
-                {
-                    Task = new Task
-                    {
-                        Name = $"{Queue}/tasks/{taskName}",
-                        HttpRequest = new HttpRequest(
-                            instanceName,
-                            repository,
-                            installationId,
-                            action
-                        ),
-                    },
-                },
-                CloudTasksClientSourceGenerationContext.Default.TaskRequest
             )
         );
 
