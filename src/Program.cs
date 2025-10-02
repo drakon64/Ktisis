@@ -31,7 +31,10 @@ public static class Program
             async (string name, string repository, long installationId) =>
                 await ComputeEngineClient.CreateInstance(name, repository, installationId)
         );
-        app.MapDelete("/api/ktisis", () => "Hello World!");
+        app.MapDelete(
+            "/api/ktisis",
+            async (string name) => await ComputeEngineClient.DeleteInstance(name)
+        );
 
         app.Run($"http://*:{Environment.GetEnvironmentVariable("PORT")}");
     }
