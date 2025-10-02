@@ -28,7 +28,10 @@ public class WorkflowJobWebhookEventProcessor(ILogger<WorkflowJobWebhookEventPro
             return;
         }
 
-        if (!(action == WorkflowJobAction.Queued || action == WorkflowJobAction.Completed))
+        if (
+            !(action == WorkflowJobAction.Queued || action == WorkflowJobAction.Completed)
+            || !workflowJobEvent.WorkflowJob.Labels.Contains("self-hosted")
+        )
         {
             logger.LogInformation(
                 "Not responding to {WorkflowJobAction} event from {FullName}",
