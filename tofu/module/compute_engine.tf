@@ -85,3 +85,16 @@ resource "google_service_account_iam_member" "runner" {
   role               = "roles/iam.serviceAccountUser"
   service_account_id = google_service_account.ktisis["runner"].id
 }
+
+resource "google_compute_firewall" "iap" {
+  name = "allow-ingress-from-iap"
+  network = google_compute_network.network.id
+  
+  allow {
+    protocol = "tcp"
+    
+    ports = [22]
+  }
+  
+  source_ranges = ["35.235.240.0/20"]
+}
