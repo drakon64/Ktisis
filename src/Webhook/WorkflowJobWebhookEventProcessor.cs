@@ -29,7 +29,7 @@ public class WorkflowJobWebhookEventProcessor(ILogger<WorkflowJobWebhookEventPro
         }
 
         if (
-            !(action == WorkflowJobAction.Queued || action == WorkflowJobAction.Completed)
+            !(action.Equals(WorkflowJobAction.Queued) || action.Equals(WorkflowJobAction.Completed))
             || !workflowJobEvent.WorkflowJob.Labels.Contains("self-hosted")
         )
         {
