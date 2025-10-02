@@ -7,7 +7,9 @@ mkdir -p /opt/runner
 cd /opt/runner
 
 adduser runner
-adduser runner sudo
+touch /etc/sudoers.d/runner
+chown 0440 /etc/sudoers.d/runner
+echo "runner ALL=(ALL:ALL) NOPASSWD:ALL" > /etc/sudoers.d/runner
 
 sudo chown runner:runner /opt/runner
 
