@@ -130,10 +130,10 @@ internal static partial class CloudTasksClient
 
     private enum TasksHttpMethod
     {
-        [JsonPropertyName("POST")]
+        [JsonStringEnumMemberName("POST")]
         Post,
 
-        [JsonPropertyName("DELETE")]
+        [JsonStringEnumMemberName("DELETE")]
         Delete,
     }
 
