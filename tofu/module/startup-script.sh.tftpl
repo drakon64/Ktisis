@@ -8,7 +8,7 @@ cd /opt/runner
 
 adduser runner
 touch /etc/sudoers.d/runner
-chown 0440 /etc/sudoers.d/runner
+chmod 0440 /etc/sudoers.d/runner
 echo "runner ALL=(ALL:ALL) NOPASSWD:ALL" > /etc/sudoers.d/runner
 
 sudo chown runner:runner /opt/runner
