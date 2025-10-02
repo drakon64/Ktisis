@@ -2,7 +2,7 @@ resource "google_cloud_run_v2_service" "processor" {
   location = var.region
   name     = "ktisis-processor"
 
-  ingress = "INGRESS_TRAFFIC_ALL"
+  ingress = "INGRESS_TRAFFIC_INTERNAL_ONLY"
 
   template {
     containers {
