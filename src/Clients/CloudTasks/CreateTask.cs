@@ -1,5 +1,6 @@
 using System.IO.Hashing;
 using System.Text;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using Octokit.Webhooks.Events.WorkflowJob;
 
@@ -24,6 +25,20 @@ internal static partial class CloudTasksClient
                         ? "c"
                         : "d" + $"-{repository.Replace("/", "-")}-{runId}-{jobId}"
                 )
+            )
+        );
+
+        Console.WriteLine(
+            JsonSerializer.Serialize(
+                new TaskRequest
+                {
+                    Task = new Task
+                    {
+                        Name = $"{Queue}/tasks/{name}",
+                        HttpRequest = new HttpRequest(name, repository, installationId, action),
+                    },
+                },
+                CloudTasksClientSourceGenerationContext.Default.TaskRequest
             )
         );
 
