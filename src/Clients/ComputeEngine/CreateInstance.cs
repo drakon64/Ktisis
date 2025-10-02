@@ -12,10 +12,10 @@ internal static partial class ComputeEngineClient
 
         var metadata = new List<MetadataItem>
         {
-            new() { Key = "REPOSITORY", Value = repository },
+            new() { Key = "ktisis-repository", Value = repository },
             new()
             {
-                Key = "TOKEN",
+                Key = "ktisis-token",
                 Value = await GitHubClient.CreateRunnerRegistrationToken(
                     repository,
                     installationId
