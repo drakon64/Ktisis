@@ -19,7 +19,11 @@ internal static partial class CloudTasksClient
 
         var name = Convert.ToHexStringLower(
             XxHash3.Hash(
-                Encoding.Default.GetBytes($"{repository.Replace("/", "-")}-{runId}-{jobId}")
+                Encoding.Default.GetBytes(
+                    action == WorkflowJobAction.Queued
+                        ? "c"
+                        : "d" + $"-{repository.Replace("/", "-")}-{runId}-{jobId}"
+                )
             )
         );
 
