@@ -4,3 +4,7 @@ output "load_balancer_ips" {
     v6 = module.lb-http.external_ipv6_address
   }
 }
+
+output "nat_ip" {
+  value = google_compute_address.nat.address
+}
