@@ -8,3 +8,7 @@ output "load_balancer_ips" {
 output "nat_ip" {
   value = google_compute_address.nat.address
 }
+
+output "repository" {
+  value = google_artifact_registry_repository.artifact_registry
+}
