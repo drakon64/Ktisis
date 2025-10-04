@@ -24,7 +24,7 @@ resource "google_compute_router" "router" {
 
 resource "google_compute_address" "nat" {
   name = "ktisis-nat-address"
-  
+
   network_tier = "PREMIUM"
 }
 
