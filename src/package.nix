@@ -37,8 +37,6 @@ buildDotnetModule {
 
   executables = [ "Ktisis" ];
 
-  selfContainedBuild = true;
-
   meta = {
     license = lib.licenses.eupl12;
     mainProgram = "Ktisis";
