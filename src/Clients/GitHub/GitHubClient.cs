@@ -12,21 +12,17 @@ internal static partial class GitHubClient
         Environment.GetEnvironmentVariable("KTISIS_GITHUB_CLIENT_ID")
         ?? throw new InvalidOperationException("KTISIS_GITHUB_CLIENT_ID is null");
 
-    private static readonly SigningCredentials GitHubSigningCredentials;
+    private static readonly SigningCredentials GitHubSigningCredentials = GetSigningCredentials();
 
-    static GitHubClient()
+    private static SigningCredentials GetSigningCredentials()
     {
-        var githubPrivateKey =
-            Environment.GetEnvironmentVariable("KTISIS_GITHUB_PRIVATE_KEY")
-            ?? throw new InvalidOperationException("KTISIS_GITHUB_PRIVATE_KEY is null");
-
         var rsa = RSA.Create();
-        rsa.ImportFromPem(githubPrivateKey);
+        rsa.ImportFromPem(
+            Environment.GetEnvironmentVariable("KTISIS_GITHUB_PRIVATE_KEY")
+                ?? throw new InvalidOperationException("KTISIS_GITHUB_PRIVATE_KEY is null")
+        );
 
-        GitHubSigningCredentials = new SigningCredentials(
-            new RsaSecurityKey(rsa),
-            SecurityAlgorithms.RsaSha256
-        )
+        return new SigningCredentials(new RsaSecurityKey(rsa), SecurityAlgorithms.RsaSha256)
         {
             CryptoProviderFactory = new CryptoProviderFactory { CacheSignatureProviders = false },
         };
