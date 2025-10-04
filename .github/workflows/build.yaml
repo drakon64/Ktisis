@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+    paths:
+      - "**.cs"
+      - "**.nix"
   workflow_dispatch:
 
 jobs:
