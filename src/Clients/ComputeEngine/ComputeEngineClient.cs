@@ -19,5 +19,5 @@ internal static partial class ComputeEngineClient
     [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
     [JsonSerializable(typeof(CreateInstanceRequest))]
     [JsonSerializable(typeof(InstanceTemplate))]
-    private partial class ComputeEngineClientClientSourceGenerationContext : JsonSerializerContext;
+    private sealed partial class ComputeEngineClientClientSourceGenerationContext : JsonSerializerContext;
 }

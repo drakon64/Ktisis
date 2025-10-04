@@ -13,5 +13,5 @@ internal static partial class CloudTasksClient
         UseStringEnumConverter = true
     )]
     [JsonSerializable(typeof(TaskRequest))]
-    private partial class CloudTasksClientSourceGenerationContext : JsonSerializerContext;
+    private sealed partial class CloudTasksClientSourceGenerationContext : JsonSerializerContext;
 }

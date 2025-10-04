@@ -107,5 +107,5 @@ internal static partial class GitHubClient
     [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.SnakeCaseLower)]
     [JsonSerializable(typeof(InstallationAccessToken))]
     [JsonSerializable(typeof(RunnerRegistrationToken))]
-    private partial class GitHubClientSourceGenerationContext : JsonSerializerContext;
+    private sealed partial class GitHubClientSourceGenerationContext : JsonSerializerContext;
 }

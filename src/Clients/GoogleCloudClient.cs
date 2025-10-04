@@ -42,4 +42,4 @@ internal static class GoogleCloudClient
 
 [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.SnakeCaseLower)]
 [JsonSerializable(typeof(GoogleCloudClient.AccessTokenResponse))]
-internal partial class GoogleCloudClientSourceGenerationContext : JsonSerializerContext;
+internal sealed partial class GoogleCloudClientSourceGenerationContext : JsonSerializerContext;
