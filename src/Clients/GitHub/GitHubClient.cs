@@ -98,7 +98,7 @@ internal static partial class GitHubClient
         )!;
     }
 
-    private class InstallationAccessToken
+    private sealed class InstallationAccessToken
     {
         public required string Token { get; init; }
         public required DateTime ExpiresAt { get; init; }

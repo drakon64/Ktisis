@@ -26,12 +26,12 @@ internal static partial class ComputeEngineClient
         throw new Exception(); // TODO: Useful exception
     }
 
-    private class InstanceTemplate
+    private sealed class InstanceTemplate
     {
         public required InstanceTemplateProperties Properties { get; init; }
     }
 
-    private class InstanceTemplateProperties
+    private sealed class InstanceTemplateProperties
     {
         public required Metadata Metadata { get; init; }
     }

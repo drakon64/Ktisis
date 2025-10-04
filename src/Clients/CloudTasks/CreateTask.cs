@@ -60,18 +60,18 @@ internal static partial class CloudTasksClient
         );
     }
 
-    private class TaskRequest
+    private sealed class TaskRequest
     {
         public required Task Task { get; init; }
     }
 
-    private class Task
+    private sealed class Task
     {
         public required string Name { get; init; }
         public required HttpRequest HttpRequest { get; init; }
     }
 
-    private class HttpRequest()
+    private sealed class HttpRequest()
     {
         [JsonInclude]
         public string Url;
@@ -117,7 +117,7 @@ internal static partial class CloudTasksClient
         Delete,
     }
 
-    private class OidcToken
+    private sealed class OidcToken
     {
         [JsonInclude]
         public readonly string ServiceAccountEmail =

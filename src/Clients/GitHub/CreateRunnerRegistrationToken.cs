@@ -30,7 +30,7 @@ internal static partial class GitHubClient
         )!.Token;
     }
 
-    private class RunnerRegistrationToken
+    private sealed class RunnerRegistrationToken
     {
         public required string Token { get; init; }
     }

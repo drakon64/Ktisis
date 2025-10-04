@@ -52,18 +52,18 @@ internal static partial class ComputeEngineClient
         }
     }
 
-    private class CreateInstanceRequest
+    private sealed class CreateInstanceRequest
     {
         public required string Name { get; init; }
         public required Metadata Metadata { get; init; }
     }
 
-    private class Metadata
+    private sealed class Metadata
     {
         public required List<MetadataItem> Items { get; init; }
     }
 
-    private class MetadataItem
+    private sealed class MetadataItem
     {
         public required string Key { get; init; }
         public required string Value { get; init; }
