@@ -32,7 +32,7 @@ internal static class GoogleCloudClient
         throw new Exception(await response.Content.ReadAsStringAsync());
     }
 
-    internal class AccessTokenResponse
+    internal sealed class AccessTokenResponse
     {
         public required string AccessToken { get; init; }
         public required ushort ExpiresIn { get; init; }
