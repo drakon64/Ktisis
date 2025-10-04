@@ -10,7 +10,7 @@ let
 in
 buildDotnetModule {
   pname = "ktisis";
-  version = "0.0.1";
+  version = builtins.readFile ../version;
 
   src = fs.toSource {
     root = ./.;
