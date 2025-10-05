@@ -38,11 +38,11 @@ resource "google_compute_router_nat" "nat" {
 }
 
 resource "google_compute_instance_template" "runner" {
-  machine_type = "n4-standard-4"
+  machine_type = "n2d-standard-4"
 
   disk {
-    disk_size_gb = 14
-    disk_type    = "hyperdisk-balanced"
+    disk_size_gb = 14 + 4
+    disk_type    = "pd-standard"
     source_image = "projects/ubuntu-os-cloud/global/images/family/ubuntu-minimal-2404-lts-amd64"
   }
 
