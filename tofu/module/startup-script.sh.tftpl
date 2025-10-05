@@ -11,7 +11,7 @@ touch /etc/sudoers.d/runner
 chmod 0440 /etc/sudoers.d/runner
 echo "runner ALL=(ALL:ALL) NOPASSWD:ALL" > /etc/sudoers.d/runner
 
-sudo chown runner:runner /opt/runner
+chown runner:runner /opt/runner
 
 wget ${runner_url}
 sudo -u runner tar xf ${runner_tarball}
