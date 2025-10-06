@@ -30,19 +30,10 @@ jobs:
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
 
       - name: Build
-        run: |
-          echo "KTISIS_DOCKER=$(nix-build -A docker)" >> $GITHUB_ENV
-          echo "KTISIS=$(nix eval --file ./default.nix ktisis --raw)" >> $GITHUB_ENV
-        
-      - name: Push to Cachix
-        run: |
-          cachix push drakon64-ktisis "$KTISIS"
-          cachix push drakon64-ktisis "$KTISIS_DOCKER"
-          
-      - name: Create Cachix pins
-        run: |
-          cachix pin drakon64-ktisis ktisis "$KTISIS" --keep-revisions 1
-          cachix pin drakon64-ktisis docker "$KTISIS_DOCKER" --keep-revisions 1
+        run: cachix watch-exec drakon64-ktisis -- nix-build -A docker
+
+      - name: Create Cachix pin
+        run: cachix pin drakon64-ktisis docker "$(nix eval --file ./default.nix docker --raw)" --keep-revisions 1
 
       - run: docker load < result
 
