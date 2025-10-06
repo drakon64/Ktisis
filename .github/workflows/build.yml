@@ -30,7 +30,9 @@ jobs:
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
 
       - name: Build
-        run: nix-build -A docker
+        run: |
+          nix-build -A docker | cachix push drakon64-ktisis
+          cachix pin drakon64-ktisis latest $(nix-build -A docker) --keep-revisions 1
 
       - run: docker load < result
 
