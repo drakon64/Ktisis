@@ -28,9 +28,15 @@ public class WorkflowJobWebhookEventProcessor(ILogger<WorkflowJobWebhookEventPro
             return;
         }
 
+        // If the workflow job action is not queued or completed, or the workflow job labels do not contain all of "self-hosted", "Linux", and "X64",
+        // return a HTTP 200 to the webhook and do nothing
         if (
             !(action.Equals(WorkflowJobAction.Queued) || action.Equals(WorkflowJobAction.Completed))
-            || !workflowJobEvent.WorkflowJob.Labels.Contains("self-hosted")
+            || !(
+                workflowJobEvent.WorkflowJob.Labels.Contains("self-hosted")
+                && workflowJobEvent.WorkflowJob.Labels.Contains("Linux")
+                && workflowJobEvent.WorkflowJob.Labels.Contains("X64")
+            )
         )
         {
             logger.LogInformation(
