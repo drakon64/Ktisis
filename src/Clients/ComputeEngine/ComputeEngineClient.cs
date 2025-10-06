@@ -16,6 +16,11 @@ internal static partial class ComputeEngineClient
         Environment.GetEnvironmentVariable("KTISIS_SOURCE_INSTANCE_TEMPLATE")
         ?? throw new InvalidOperationException("KTISIS_SOURCE_INSTANCE_TEMPLATE is null");
 
+    private sealed class Metadata
+    {
+        public required List<MetadataItem> Items { get; init; }
+    }
+
     [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
     [JsonSerializable(typeof(CreateInstanceRequest))]
     [JsonSerializable(typeof(InstanceTemplate))]

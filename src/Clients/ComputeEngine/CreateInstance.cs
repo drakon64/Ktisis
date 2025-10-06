@@ -56,11 +56,6 @@ internal static partial class ComputeEngineClient
         public required Metadata Metadata { get; init; }
     }
 
-    private sealed class Metadata
-    {
-        public required List<MetadataItem> Items { get; init; }
-    }
-
     private sealed class MetadataItem
     {
         public required string Key { get; init; }
