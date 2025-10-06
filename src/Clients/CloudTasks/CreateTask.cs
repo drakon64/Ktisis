@@ -15,8 +15,6 @@ internal static partial class CloudTasksClient
         WorkflowJobAction action
     )
     {
-        var token = await GoogleCloudClient.GetAccessToken();
-
         var taskName = Convert.ToHexStringLower(
             XxHash3.Hash(
                 Encoding.Default.GetBytes(
@@ -36,7 +34,7 @@ internal static partial class CloudTasksClient
             new HttpRequestMessage
             {
                 RequestUri = new Uri($"https://cloudtasks.googleapis.com/v2/{Queue}/tasks"),
-                Headers = { { "Authorization", token } },
+                Headers = { { "Authorization", await GoogleCloudClient.GetAccessToken() } },
                 Method = HttpMethod.Post,
 
                 Content = JsonContent.Create(

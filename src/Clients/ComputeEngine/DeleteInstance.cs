@@ -4,8 +4,6 @@ internal static partial class ComputeEngineClient
 {
     public static async Task DeleteInstance(string name)
     {
-        var token = await GoogleCloudClient.GetAccessToken();
-
         var zone = Zones[0]; // TODO: Pick a random element
 
         var response = await Program.HttpClient.SendAsync(
@@ -14,7 +12,7 @@ internal static partial class ComputeEngineClient
                 RequestUri = new Uri(
                     $"https://compute.googleapis.com/compute/v1/projects/{Project}/zones/{zone}/instances/i-{name}"
                 ),
-                Headers = { { "Authorization", token } },
+                Headers = { { "Authorization", await GoogleCloudClient.GetAccessToken() } },
                 Method = HttpMethod.Delete,
             }
         );

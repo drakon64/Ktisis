@@ -6,8 +6,6 @@ internal static partial class ComputeEngineClient
 {
     public static async Task CreateInstance(string name, string repository, long installationId)
     {
-        var token = await GoogleCloudClient.GetAccessToken();
-
         var zone = Zones[0]; // TODO: Pick a random element
 
         var metadata = new List<MetadataItem>
@@ -30,7 +28,7 @@ internal static partial class ComputeEngineClient
                 RequestUri = new Uri(
                     $"https://compute.googleapis.com/compute/v1/projects/{Project}/zones/{zone}/instances?sourceInstanceTemplate={SourceInstanceTemplate}"
                 ),
-                Headers = { { "Authorization", token } },
+                Headers = { { "Authorization", await GoogleCloudClient.GetAccessToken() } },
                 Method = HttpMethod.Post,
 
                 Content = JsonContent.Create(
