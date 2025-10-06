@@ -37,7 +37,7 @@ internal static partial class ComputeEngineClient
                         Name = $"i-{name}",
                         Metadata = new Metadata { Items = metadata },
                     },
-                    ComputeEngineClientClientSourceGenerationContext.Default.CreateInstanceRequest
+                    ComputeEngineClientSourceGenerationContext.Default.CreateInstanceRequest
                 ),
             }
         );
@@ -50,11 +50,5 @@ internal static partial class ComputeEngineClient
     {
         public required string Name { get; init; }
         public required Metadata Metadata { get; init; }
-    }
-
-    private sealed class MetadataItem
-    {
-        public required string Key { get; init; }
-        public required string Value { get; init; }
     }
 }

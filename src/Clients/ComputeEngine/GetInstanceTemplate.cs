@@ -17,7 +17,7 @@ internal static partial class ComputeEngineClient
 
         if (response.IsSuccessStatusCode)
             return await response.Content.ReadFromJsonAsync<InstanceTemplate>(
-                ComputeEngineClientClientSourceGenerationContext.Default.InstanceTemplate
+                ComputeEngineClientSourceGenerationContext.Default.InstanceTemplate
             );
 
         throw new Exception(await response.Content.ReadAsStringAsync()); // TODO: Useful exception

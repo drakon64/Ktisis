@@ -21,9 +21,14 @@ internal static partial class ComputeEngineClient
         public required List<MetadataItem> Items { get; init; }
     }
 
+    private sealed class MetadataItem
+    {
+        public required string Key { get; init; }
+        public required string Value { get; init; }
+    }
+
     [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
     [JsonSerializable(typeof(CreateInstanceRequest))]
     [JsonSerializable(typeof(InstanceTemplate))]
-    private sealed partial class ComputeEngineClientClientSourceGenerationContext
-        : JsonSerializerContext;
+    private sealed partial class ComputeEngineClientSourceGenerationContext : JsonSerializerContext;
 }
