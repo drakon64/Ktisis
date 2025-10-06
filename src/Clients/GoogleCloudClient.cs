@@ -5,8 +5,33 @@ namespace Ktisis.Clients;
 
 internal static partial class GoogleCloudClient
 {
-    // TODO: Reuse tokens if they haven't expired in a thread-safe way
-    public static async Task<string> RefreshAccessToken()
+    private static AccessTokenResponse _accessToken = new()
+    {
+        AccessToken = "",
+        ExpiresIn = 0,
+        TokenType = "",
+    };
+
+    public static async Task<string> GetAccessToken()
+    {
+        Monitor.Enter(_accessToken);
+
+        try
+        {
+            if (_accessToken.ExpiresIn < 60)
+            {
+                _accessToken = await RefreshAccessToken();
+            }
+        }
+        finally
+        {
+            Monitor.Exit(_accessToken);
+        }
+
+        return $"{_accessToken.TokenType} {_accessToken.AccessToken}";
+    }
+
+    private static async Task<AccessTokenResponse> RefreshAccessToken()
     {
         var response = await Program.HttpClient.SendAsync(
             new HttpRequestMessage
@@ -22,12 +47,12 @@ internal static partial class GoogleCloudClient
         if (!response.IsSuccessStatusCode)
             throw new Exception(await response.Content.ReadAsStringAsync());
 
-        var token = await JsonSerializer.DeserializeAsync<AccessTokenResponse>(
-            await response.Content.ReadAsStreamAsync(),
-            GoogleCloudClientSourceGenerationContext.Default.AccessTokenResponse
-        );
-
-        return $"{token!.TokenType} ${token.AccessToken}";
+        return (
+            await JsonSerializer.DeserializeAsync<AccessTokenResponse>(
+                await response.Content.ReadAsStreamAsync(),
+                GoogleCloudClientSourceGenerationContext.Default.AccessTokenResponse
+            )
+        )!;
     }
 
     private sealed class AccessTokenResponse

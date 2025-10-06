@@ -6,7 +6,7 @@ internal static partial class ComputeEngineClient
 {
     public static async Task CreateInstance(string name, string repository, long installationId)
     {
-        var token = await GoogleCloudClient.RefreshAccessToken();
+        var token = await GoogleCloudClient.GetAccessToken();
 
         var zone = Zones[0]; // TODO: Pick a random element
 

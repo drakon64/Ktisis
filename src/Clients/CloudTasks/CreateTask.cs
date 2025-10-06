@@ -15,7 +15,7 @@ internal static partial class CloudTasksClient
         WorkflowJobAction action
     )
     {
-        var token = await GoogleCloudClient.RefreshAccessToken();
+        var token = await GoogleCloudClient.GetAccessToken();
 
         var taskName = Convert.ToHexStringLower(
             XxHash3.Hash(

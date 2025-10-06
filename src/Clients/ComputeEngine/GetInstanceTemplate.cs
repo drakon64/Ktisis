@@ -4,7 +4,7 @@ internal static partial class ComputeEngineClient
 {
     private static async Task<InstanceTemplate?> GetInstanceTemplate()
     {
-        var token = await GoogleCloudClient.RefreshAccessToken();
+        var token = await GoogleCloudClient.GetAccessToken();
 
         var response = await Program.HttpClient.SendAsync(
             new HttpRequestMessage
