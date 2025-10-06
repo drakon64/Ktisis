@@ -15,19 +15,18 @@ internal static partial class CloudTasksClient
         WorkflowJobAction action
     )
     {
+        var workflowJob = $"{repository.Replace("/", "-")}-{runId}-{jobId}";
+
         var taskName = Convert.ToHexStringLower(
             XxHash3.Hash(
                 Encoding.Default.GetBytes(
-                    (action == WorkflowJobAction.Queued ? "c" : "d")
-                        + $"-{repository.Replace("/", "-")}-{runId}-{jobId}"
+                    (action == WorkflowJobAction.Queued ? "c" : "d") + $"-{workflowJob}"
                 )
             )
         );
 
         var instanceName = Convert.ToHexStringLower(
-            XxHash3.Hash(
-                Encoding.Default.GetBytes($"{repository.Replace("/", "-")}-{runId}-{jobId}")
-            )
+            XxHash3.Hash(Encoding.Default.GetBytes(workflowJob))
         );
 
         return await Program.HttpClient.SendAsync(
