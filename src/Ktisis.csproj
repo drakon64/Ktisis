@@ -13,7 +13,9 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Octokit.Webhooks.AspNetCore" Version="3.2.1" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
     <PackageReference Include="System.IO.Hashing" Version="9.0.9" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Drakon.GitHub\src\Drakon.GitHub.csproj" />
   </ItemGroup>
 </Project>

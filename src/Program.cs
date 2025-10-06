@@ -1,3 +1,4 @@
+using Drakon.GitHub;
 using Ktisis.Clients.ComputeEngine;
 using Ktisis.Webhook;
 using Octokit.Webhooks;
@@ -12,6 +13,13 @@ public static class Program
         ?.Split(" ");
 
     internal static readonly HttpClient HttpClient = new();
+
+    internal static readonly GitHubClient GitHubClient = new(
+        Environment.GetEnvironmentVariable("KTISIS_GITHUB_CLIENT_ID")
+            ?? throw new InvalidOperationException("KTISIS_GITHUB_CLIENT_ID is null"),
+        Environment.GetEnvironmentVariable("KTISIS_GITHUB_PRIVATE_KEY")
+            ?? throw new InvalidOperationException("KTISIS_GITHUB_PRIVATE_KEY is null")
+    );
 
     public static void Main()
     {

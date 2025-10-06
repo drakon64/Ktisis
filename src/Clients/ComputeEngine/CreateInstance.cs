@@ -1,5 +1,3 @@
-using Ktisis.Clients.GitHub;
-
 namespace Ktisis.Clients.ComputeEngine;
 
 internal static partial class ComputeEngineClient
@@ -14,7 +12,7 @@ internal static partial class ComputeEngineClient
             new()
             {
                 Key = "ktisis-token",
-                Value = await GitHubClient.CreateRunnerRegistrationToken(
+                Value = await Program.GitHubClient.CreateRunnerRegistrationToken(
                     repository,
                     installationId
                 ),

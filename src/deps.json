@@ -1,5 +1,10 @@
 [
   {
+    "pname": "CSharpier",
+    "version": "1.1.2",
+    "hash": "sha256-dlWIqlErXT0l8WaLwtgKb7xpYVunkZihaJ3EzKqaqFE="
+  },
+  {
     "pname": "Macross.Json.Extensions",
     "version": "3.0.0",
     "hash": "sha256-nBoB4vY+R19jGPdnlN6hNmZjOeAEkOA1CS+DHLjZUJA="

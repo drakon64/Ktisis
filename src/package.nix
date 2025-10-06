@@ -13,9 +13,9 @@ buildDotnetModule {
   version = builtins.readFile ../version;
 
   src = fs.toSource {
-    root = ./.;
+    root = ../.;
 
-    fileset = fs.difference (./.) (
+    fileset = fs.difference (../.) (
       fs.unions [
         ./appsettings.Development.json
         (lib.fileset.maybeMissing ./bin)
@@ -29,7 +29,7 @@ buildDotnetModule {
     );
   };
 
-  projectFile = "Ktisis.csproj";
+  projectFile = "src/Ktisis.csproj";
   nugetDeps = ./deps.json;
 
   dotnet-sdk = dotnetCorePackages.sdk_9_0;
