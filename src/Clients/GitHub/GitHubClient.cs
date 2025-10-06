@@ -50,18 +50,34 @@ internal static partial class GitHubClient
         return new JwtSecurityTokenHandler().WriteToken(jwt);
     }
 
-    private static InstallationAccessToken _githubInstallationAccessToken = new()
+    private static InstallationAccessToken _installationAccessToken = new()
     {
         Token = "",
         ExpiresAt = DateTime.Now,
     };
 
-    private static async Task RefreshGitHubInstallationAccessToken(long installationId)
+    private static async Task<string> GetInstallationAccessToken(long installationId)
     {
-        // If the current installation access token expires in less than a minute, generate a new one
-        if (_githubInstallationAccessToken.ExpiresAt.Subtract(DateTime.Now).Minutes >= 1)
-            return;
+        Monitor.Enter(_installationAccessToken);
 
+        try
+        {
+            // If the current installation access token expires in less than a minute, generate a new one
+            if (_installationAccessToken.ExpiresAt.Subtract(DateTime.Now).Minutes < 1)
+                _installationAccessToken = await RefreshInstallationAccessToken(installationId);
+        }
+        finally
+        {
+            Monitor.Exit(_installationAccessToken);
+        }
+
+        return _installationAccessToken.Token;
+    }
+
+    private static async Task<InstallationAccessToken> RefreshInstallationAccessToken(
+        long installationId
+    )
+    {
         var response = await Program.HttpClient.SendAsync(
             new HttpRequestMessage
             {
@@ -79,19 +95,14 @@ internal static partial class GitHubClient
             }
         );
 
-        if (!response.IsSuccessStatusCode)
-        {
-            await Console.Out.WriteLineAsync(await response.Content.ReadAsStringAsync());
+        if (response.IsSuccessStatusCode)
+            return (
+                await response.Content.ReadFromJsonAsync<InstallationAccessToken>(
+                    GitHubClientSourceGenerationContext.Default.InstallationAccessToken
+                )
+            )!;
 
-            throw new Exception(); // TODO: Useful exception
-        }
-
-        // TODO: Make this thread-safe
-        _githubInstallationAccessToken = (
-            await response.Content.ReadFromJsonAsync<InstallationAccessToken>(
-                GitHubClientSourceGenerationContext.Default.InstallationAccessToken
-            )
-        )!;
+        throw new Exception(await response.Content.ReadAsStringAsync()); // TODO: Useful exception
     }
 
     private sealed class InstallationAccessToken

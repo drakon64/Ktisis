@@ -4,15 +4,16 @@ internal static partial class GitHubClient
 {
     public static async Task<string> CreateRunnerRegistrationToken(string repo, long installationId)
     {
-        await RefreshGitHubInstallationAccessToken(installationId);
-
         var request = await Program.HttpClient.SendAsync(
             new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
                 Headers =
                 {
-                    { "Authorization", $"Bearer {_githubInstallationAccessToken.Token}" },
+                    {
+                        "Authorization",
+                        $"Bearer {await GetInstallationAccessToken(installationId)}"
+                    },
                     { "User-Agent", "Ktisis/0.0.1" },
                     { "Accept", "application/vnd.github+json" },
                     { "X-GitHub-Api-Version", "2022-11-28" },
