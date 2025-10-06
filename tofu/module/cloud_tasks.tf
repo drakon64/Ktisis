@@ -20,12 +20,7 @@ resource "google_cloud_tasks_queue" "cloud_tasks" {
 }
 
 resource "google_cloud_tasks_queue_iam_member" "ktisis" {
-  for_each = toset([
-    "enqueuer",
-    "taskDeleter",
-  ])
-
   member = google_service_account.ktisis["receiver"].member
   name   = google_cloud_tasks_queue.cloud_tasks.name
-  role   = "roles/cloudtasks.${each.value}"
+  role   = "roles/cloudtasks.enqueuer"
 }
