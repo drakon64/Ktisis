@@ -3,6 +3,11 @@ terraform {
     google = {
       source = "hashicorp/google"
     }
+
+    http = {
+      source  = "hashicorp/http"
+      version = "~> 3"
+    }
   }
 }
 
