@@ -31,8 +31,18 @@ jobs:
 
       - name: Build
         run: |
-          nix-build -A docker | cachix push drakon64-ktisis
-          cachix pin drakon64-ktisis latest $(nix-build -A docker) --keep-revisions 1
+          echo "KTISIS=$(nix-build -A ktisis)" >> $GITHUB_ENV
+          echo "KTISIS_DOCKER=$(nix-build -A docker)" >> $GITHUB_ENV
+        
+      - name: Push to Cachix
+        run: |
+          cachix push drakon64-ktisis "$KTISIS"
+          cachix push drakon64-ktisis "$KTISIS_DOCKER"
+          
+      - name: Creating Cachix pins
+        run: |
+          cachix pin drakon64-ktisis ktisis "$KTISIS" --keep-revisions 1
+          cachix pin drakon64-ktisis docker "$KTISIS_DOCKER" --keep-revisions 1
 
       - run: docker load < result
 
