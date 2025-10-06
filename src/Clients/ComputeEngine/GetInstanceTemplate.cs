@@ -20,8 +20,7 @@ internal static partial class ComputeEngineClient
                 ComputeEngineClientClientSourceGenerationContext.Default.InstanceTemplate
             );
 
-        await Console.Out.WriteLineAsync(await response.Content.ReadAsStringAsync());
-        throw new Exception(); // TODO: Useful exception
+        throw new Exception(await response.Content.ReadAsStringAsync()); // TODO: Useful exception
     }
 
     private sealed class InstanceTemplate
