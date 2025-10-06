@@ -1,4 +1,5 @@
 using Drakon.GitHub;
+using Drakon.GoogleCloud;
 using Ktisis.Clients.ComputeEngine;
 using Ktisis.Webhook;
 using Octokit.Webhooks;
@@ -18,8 +19,11 @@ public static class Program
         Environment.GetEnvironmentVariable("KTISIS_GITHUB_CLIENT_ID")
             ?? throw new InvalidOperationException("KTISIS_GITHUB_CLIENT_ID is null"),
         Environment.GetEnvironmentVariable("KTISIS_GITHUB_PRIVATE_KEY")
-            ?? throw new InvalidOperationException("KTISIS_GITHUB_PRIVATE_KEY is null")
+            ?? throw new InvalidOperationException("KTISIS_GITHUB_PRIVATE_KEY is null"),
+        HttpClient
     );
+
+    internal static readonly GoogleCloudClient GoogleCloudClient = new(HttpClient);
 
     public static void Main()
     {

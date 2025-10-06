@@ -12,7 +12,7 @@ internal static partial class ComputeEngineClient
                 RequestUri = new Uri(
                     $"https://compute.googleapis.com/compute/v1/projects/{Project}/zones/{zone}/instances/i-{name}"
                 ),
-                Headers = { { "Authorization", await GoogleCloudClient.GetAccessToken() } },
+                Headers = { { "Authorization", await Program.GoogleCloudClient.GetAccessToken() } },
                 Method = HttpMethod.Delete,
             }
         );

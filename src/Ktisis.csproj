@@ -17,5 +17,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Drakon.GitHub\src\Drakon.GitHub.csproj" />
+    <ProjectReference Include="..\Drakon.GoogleCloud\src\Drakon.GoogleCloud.csproj" />
   </ItemGroup>
 </Project>

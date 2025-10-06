@@ -26,7 +26,7 @@ internal static partial class ComputeEngineClient
                 RequestUri = new Uri(
                     $"https://compute.googleapis.com/compute/v1/projects/{Project}/zones/{zone}/instances?sourceInstanceTemplate={SourceInstanceTemplate}"
                 ),
-                Headers = { { "Authorization", await GoogleCloudClient.GetAccessToken() } },
+                Headers = { { "Authorization", await Program.GoogleCloudClient.GetAccessToken() } },
                 Method = HttpMethod.Post,
 
                 Content = JsonContent.Create(
