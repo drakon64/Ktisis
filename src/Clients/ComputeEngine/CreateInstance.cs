@@ -30,7 +30,7 @@ internal static partial class ComputeEngineClient
                 RequestUri = new Uri(
                     $"https://compute.googleapis.com/compute/v1/projects/{Project}/zones/{zone}/instances?sourceInstanceTemplate={SourceInstanceTemplate}"
                 ),
-                Headers = { { "Authorization", $"{token.TokenType} {token.AccessToken}" } },
+                Headers = { { "Authorization", token } },
                 Method = HttpMethod.Post,
 
                 Content = JsonContent.Create(

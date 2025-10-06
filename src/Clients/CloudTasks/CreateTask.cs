@@ -36,7 +36,7 @@ internal static partial class CloudTasksClient
             new HttpRequestMessage
             {
                 RequestUri = new Uri($"https://cloudtasks.googleapis.com/v2/{Queue}/tasks"),
-                Headers = { { "Authorization", $"{token.TokenType} {token.AccessToken}" } },
+                Headers = { { "Authorization", token } },
                 Method = HttpMethod.Post,
 
                 Content = JsonContent.Create(

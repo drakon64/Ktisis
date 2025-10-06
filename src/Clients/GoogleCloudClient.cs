@@ -3,10 +3,10 @@ using System.Text.Json.Serialization;
 
 namespace Ktisis.Clients;
 
-internal static class GoogleCloudClient
+internal static partial class GoogleCloudClient
 {
     // TODO: Reuse tokens if they haven't expired in a thread-safe way
-    public static async Task<AccessTokenResponse> RefreshAccessToken()
+    public static async Task<string> RefreshAccessToken()
     {
         var response = await Program.HttpClient.SendAsync(
             new HttpRequestMessage
@@ -19,27 +19,25 @@ internal static class GoogleCloudClient
             }
         );
 
-        if (response.IsSuccessStatusCode)
-        {
-            return (
-                await JsonSerializer.DeserializeAsync<AccessTokenResponse>(
-                    await response.Content.ReadAsStreamAsync(),
-                    GoogleCloudClientSourceGenerationContext.Default.AccessTokenResponse
-                )
-            )!;
-        }
+        if (!response.IsSuccessStatusCode)
+            throw new Exception(await response.Content.ReadAsStringAsync());
 
-        throw new Exception(await response.Content.ReadAsStringAsync());
+        var token = await JsonSerializer.DeserializeAsync<AccessTokenResponse>(
+            await response.Content.ReadAsStreamAsync(),
+            GoogleCloudClientSourceGenerationContext.Default.AccessTokenResponse
+        );
+
+        return $"{token!.TokenType} ${token.AccessToken}";
     }
 
-    internal sealed class AccessTokenResponse
+    private sealed class AccessTokenResponse
     {
         public required string AccessToken { get; init; }
         public required ushort ExpiresIn { get; init; }
         public required string TokenType { get; init; }
     }
-}
 
-[JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.SnakeCaseLower)]
-[JsonSerializable(typeof(GoogleCloudClient.AccessTokenResponse))]
-internal sealed partial class GoogleCloudClientSourceGenerationContext : JsonSerializerContext;
+    [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.SnakeCaseLower)]
+    [JsonSerializable(typeof(AccessTokenResponse))]
+    private sealed partial class GoogleCloudClientSourceGenerationContext : JsonSerializerContext;
+}
