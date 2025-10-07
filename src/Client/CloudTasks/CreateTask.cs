@@ -1,6 +1,7 @@
 using System.IO.Hashing;
 using System.Text;
 using System.Text.Json.Serialization;
+using System.Web;
 using Ktisis.SourceGenerationContext;
 using Octokit.Webhooks.Events.WorkflowJob;
 
@@ -86,7 +87,7 @@ internal static partial class CloudTasksClient
             WorkflowJobAction action
         )
         {
-            var queryString = System.Web.HttpUtility.ParseQueryString(string.Empty);
+            var queryString = HttpUtility.ParseQueryString(string.Empty);
             queryString.Add("name", name);
             queryString.Add("repository", repository);
             queryString.Add("installationId", installationId.ToString());
