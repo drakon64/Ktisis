@@ -86,18 +86,13 @@ internal static partial class CloudTasksClient
             WorkflowJobAction action
         )
         {
-            var url =
-                (
-                    Environment.GetEnvironmentVariable("KTISIS_PROCESSOR")
-                    ?? throw new InvalidOperationException("KTISIS_PROCESSOR is null")
-                ) + "/api/ktisis";
-
             var queryString = System.Web.HttpUtility.ParseQueryString(string.Empty);
             queryString.Add("name", name);
             queryString.Add("repository", repository);
             queryString.Add("installationId", installationId.ToString());
 
-            Url = $"{url}?{queryString}";
+            Url =
+                $"{Environment.GetEnvironmentVariable("KTISIS_PROCESSOR") ?? throw new InvalidOperationException("KTISIS_PROCESSOR is null")}?{queryString}";
 
             HttpMethod =
                 action == WorkflowJobAction.Queued ? TasksHttpMethod.Post : TasksHttpMethod.Delete;

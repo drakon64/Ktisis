@@ -39,7 +39,7 @@ resource "google_cloud_run_v2_service" "receiver" {
       env {
         name = "KTISIS_PROCESSOR"
 
-        value = google_cloud_run_v2_service.processor.uri
+        value = "${google_cloud_run_v2_service.processor.uri}/api/ktisis"
       }
 
       env {
