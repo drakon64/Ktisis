@@ -1,4 +1,4 @@
-namespace Ktisis.Clients.GitHub;
+namespace Ktisis.Client.GitHub;
 
 internal static partial class GitHubClient
 {

@@ -1,4 +1,4 @@
-using Ktisis.Clients.CloudTasks;
+using Ktisis.Client.CloudTasks;
 using Octokit.Webhooks;
 using Octokit.Webhooks.Events;
 using Octokit.Webhooks.Events.WorkflowJob;

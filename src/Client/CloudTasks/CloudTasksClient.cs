@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Ktisis.Clients.CloudTasks;
+namespace Ktisis.Client.CloudTasks;
 
 internal static partial class CloudTasksClient
 {

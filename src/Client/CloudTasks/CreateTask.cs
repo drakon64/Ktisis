@@ -3,7 +3,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using Octokit.Webhooks.Events.WorkflowJob;
 
-namespace Ktisis.Clients.CloudTasks;
+namespace Ktisis.Client.CloudTasks;
 
 internal static partial class CloudTasksClient
 {

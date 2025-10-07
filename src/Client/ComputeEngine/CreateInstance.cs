@@ -1,6 +1,6 @@
-using Ktisis.Clients.GitHub;
+using Ktisis.Client.GitHub;
 
-namespace Ktisis.Clients.ComputeEngine;
+namespace Ktisis.Client.ComputeEngine;
 
 internal static partial class ComputeEngineClient
 {

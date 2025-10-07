@@ -1,7 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Ktisis.Clients;
+namespace Ktisis.Client;
 
 internal static partial class GoogleCloudClient
 {

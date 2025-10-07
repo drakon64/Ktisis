@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Ktisis.Clients.ComputeEngine;
+namespace Ktisis.Client.ComputeEngine;
 
 internal static partial class ComputeEngineClient
 {
