@@ -3,5 +3,5 @@
 }:
 {
   ktisis = pkgs.callPackage ./src/package.nix { };
-  docker = pkgs.callPackage ./src/docker.nix { };
+  docker = pkgs.pkgsCross.gnu64.callPackage ./src/docker.nix { };
 }
