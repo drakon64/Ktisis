@@ -5,7 +5,7 @@ using Ktisis.Client.GitHub;
 namespace Ktisis.SourceGenerationContext;
 
 [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.SnakeCaseLower)]
-[JsonSerializable(typeof(GitHubClient.InstallationAccessToken))]
-[JsonSerializable(typeof(GitHubClient.RunnerRegistrationToken))]
 [JsonSerializable(typeof(GoogleCloudClient.AccessTokenResponse))]
+[JsonSerializable(typeof(GitHubClient.RunnerRegistrationToken))]
+[JsonSerializable(typeof(GitHubClient.InstallationAccessToken))]
 internal sealed partial class SnakeCaseLowerSourceGenerationContext : JsonSerializerContext;
