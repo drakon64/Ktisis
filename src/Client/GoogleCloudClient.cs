@@ -5,30 +5,29 @@ namespace Ktisis.Client;
 
 internal static class GoogleCloudClient
 {
-    private static AccessTokenResponse _accessToken = new()
+    private static AccessTokenResponse _accessTokenResponse = new()
     {
         AccessToken = "",
         ExpiresIn = 0,
-        TokenType = "",
     };
 
     public static async Task<string> GetAccessToken()
     {
-        Monitor.Enter(_accessToken);
+        Monitor.Enter(_accessTokenResponse);
 
         try
         {
-            if (_accessToken.ExpiresIn < 60)
+            if (_accessTokenResponse.ExpiresIn < 60)
             {
-                _accessToken = await RefreshAccessToken();
+                _accessTokenResponse = await RefreshAccessToken();
             }
         }
         finally
         {
-            Monitor.Exit(_accessToken);
+            Monitor.Exit(_accessTokenResponse);
         }
 
-        return $"{_accessToken.TokenType} {_accessToken.AccessToken}";
+        return $"Bearer {_accessTokenResponse.AccessToken}";
     }
 
     private static async Task<AccessTokenResponse> RefreshAccessToken()
@@ -59,6 +58,5 @@ internal static class GoogleCloudClient
     {
         public required string AccessToken { get; init; }
         public required ushort ExpiresIn { get; init; }
-        public required string TokenType { get; init; }
     }
 }
