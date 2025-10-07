@@ -20,4 +20,4 @@ jobs:
       - env:
           LON_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LON_LABELS: "lon,bot"
-        run: lon bot github
+        run: nix-shell -A lon --run "lon bot github"

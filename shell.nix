@@ -8,4 +8,10 @@ pkgs.mkShellNoCC {
     nixfmt-rfc-style
     opentofu
   ];
+
+  passthru = {
+    lon = pkgs.mkShellNoCC {
+      packages = with pkgs; [ lon ];
+    };
+  };
 }
