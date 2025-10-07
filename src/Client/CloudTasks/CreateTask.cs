@@ -68,7 +68,7 @@ internal static partial class CloudTasksClient
         public required HttpRequest HttpRequest { get; init; }
     }
 
-    internal sealed class HttpRequest()
+    internal sealed class HttpRequest
     {
         [JsonInclude]
         public string Url;
@@ -85,7 +85,6 @@ internal static partial class CloudTasksClient
             long installationId,
             WorkflowJobAction action
         )
-            : this()
         {
             var url =
                 (
