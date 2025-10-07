@@ -7,6 +7,7 @@ on:
     paths:
       - "**.cs"
       - "**.nix"
+      - "lon.lock"
   workflow_dispatch:
 
 jobs:
