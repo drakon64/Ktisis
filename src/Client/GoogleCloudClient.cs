@@ -1,9 +1,9 @@
 using System.Text.Json;
-using System.Text.Json.Serialization;
+using Ktisis.SourceGenerationContext;
 
 namespace Ktisis.Client;
 
-internal static partial class GoogleCloudClient
+internal static class GoogleCloudClient
 {
     private static AccessTokenResponse _accessToken = new()
     {
@@ -50,19 +50,15 @@ internal static partial class GoogleCloudClient
         return (
             await JsonSerializer.DeserializeAsync<AccessTokenResponse>(
                 await response.Content.ReadAsStreamAsync(),
-                GoogleCloudClientSourceGenerationContext.Default.AccessTokenResponse
+                SnakeCaseLowerSourceGenerationContext.Default.AccessTokenResponse
             )
         )!;
     }
 
-    private sealed class AccessTokenResponse
+    internal sealed class AccessTokenResponse
     {
         public required string AccessToken { get; init; }
         public required ushort ExpiresIn { get; init; }
         public required string TokenType { get; init; }
     }
-
-    [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.SnakeCaseLower)]
-    [JsonSerializable(typeof(AccessTokenResponse))]
-    private sealed partial class GoogleCloudClientSourceGenerationContext : JsonSerializerContext;
 }

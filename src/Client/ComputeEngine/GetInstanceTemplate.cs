@@ -1,3 +1,5 @@
+using Ktisis.SourceGenerationContext;
+
 namespace Ktisis.Client.ComputeEngine;
 
 internal static partial class ComputeEngineClient
@@ -17,18 +19,18 @@ internal static partial class ComputeEngineClient
 
         if (response.IsSuccessStatusCode)
             return await response.Content.ReadFromJsonAsync<InstanceTemplate>(
-                ComputeEngineClientSourceGenerationContext.Default.InstanceTemplate
+                CamelCaseSourceGenerationContext.Default.InstanceTemplate
             );
 
         throw new Exception(await response.Content.ReadAsStringAsync()); // TODO: Useful exception
     }
 
-    private sealed class InstanceTemplate
+    internal sealed class InstanceTemplate
     {
         public required InstanceTemplateProperties Properties { get; init; }
     }
 
-    private sealed class InstanceTemplateProperties
+    internal sealed class InstanceTemplateProperties
     {
         public required Metadata Metadata { get; init; }
     }

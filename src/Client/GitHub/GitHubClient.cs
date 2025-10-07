@@ -1,7 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using System.Text.Json.Serialization;
+using Ktisis.SourceGenerationContext;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Ktisis.Client.GitHub;
@@ -98,21 +98,16 @@ internal static partial class GitHubClient
         if (response.IsSuccessStatusCode)
             return (
                 await response.Content.ReadFromJsonAsync<InstallationAccessToken>(
-                    GitHubClientSourceGenerationContext.Default.InstallationAccessToken
+                    SnakeCaseLowerSourceGenerationContext.Default.InstallationAccessToken
                 )
             )!;
 
         throw new Exception(await response.Content.ReadAsStringAsync()); // TODO: Useful exception
     }
 
-    private sealed class InstallationAccessToken
+    internal sealed class InstallationAccessToken
     {
         public required string Token { get; init; }
         public required DateTime ExpiresAt { get; init; }
     }
-
-    [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.SnakeCaseLower)]
-    [JsonSerializable(typeof(InstallationAccessToken))]
-    [JsonSerializable(typeof(RunnerRegistrationToken))]
-    private sealed partial class GitHubClientSourceGenerationContext : JsonSerializerContext;
 }

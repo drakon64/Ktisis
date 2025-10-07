@@ -1,6 +1,7 @@
 using System.IO.Hashing;
 using System.Text;
 using System.Text.Json.Serialization;
+using Ktisis.SourceGenerationContext;
 using Octokit.Webhooks.Events.WorkflowJob;
 
 namespace Ktisis.Client.CloudTasks;
@@ -50,24 +51,24 @@ internal static partial class CloudTasksClient
                             ),
                         },
                     },
-                    CloudTasksClientSourceGenerationContext.Default.TaskRequest
+                    CamelCaseSourceGenerationContext.Default.TaskRequest
                 ),
             }
         );
     }
 
-    private sealed class TaskRequest
+    internal sealed class TaskRequest
     {
         public required Task Task { get; init; }
     }
 
-    private sealed class Task
+    internal sealed class Task
     {
         public required string Name { get; init; }
         public required HttpRequest HttpRequest { get; init; }
     }
 
-    private sealed class HttpRequest()
+    internal sealed class HttpRequest()
     {
         [JsonInclude]
         public string Url;
@@ -104,7 +105,7 @@ internal static partial class CloudTasksClient
         }
     }
 
-    private enum TasksHttpMethod
+    internal enum TasksHttpMethod
     {
         [JsonStringEnumMemberName("POST")]
         Post,
@@ -113,7 +114,7 @@ internal static partial class CloudTasksClient
         Delete,
     }
 
-    private sealed class OidcToken
+    internal sealed class OidcToken
     {
         [JsonInclude]
         public readonly string ServiceAccountEmail =

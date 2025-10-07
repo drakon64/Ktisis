@@ -1,4 +1,5 @@
 using Ktisis.Client.GitHub;
+using Ktisis.SourceGenerationContext;
 
 namespace Ktisis.Client.ComputeEngine;
 
@@ -37,7 +38,7 @@ internal static partial class ComputeEngineClient
                         Name = $"i-{name}",
                         Metadata = new Metadata { Items = metadata },
                     },
-                    ComputeEngineClientSourceGenerationContext.Default.CreateInstanceRequest
+                    CamelCaseSourceGenerationContext.Default.CreateInstanceRequest
                 ),
             }
         );
@@ -46,7 +47,7 @@ internal static partial class ComputeEngineClient
             throw new Exception(await response.Content.ReadAsStringAsync()); // TODO: Useful exception
     }
 
-    private sealed class CreateInstanceRequest
+    internal sealed class CreateInstanceRequest
     {
         public required string Name { get; init; }
         public required Metadata Metadata { get; init; }

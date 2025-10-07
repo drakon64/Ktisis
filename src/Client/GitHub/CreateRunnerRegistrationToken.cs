@@ -1,3 +1,5 @@
+using Ktisis.SourceGenerationContext;
+
 namespace Ktisis.Client.GitHub;
 
 internal static partial class GitHubClient
@@ -26,12 +28,12 @@ internal static partial class GitHubClient
 
         return (
             await request.Content.ReadFromJsonAsync<RunnerRegistrationToken>(
-                GitHubClientSourceGenerationContext.Default.RunnerRegistrationToken
+                SnakeCaseLowerSourceGenerationContext.Default.RunnerRegistrationToken
             )
         )!.Token;
     }
 
-    private sealed class RunnerRegistrationToken
+    internal sealed class RunnerRegistrationToken
     {
         public required string Token { get; init; }
     }

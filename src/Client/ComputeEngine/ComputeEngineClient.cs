@@ -1,5 +1,3 @@
-using System.Text.Json.Serialization;
-
 namespace Ktisis.Client.ComputeEngine;
 
 internal static partial class ComputeEngineClient
@@ -16,19 +14,14 @@ internal static partial class ComputeEngineClient
         Environment.GetEnvironmentVariable("KTISIS_SOURCE_INSTANCE_TEMPLATE")
         ?? throw new InvalidOperationException("KTISIS_SOURCE_INSTANCE_TEMPLATE is null");
 
-    private sealed class Metadata
+    internal sealed class Metadata
     {
         public required List<MetadataItem> Items { get; init; }
     }
 
-    private sealed class MetadataItem
+    internal sealed class MetadataItem
     {
         public required string Key { get; init; }
         public required string Value { get; init; }
     }
-
-    [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
-    [JsonSerializable(typeof(CreateInstanceRequest))]
-    [JsonSerializable(typeof(InstanceTemplate))]
-    private sealed partial class ComputeEngineClientSourceGenerationContext : JsonSerializerContext;
 }
