@@ -17,6 +17,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install Lix
+        uses: samueldr/lix-gha-installer-action@v2025-02-26.prerelease
+
       - env:
           LON_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LON_LABELS: "lon,bot"
