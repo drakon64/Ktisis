@@ -11,11 +11,11 @@ internal static class GoogleCloudClient
         ExpiresIn = 0,
     };
 
-    private static readonly object Lock = new();
+    private static readonly ReaderWriterLockSlim Lock = new();
 
     public static async Task<string> GetAccessToken()
     {
-        Monitor.Enter(Lock);
+        Lock.EnterWriteLock();
 
         try
         {
@@ -26,7 +26,7 @@ internal static class GoogleCloudClient
         }
         finally
         {
-            Monitor.Exit(Lock);
+            Lock.ExitWriteLock();
         }
 
         return $"Bearer {_accessTokenResponse.AccessToken}";
