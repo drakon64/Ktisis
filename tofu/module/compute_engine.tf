@@ -26,6 +26,8 @@ resource "google_compute_address" "nat" {
   name = "ktisis-nat-address"
 
   network_tier = "PREMIUM"
+  
+  depends_on = [google_project_service.compute]
 }
 
 resource "google_compute_router_nat" "nat" {
