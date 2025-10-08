@@ -56,9 +56,11 @@ internal static partial class GitHubClient
         ExpiresAt = DateTime.Now,
     };
 
+    private static readonly object Lock = new();
+
     private static async Task<string> GetInstallationAccessToken(long installationId)
     {
-        Monitor.Enter(_installationAccessToken);
+        Monitor.Enter(Lock);
 
         try
         {
@@ -68,7 +70,7 @@ internal static partial class GitHubClient
         }
         finally
         {
-            Monitor.Exit(_installationAccessToken);
+            Monitor.Exit(Lock);
         }
 
         return _installationAccessToken.Token;
