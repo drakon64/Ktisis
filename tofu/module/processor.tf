@@ -57,7 +57,7 @@ resource "google_cloud_run_v2_service" "processor" {
       env {
         name = "KTISIS_SOURCE_INSTANCE_TEMPLATE"
 
-        value = "ktisis"
+        value = "${data.google_project.project.id}/global/instanceTemplates/ktisis"
       }
 
       resources {
