@@ -50,35 +50,7 @@ internal static partial class GitHubClient
         return new JwtSecurityTokenHandler().WriteToken(jwt);
     }
 
-    private static InstallationAccessToken _installationAccessToken = new()
-    {
-        Token = "",
-        ExpiresAt = DateTime.Now,
-    };
-
-    private static readonly ReaderWriterLockSlim Lock = new();
-
     private static async Task<string> GetInstallationAccessToken(long installationId)
-    {
-        Lock.EnterWriteLock();
-
-        try
-        {
-            // If the current installation access token expires in less than a minute, generate a new one
-            if (_installationAccessToken.ExpiresAt.Subtract(DateTime.Now).Minutes < 1)
-                _installationAccessToken = await RefreshInstallationAccessToken(installationId);
-        }
-        finally
-        {
-            Lock.ExitWriteLock();
-        }
-
-        return _installationAccessToken.Token;
-    }
-
-    private static async Task<InstallationAccessToken> RefreshInstallationAccessToken(
-        long installationId
-    )
     {
         var response = await Program.HttpClient.SendAsync(
             new HttpRequestMessage
@@ -102,7 +74,7 @@ internal static partial class GitHubClient
                 await response.Content.ReadFromJsonAsync<InstallationAccessToken>(
                     SnakeCaseLowerSourceGenerationContext.Default.InstallationAccessToken
                 )
-            )!;
+            )!.Token;
 
         throw new Exception(await response.Content.ReadAsStringAsync()); // TODO: Useful exception
     }
@@ -110,6 +82,5 @@ internal static partial class GitHubClient
     internal sealed class InstallationAccessToken
     {
         public required string Token { get; init; }
-        public required DateTime ExpiresAt { get; init; }
     }
 }

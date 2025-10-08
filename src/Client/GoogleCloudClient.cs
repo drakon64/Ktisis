@@ -5,34 +5,7 @@ namespace Ktisis.Client;
 
 internal static class GoogleCloudClient
 {
-    private static AccessTokenResponse _accessTokenResponse = new()
-    {
-        AccessToken = "",
-        ExpiresIn = 0,
-    };
-
-    private static readonly ReaderWriterLockSlim Lock = new();
-
     public static async Task<string> GetAccessToken()
-    {
-        Lock.EnterWriteLock();
-
-        try
-        {
-            if (_accessTokenResponse.ExpiresIn < 60)
-            {
-                _accessTokenResponse = await RefreshAccessToken();
-            }
-        }
-        finally
-        {
-            Lock.ExitWriteLock();
-        }
-
-        return $"Bearer {_accessTokenResponse.AccessToken}";
-    }
-
-    private static async Task<AccessTokenResponse> RefreshAccessToken()
     {
         var response = await Program.HttpClient.SendAsync(
             new HttpRequestMessage
@@ -53,12 +26,11 @@ internal static class GoogleCloudClient
                 await response.Content.ReadAsStreamAsync(),
                 SnakeCaseLowerSourceGenerationContext.Default.AccessTokenResponse
             )
-        )!;
+        )!.AccessToken;
     }
 
     internal sealed class AccessTokenResponse
     {
         public required string AccessToken { get; init; }
-        public required ushort ExpiresIn { get; init; }
     }
 }
