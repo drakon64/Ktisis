@@ -50,17 +50,29 @@ public class WorkflowJobWebhookEventProcessor(ILogger<WorkflowJobWebhookEventPro
 
         logger.LogInformation("Repository: {FullName}", workflowJobEvent.Repository!.FullName);
 
-        var task = await CloudTasksClient.CreateTask(
-            workflowJobEvent.Repository.FullName,
-            workflowJobEvent.WorkflowJob.RunId,
-            workflowJobEvent.WorkflowJob.Id,
-            workflowJobEvent.Installation!.Id,
-            action
-        );
-
-        if (!task.IsSuccessStatusCode)
+        if (action.Equals(WorkflowJobAction.Queued))
         {
-            logger.LogError(await task.Content.ReadAsStringAsync(cancellationToken));
+            var task = await CloudTasksClient.CreateTask(
+                workflowJobEvent.Repository.FullName,
+                workflowJobEvent.WorkflowJob.RunId,
+                workflowJobEvent.WorkflowJob.Id,
+                workflowJobEvent.Installation!.Id,
+                action
+            );
+
+            if (!task.IsSuccessStatusCode)
+            {
+                logger.LogError(await task.Content.ReadAsStringAsync(cancellationToken));
+            }
+        }
+        else
+        {
+            // Failing to delete a Cloud Task is not fatal
+            await CloudTasksClient.DeleteTask(
+                workflowJobEvent.Repository.FullName,
+                workflowJobEvent.WorkflowJob.RunId,
+                workflowJobEvent.WorkflowJob.Id
+            );
         }
     }
 }
