@@ -9,13 +9,13 @@ internal static partial class CloudTasksClient
         long jobId
     )
     {
-        var taskName = GetTaskName(repository, runId, jobId);
+        var workflowJob = GetWorkflowJob(repository, runId, jobId);
 
         return await Program.HttpClient.SendAsync(
             new HttpRequestMessage
             {
                 RequestUri = new Uri(
-                    $"https://cloudtasks.googleapis.com/v2/{Queue}/tasks/{taskName}"
+                    $"https://cloudtasks.googleapis.com/v2/{Queue}/tasks/c-{workflowJob}"
                 ),
                 Headers = { { "Authorization", await GoogleCloudClient.GetAccessToken() } },
                 Method = HttpMethod.Delete,
