@@ -1,6 +1,3 @@
-using System.IO.Hashing;
-using System.Text;
-
 namespace Ktisis.Client.CloudTasks;
 
 internal static partial class CloudTasksClient
@@ -11,11 +8,7 @@ internal static partial class CloudTasksClient
         long jobId
     )
     {
-        var taskName = Convert.ToHexStringLower(
-            XxHash3.Hash(
-                Encoding.Default.GetBytes($"c-{repository.Replace("/", "-")}-{runId}-{jobId}")
-            )
-        );
+        var taskName = GetTaskName(repository, runId, jobId);
 
         return await Program.HttpClient.SendAsync(
             new HttpRequestMessage

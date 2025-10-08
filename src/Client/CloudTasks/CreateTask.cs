@@ -17,7 +17,7 @@ internal static partial class CloudTasksClient
         WorkflowJobAction action
     )
     {
-        var workflowJob = $"{repository.Replace("/", "-")}-{runId}-{jobId}";
+        var workflowJob = GetTaskName(repository, runId, jobId);
 
         var taskName = Convert.ToHexStringLower(
             XxHash3.Hash(
