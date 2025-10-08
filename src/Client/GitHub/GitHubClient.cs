@@ -69,14 +69,14 @@ internal static partial class GitHubClient
             }
         );
 
-        if (response.IsSuccessStatusCode)
-            return (
-                await response.Content.ReadFromJsonAsync<InstallationAccessToken>(
-                    SnakeCaseLowerSourceGenerationContext.Default.InstallationAccessToken
-                )
-            )!.Token;
+        if (!response.IsSuccessStatusCode)
+            throw new Exception(await response.Content.ReadAsStringAsync());
 
-        throw new Exception(await response.Content.ReadAsStringAsync()); // TODO: Useful exception
+        var token = await response.Content.ReadFromJsonAsync<InstallationAccessToken>(
+            SnakeCaseLowerSourceGenerationContext.Default.InstallationAccessToken
+        );
+
+        return $"Bearer {token!.Token}";
     }
 
     internal sealed class InstallationAccessToken

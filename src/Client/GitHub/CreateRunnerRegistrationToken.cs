@@ -6,16 +6,13 @@ internal static partial class GitHubClient
 {
     public static async Task<string> CreateRunnerRegistrationToken(string repo, long installationId)
     {
-        var request = await Program.HttpClient.SendAsync(
+        var response = await Program.HttpClient.SendAsync(
             new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
                 Headers =
                 {
-                    {
-                        "Authorization",
-                        $"Bearer {await GetInstallationAccessToken(installationId)}"
-                    },
+                    { "Authorization", await GetInstallationAccessToken(installationId) },
                     { "User-Agent", "Ktisis/0.0.1" },
                     { "Accept", "application/vnd.github+json" },
                     { "X-GitHub-Api-Version", "2022-11-28" },
@@ -26,8 +23,11 @@ internal static partial class GitHubClient
             }
         );
 
+        if (!response.IsSuccessStatusCode)
+            throw new Exception(await response.Content.ReadAsStringAsync());
+
         return (
-            await request.Content.ReadFromJsonAsync<RunnerRegistrationToken>(
+            await response.Content.ReadFromJsonAsync<RunnerRegistrationToken>(
                 SnakeCaseLowerSourceGenerationContext.Default.RunnerRegistrationToken
             )
         )!.Token;

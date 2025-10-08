@@ -21,12 +21,11 @@ internal static class GoogleCloudClient
         if (!response.IsSuccessStatusCode)
             throw new Exception(await response.Content.ReadAsStringAsync());
 
-        return (
-            await JsonSerializer.DeserializeAsync<AccessTokenResponse>(
-                await response.Content.ReadAsStreamAsync(),
-                SnakeCaseLowerSourceGenerationContext.Default.AccessTokenResponse
-            )
-        )!.AccessToken;
+        var token = await response.Content.ReadFromJsonAsync<AccessTokenResponse>(
+            SnakeCaseLowerSourceGenerationContext.Default.AccessTokenResponse
+        );
+
+        return $"Bearer {token!.AccessToken}";
     }
 
     internal sealed class AccessTokenResponse
