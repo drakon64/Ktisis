@@ -9,11 +9,11 @@ internal static partial class ComputeEngineClient
         var response = await Program.HttpClient.SendAsync(
             new HttpRequestMessage
             {
+                Headers = { { "Authorization", await GoogleCloudClient.GetAccessToken() } },
+                Method = HttpMethod.Get,
                 RequestUri = new Uri(
                     $"https://compute.googleapis.com/compute/v1/{SourceInstanceTemplate}"
                 ),
-                Headers = { { "Authorization", await GoogleCloudClient.GetAccessToken() } },
-                Method = HttpMethod.Get,
             }
         );
 

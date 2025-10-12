@@ -5,7 +5,7 @@ using Octokit.Webhooks.Events.WorkflowJob;
 
 namespace Ktisis.Webhook;
 
-public class WorkflowJobWebhookEventProcessor(ILogger<WorkflowJobWebhookEventProcessor> logger)
+internal class WorkflowJobWebhookEventProcessor(ILogger<WorkflowJobWebhookEventProcessor> logger)
     : WebhookEventProcessor
 {
     protected override async ValueTask ProcessWorkflowJobWebhookAsync(

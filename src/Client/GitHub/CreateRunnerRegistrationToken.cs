@@ -4,12 +4,11 @@ namespace Ktisis.Client.GitHub;
 
 internal static partial class GitHubClient
 {
-    public static async Task<string> CreateRunnerRegistrationToken(string repo, long installationId)
+    internal static async Task<string> CreateRunnerRegistrationToken(string repo, long installationId)
     {
         var response = await Program.HttpClient.SendAsync(
             new HttpRequestMessage
             {
-                Method = HttpMethod.Post,
                 Headers =
                 {
                     { "Authorization", await GetInstallationAccessToken(installationId) },
@@ -17,6 +16,7 @@ internal static partial class GitHubClient
                     { "Accept", "application/vnd.github+json" },
                     { "X-GitHub-Api-Version", "2022-11-28" },
                 },
+                Method = HttpMethod.Post,
                 RequestUri = new Uri(
                     $"https://api.github.com/repos/{repo}/actions/runners/registration-token"
                 ),

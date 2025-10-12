@@ -5,7 +5,7 @@ using Octokit.Webhooks.AspNetCore;
 
 namespace Ktisis;
 
-public static class Program
+internal static class Program
 {
     internal static readonly string[]? Repositories = Environment
         .GetEnvironmentVariable("KTISIS_GITHUB_REPOSITORIES")
@@ -13,9 +13,11 @@ public static class Program
 
     internal static readonly HttpClient HttpClient = new();
 
-    public static void Main()
+    internal static void Main()
     {
         var builder = WebApplication.CreateSlimBuilder();
+        
+        // Receiver
         builder.Services.AddSingleton<WebhookEventProcessor, WorkflowJobWebhookEventProcessor>();
 
         var app = builder.Build();

@@ -55,7 +55,6 @@ internal static partial class GitHubClient
         var response = await Program.HttpClient.SendAsync(
             new HttpRequestMessage
             {
-                Method = HttpMethod.Post,
                 Headers =
                 {
                     { "Authorization", $"Bearer {GenerateJwt()}" },
@@ -63,6 +62,7 @@ internal static partial class GitHubClient
                     { "Accept", "application/vnd.github+json" },
                     { "X-GitHub-Api-Version", "2022-11-28" },
                 },
+                Method = HttpMethod.Post,
                 RequestUri = new Uri(
                     $"https://api.github.com/app/installations/{installationId}/access_tokens"
                 ),

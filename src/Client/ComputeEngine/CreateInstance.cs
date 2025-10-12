@@ -5,7 +5,7 @@ namespace Ktisis.Client.ComputeEngine;
 
 internal static partial class ComputeEngineClient
 {
-    public static async Task CreateInstance(string name, string repository, long installationId)
+    internal static async Task CreateInstance(string name, string repository, long installationId)
     {
         var zone = Zones[0]; // TODO: Pick a random element
 
@@ -26,12 +26,6 @@ internal static partial class ComputeEngineClient
         var response = await Program.HttpClient.SendAsync(
             new HttpRequestMessage
             {
-                RequestUri = new Uri(
-                    $"https://compute.googleapis.com/compute/v1/projects/{Project}/zones/{zone}/instances?sourceInstanceTemplate={SourceInstanceTemplate}"
-                ),
-                Headers = { { "Authorization", await GoogleCloudClient.GetAccessToken() } },
-                Method = HttpMethod.Post,
-
                 Content = JsonContent.Create(
                     new CreateInstanceRequest
                     {
@@ -39,6 +33,11 @@ internal static partial class ComputeEngineClient
                         Metadata = new Metadata { Items = metadata },
                     },
                     CamelCaseSourceGenerationContext.Default.CreateInstanceRequest
+                ),
+                Headers = { { "Authorization", await GoogleCloudClient.GetAccessToken() } },
+                Method = HttpMethod.Post,
+                RequestUri = new Uri(
+                    $"https://compute.googleapis.com/compute/v1/projects/{Project}/zones/{zone}/instances?sourceInstanceTemplate={SourceInstanceTemplate}"
                 ),
             }
         );

@@ -1,20 +1,19 @@
-using System.Text.Json;
 using Ktisis.SourceGenerationContext;
 
 namespace Ktisis.Client;
 
 internal static class GoogleCloudClient
 {
-    public static async Task<string> GetAccessToken()
+    internal static async Task<string> GetAccessToken()
     {
         var response = await Program.HttpClient.SendAsync(
             new HttpRequestMessage
             {
+                Headers = { { "Metadata-Flavor", "Google" } },
+                Method = HttpMethod.Get,
                 RequestUri = new Uri(
                     "http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token"
                 ),
-                Headers = { { "Metadata-Flavor", "Google" } },
-                Method = HttpMethod.Get,
             }
         );
 

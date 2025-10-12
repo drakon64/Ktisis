@@ -9,7 +9,7 @@ namespace Ktisis.Client.CloudTasks;
 
 internal static partial class CloudTasksClient
 {
-    public static async Task<HttpResponseMessage> CreateTask(
+    internal static async Task<HttpResponseMessage> CreateTask(
         string repository,
         long runId,
         long jobId,
@@ -34,10 +34,6 @@ internal static partial class CloudTasksClient
         return await Program.HttpClient.SendAsync(
             new HttpRequestMessage
             {
-                RequestUri = new Uri($"https://cloudtasks.googleapis.com/v2/{Queue}/tasks"),
-                Headers = { { "Authorization", await GoogleCloudClient.GetAccessToken() } },
-                Method = HttpMethod.Post,
-
                 Content = JsonContent.Create(
                     new TaskRequest
                     {
@@ -54,6 +50,9 @@ internal static partial class CloudTasksClient
                     },
                     CamelCaseSourceGenerationContext.Default.TaskRequest
                 ),
+                Headers = { { "Authorization", await GoogleCloudClient.GetAccessToken() } },
+                Method = HttpMethod.Post,
+                RequestUri = new Uri($"https://cloudtasks.googleapis.com/v2/{Queue}/tasks"),
             }
         );
     }
