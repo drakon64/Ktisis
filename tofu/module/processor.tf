@@ -67,7 +67,7 @@ resource "google_cloud_run_v2_service" "processor" {
 
         limits = {
           cpu    = "1000m"
-          memory = "512Mi"
+          memory = "614Mi"
         }
       }
 
