@@ -16,7 +16,7 @@ internal static class Program
     internal static void Main()
     {
         var builder = WebApplication.CreateSlimBuilder();
-        
+
         // Receiver
         builder.Services.AddSingleton<WebhookEventProcessor, WorkflowJobWebhookEventProcessor>();
 
