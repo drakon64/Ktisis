@@ -33,12 +33,6 @@ internal static class Program
                 secret: Environment.GetEnvironmentVariable("KTISIS_GITHUB_WEBHOOK_SECRET")
             );
 
-            app.MapPost(
-                "/api/ktisis",
-                async (string name, string repository, long installationId) =>
-                    await ComputeEngineClient.CreateInstance(name, repository, installationId)
-            );
-
             Run(app);
         });
 
@@ -46,6 +40,12 @@ internal static class Program
         processor.SetAction(_ =>
         {
             app = builder.Build();
+
+            app.MapPost(
+                "/api/ktisis",
+                async (string name, string repository, long installationId) =>
+                    await ComputeEngineClient.CreateInstance(name, repository, installationId)
+            );
 
             app.MapDelete(
                 "/api/ktisis",
