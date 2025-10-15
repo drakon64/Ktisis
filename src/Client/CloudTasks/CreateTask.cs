@@ -19,14 +19,8 @@ internal static partial class CloudTasksClient
     )
     {
         var workflowJob = GetWorkflowJob(repository, runId, jobId);
-
-        var taskName = Convert.ToHexStringLower(
-            XxHash3.Hash(Encoding.Default.GetBytes($"d-{workflowJob}"))
-        );
-
-        var instanceName = Convert.ToHexStringLower(
-            XxHash3.Hash(Encoding.Default.GetBytes(workflowJob))
-        );
+        var taskName = GetTaskName('d', workflowJob);
+        var instanceName = GetInstanceName(workflowJob);
 
         return await Program.HttpClient.SendAsync(
             new HttpRequestMessage
@@ -57,14 +51,8 @@ internal static partial class CloudTasksClient
     )
     {
         var workflowJob = GetWorkflowJob(repository, runId, jobId);
-
-        var taskName = Convert.ToHexStringLower(
-            XxHash3.Hash(Encoding.Default.GetBytes($"c-{workflowJob}"))
-        );
-
-        var instanceName = Convert.ToHexStringLower(
-            XxHash3.Hash(Encoding.Default.GetBytes(workflowJob))
-        );
+        var taskName = GetTaskName('c', workflowJob);
+        var instanceName = GetInstanceName(workflowJob);
 
         return await Program.HttpClient.SendAsync(
             new HttpRequestMessage
@@ -86,6 +74,14 @@ internal static partial class CloudTasksClient
             }
         );
     }
+
+    private static string GetTaskName(char prefix, string workflowJob) =>
+        Convert.ToHexStringLower(
+            XxHash3.Hash(Encoding.Default.GetBytes($"{prefix}-{workflowJob}"))
+        );
+
+    private static string GetInstanceName(string workflowJob) =>
+        Convert.ToHexStringLower(XxHash3.Hash(Encoding.Default.GetBytes(workflowJob)));
 
     internal sealed class TaskRequest
     {
