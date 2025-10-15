@@ -74,7 +74,7 @@ internal static partial class CloudTasksClient
         public string Url;
 
         [JsonInclude]
-        public TasksHttpMethod HttpMethod;
+        public string HttpMethod;
 
         [JsonInclude]
         public readonly OidcToken OidcToken = new();
@@ -101,18 +101,8 @@ internal static partial class CloudTasksClient
                     ?? throw new InvalidOperationException("KTISIS_PROCESSOR is null")
                 ) + $"?{queryString}";
 
-            HttpMethod =
-                action == WorkflowJobAction.Queued ? TasksHttpMethod.Post : TasksHttpMethod.Delete;
+            HttpMethod = action == WorkflowJobAction.Queued ? "POST" : "DELETE";
         }
-    }
-
-    internal enum TasksHttpMethod
-    {
-        [JsonStringEnumMemberName("POST")]
-        Post,
-
-        [JsonStringEnumMemberName("DELETE")]
-        Delete,
     }
 
     internal sealed class OidcToken

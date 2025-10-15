@@ -5,10 +5,7 @@ using Ktisis.Client.ComputeEngine;
 
 namespace Ktisis.SourceGenerationContext;
 
-[JsonSourceGenerationOptions(
-    PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase,
-    UseStringEnumConverter = true
-)]
+[JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
 [JsonSerializable(typeof(GoogleCloudClient.AccessTokenResponse))]
 [JsonSerializable(typeof(CloudTasksClient.TaskRequest))]
 [JsonSerializable(typeof(ComputeEngineClient.CreateInstanceRequest))]
