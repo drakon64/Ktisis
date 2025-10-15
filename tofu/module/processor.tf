@@ -8,7 +8,7 @@ resource "google_cloud_run_v2_service" "processor" {
     containers {
       image = data.google_artifact_registry_docker_image.ktisis.self_link
 
-      command = ["processor"]
+      args = ["processor"]
 
       dynamic "env" {
         for_each = var.allowed_repositories != null ? var.allowed_repositories : []
