@@ -6,6 +6,8 @@ on:
       - main
     paths:
       - "**.cs"
+      - "**.csproj"
+      - "**/deps.json"
       - "**.nix"
       - "lon.lock"
   workflow_dispatch:
