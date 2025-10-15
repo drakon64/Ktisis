@@ -9,6 +9,10 @@ namespace Ktisis.Client.CloudTasks;
 
 internal static partial class CloudTasksClient
 {
+    private static readonly string Processor =
+        Environment.GetEnvironmentVariable("KTISIS_PROCESSOR")
+        ?? throw new InvalidOperationException("KTISIS_PROCESSOR is null");
+
     internal static async Task<HttpResponseMessage> CreateTask(
         string repository,
         long runId,
@@ -95,12 +99,7 @@ internal static partial class CloudTasksClient
                 queryString.Add("installationId", installationId.ToString());
             }
 
-            Url =
-                (
-                    Environment.GetEnvironmentVariable("KTISIS_PROCESSOR")
-                    ?? throw new InvalidOperationException("KTISIS_PROCESSOR is null")
-                ) + $"?{queryString}";
-
+            Url = Processor + $"?{queryString}";
             HttpMethod = action.Equals(WorkflowJobAction.Queued) ? "POST" : "DELETE";
         }
     }
