@@ -111,7 +111,10 @@ internal static partial class CloudTasksClient
 
         public HttpRequest(string name)
         {
-            Url = Processor + $"?name={name}";
+            var queryString = HttpUtility.ParseQueryString(string.Empty);
+            queryString.Add("name", name);
+
+            Url = $"{Processor}?{queryString}";
             HttpMethod = "DELETE";
         }
 
@@ -122,7 +125,7 @@ internal static partial class CloudTasksClient
             queryString.Add("repository", repository);
             queryString.Add("installationId", installationId.ToString());
 
-            Url = Processor + $"?{queryString}";
+            Url = $"{Processor}?{queryString}";
             HttpMethod = "POST";
         }
     }
