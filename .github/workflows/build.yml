@@ -5,9 +5,9 @@ on:
     branches:
       - main
     paths:
-      - "**.cs"
-      - "**.csproj"
-      - "**/deps.json"
+      - "src/**.cs"
+      - "src/Ktisis.csproj"
+      - "src/deps.json"
       - "**.nix"
       - "lon.lock"
   workflow_dispatch:
