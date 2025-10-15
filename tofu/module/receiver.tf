@@ -8,6 +8,8 @@ resource "google_cloud_run_v2_service" "receiver" {
     containers {
       image = data.google_artifact_registry_docker_image.ktisis.self_link
 
+      command = ["receiver"]
+
       env {
         name = "KTISIS_CLOUD_TASKS_QUEUE"
 

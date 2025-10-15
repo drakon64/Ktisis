@@ -1,3 +1,4 @@
+using System.CommandLine;
 using Ktisis.Client.ComputeEngine;
 using Ktisis.Webhook;
 using Octokit.Webhooks;
@@ -13,31 +14,53 @@ internal static class Program
 
     internal static readonly HttpClient HttpClient = new();
 
-    internal static void Main()
+    internal static void Main(string[] args)
     {
         var builder = WebApplication.CreateSlimBuilder();
+        WebApplication app;
 
-        // Receiver
-        builder.Services.AddSingleton<WebhookEventProcessor, WorkflowJobWebhookEventProcessor>();
+        var receiver = new Command("receiver");
+        receiver.SetAction(_ =>
+        {
+            builder.Services.AddSingleton<
+                WebhookEventProcessor,
+                WorkflowJobWebhookEventProcessor
+            >();
 
-        var app = builder.Build();
+            app = builder.Build();
 
-        // Receiver
-        app.MapGitHubWebhooks(
-            secret: Environment.GetEnvironmentVariable("KTISIS_GITHUB_WEBHOOK_SECRET")
-        );
+            app.MapGitHubWebhooks(
+                secret: Environment.GetEnvironmentVariable("KTISIS_GITHUB_WEBHOOK_SECRET")
+            );
 
-        // Processor
-        app.MapPost(
-            "/api/ktisis",
-            async (string name, string repository, long installationId) =>
-                await ComputeEngineClient.CreateInstance(name, repository, installationId)
-        );
-        app.MapDelete(
-            "/api/ktisis",
-            async (string name) => await ComputeEngineClient.DeleteInstance(name)
-        );
+            app.MapPost(
+                "/api/ktisis",
+                async (string name, string repository, long installationId) =>
+                    await ComputeEngineClient.CreateInstance(name, repository, installationId)
+            );
 
-        app.Run($"http://*:{Environment.GetEnvironmentVariable("PORT")}");
+            Run(app);
+        });
+
+        var processor = new Command("processor");
+        processor.SetAction(_ =>
+        {
+            app = builder.Build();
+
+            app.MapDelete(
+                "/api/ktisis",
+                async (string name) => await ComputeEngineClient.DeleteInstance(name)
+            );
+
+            Run(app);
+        });
+
+        var rootCommand = new RootCommand();
+        rootCommand.Subcommands.Add(receiver);
+        rootCommand.Subcommands.Add(processor);
+        rootCommand.Parse(args).Invoke();
     }
+
+    private static void Run(WebApplication app) =>
+        app.Run($"http://*:{Environment.GetEnvironmentVariable("PORT")}");
 }
