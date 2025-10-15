@@ -22,7 +22,7 @@ internal static partial class CloudTasksClient
         var taskName = Convert.ToHexStringLower(
             XxHash3.Hash(
                 Encoding.Default.GetBytes(
-                    (action == WorkflowJobAction.Queued ? "c" : "d") + $"-{workflowJob}"
+                    (action.Equals(WorkflowJobAction.Queued) ? "c" : "d") + $"-{workflowJob}"
                 )
             )
         );
@@ -101,7 +101,7 @@ internal static partial class CloudTasksClient
                     ?? throw new InvalidOperationException("KTISIS_PROCESSOR is null")
                 ) + $"?{queryString}";
 
-            HttpMethod = action == WorkflowJobAction.Queued ? "POST" : "DELETE";
+            HttpMethod = action.Equals(WorkflowJobAction.Queued) ? "POST" : "DELETE";
         }
     }
 
