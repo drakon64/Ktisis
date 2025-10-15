@@ -13,8 +13,8 @@ internal static partial class CloudTasksClient
         string repository,
         long runId,
         long jobId,
-        long installationId,
-        WorkflowJobAction action
+        WorkflowJobAction action,
+        long? installationId = null
     )
     {
         var workflowJob = GetWorkflowJob(repository, runId, jobId);
@@ -43,8 +43,8 @@ internal static partial class CloudTasksClient
                             HttpRequest = new HttpRequest(
                                 instanceName,
                                 repository,
-                                installationId,
-                                action
+                                action,
+                                installationId
                             ),
                         },
                     },
@@ -82,14 +82,18 @@ internal static partial class CloudTasksClient
         public HttpRequest(
             string name,
             string repository,
-            long installationId,
-            WorkflowJobAction action
+            WorkflowJobAction action,
+            long? installationId = null
         )
         {
             var queryString = HttpUtility.ParseQueryString(string.Empty);
             queryString.Add("name", name);
-            queryString.Add("repository", repository);
-            queryString.Add("installationId", installationId.ToString());
+
+            if (action.Equals(WorkflowJobAction.Queued))
+            {
+                queryString.Add("repository", repository);
+                queryString.Add("installationId", installationId.ToString());
+            }
 
             Url =
                 (

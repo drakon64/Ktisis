@@ -29,7 +29,7 @@ internal class WorkflowJobWebhookEventProcessor(ILogger<WorkflowJobWebhookEventP
         }
 
         // If the workflow job action is not queued or completed, or the workflow job labels do not contain all of "self-hosted", "Linux", and "X64",
-        // return a HTTP 200 to the webhook and do nothing
+        // return an HTTP 200 to the webhook and do nothing
         if (
             !(action.Equals(WorkflowJobAction.Queued) || action.Equals(WorkflowJobAction.Completed))
             || !(
@@ -50,29 +50,25 @@ internal class WorkflowJobWebhookEventProcessor(ILogger<WorkflowJobWebhookEventP
 
         logger.LogInformation("Repository: {FullName}", workflowJobEvent.Repository!.FullName);
 
-        if (action.Equals(WorkflowJobAction.Queued))
-        {
-            var task = await CloudTasksClient.CreateTask(
-                workflowJobEvent.Repository.FullName,
-                workflowJobEvent.WorkflowJob.RunId,
-                workflowJobEvent.WorkflowJob.Id,
-                workflowJobEvent.Installation!.Id,
-                action
-            );
-
-            if (!task.IsSuccessStatusCode)
-            {
-                logger.LogError(await task.Content.ReadAsStringAsync(cancellationToken));
-            }
-        }
-        else
-        {
+        if (action.Equals(WorkflowJobAction.Completed))
             // Failing to delete a Cloud Task is not fatal
             await CloudTasksClient.DeleteTask(
                 workflowJobEvent.Repository.FullName,
                 workflowJobEvent.WorkflowJob.RunId,
                 workflowJobEvent.WorkflowJob.Id
             );
+
+        var task = await CloudTasksClient.CreateTask(
+            workflowJobEvent.Repository.FullName,
+            workflowJobEvent.WorkflowJob.RunId,
+            workflowJobEvent.WorkflowJob.Id,
+            action,
+            action.Equals(WorkflowJobAction.Queued) ? workflowJobEvent.Installation!.Id : null
+        );
+
+        if (!task.IsSuccessStatusCode)
+        {
+            logger.LogError(await task.Content.ReadAsStringAsync(cancellationToken));
         }
     }
 }
