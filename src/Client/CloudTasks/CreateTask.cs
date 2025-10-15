@@ -12,6 +12,10 @@ internal static partial class CloudTasksClient
         Environment.GetEnvironmentVariable("KTISIS_PROCESSOR")
         ?? throw new InvalidOperationException("KTISIS_PROCESSOR is null");
 
+    private static readonly string ServiceAccount =
+        Environment.GetEnvironmentVariable("KTISIS_SERVICE_ACCOUNT")
+        ?? throw new InvalidOperationException("KTISIS_SERVICE_ACCOUNT is null");
+
     internal static async Task<HttpResponseMessage> CreateTask(
         string repository,
         long runId,
@@ -129,8 +133,6 @@ internal static partial class CloudTasksClient
     internal sealed class OidcToken
     {
         [JsonInclude]
-        public static readonly string ServiceAccountEmail =
-            Environment.GetEnvironmentVariable("KTISIS_SERVICE_ACCOUNT")
-            ?? throw new InvalidOperationException("KTISIS_SERVICE_ACCOUNT is null");
+        public readonly string ServiceAccountEmail = ServiceAccount;
     }
 }
