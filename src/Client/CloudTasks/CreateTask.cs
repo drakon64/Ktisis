@@ -108,7 +108,7 @@ internal static partial class CloudTasksClient
     internal sealed class OidcToken
     {
         [JsonInclude]
-        public readonly string ServiceAccountEmail =
+        public static readonly string ServiceAccountEmail =
             Environment.GetEnvironmentVariable("KTISIS_SERVICE_ACCOUNT")
             ?? throw new InvalidOperationException("KTISIS_SERVICE_ACCOUNT is null");
     }
