@@ -5,8 +5,7 @@ namespace Ktisis.Client.CloudTasks;
 
 internal static partial class CloudTasksClient
 {
-    // TODO: Fix `Task` return type not working
-    internal static async Task<HttpResponseMessage> DeleteTask(
+    internal static async System.Threading.Tasks.Task DeleteTask(
         string repository,
         long runId,
         long jobId
@@ -16,7 +15,7 @@ internal static partial class CloudTasksClient
             XxHash3.Hash(Encoding.Default.GetBytes("c-" + GetWorkflowJob(repository, runId, jobId)))
         );
 
-        return await Program.HttpClient.SendAsync(
+        await Program.HttpClient.SendAsync(
             new HttpRequestMessage
             {
                 Headers = { { "Authorization", await GoogleCloudClient.GetAccessToken() } },
