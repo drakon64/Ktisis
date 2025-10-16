@@ -24,7 +24,10 @@ internal static partial class CloudTasksClient
     )
     {
         var workflowJob = GetWorkflowJob(repository, runId, jobId);
-        var instanceName = GetInstanceName(workflowJob);
+
+        var instanceName = Convert.ToHexStringLower(
+            XxHash3.Hash(Encoding.Default.GetBytes(workflowJob))
+        );
 
         string taskName;
         HttpRequest httpRequest;
@@ -65,9 +68,6 @@ internal static partial class CloudTasksClient
         Convert.ToHexStringLower(
             XxHash3.Hash(Encoding.Default.GetBytes($"{prefix}-{workflowJob}"))
         );
-
-    private static string GetInstanceName(string workflowJob) =>
-        Convert.ToHexStringLower(XxHash3.Hash(Encoding.Default.GetBytes(workflowJob)));
 
     internal sealed class TaskRequest
     {
