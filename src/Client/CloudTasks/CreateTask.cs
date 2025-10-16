@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Web;
 using Ktisis.SourceGenerationContext;
+using Octokit.Webhooks.Events.WorkflowJob;
 
 namespace Ktisis.Client.CloudTasks;
 
@@ -20,7 +21,8 @@ internal static partial class CloudTasksClient
         string repository,
         long runId,
         long jobId,
-        long? installationId = null
+        WorkflowJobAction action,
+        long installationId
     )
     {
         var workflowJob = GetWorkflowJob(repository, runId, jobId);
@@ -32,7 +34,7 @@ internal static partial class CloudTasksClient
         string taskName;
         HttpRequest httpRequest;
 
-        if (installationId == null)
+        if (action.Equals(WorkflowJobAction.Completed))
         {
             taskName = GetTaskName('d', workflowJob);
             httpRequest = new HttpRequest(instanceName);
@@ -40,7 +42,7 @@ internal static partial class CloudTasksClient
         else
         {
             taskName = GetTaskName('c', workflowJob);
-            httpRequest = new HttpRequest(instanceName, repository, (long)installationId);
+            httpRequest = new HttpRequest(instanceName, repository, installationId);
         }
 
         return await Program.HttpClient.SendAsync(
