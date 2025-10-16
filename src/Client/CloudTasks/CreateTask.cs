@@ -19,44 +19,26 @@ internal static partial class CloudTasksClient
     internal static async Task<HttpResponseMessage> CreateTask(
         string repository,
         long runId,
-        long jobId
-    )
-    {
-        var workflowJob = GetWorkflowJob(repository, runId, jobId);
-        var taskName = GetTaskName('d', workflowJob);
-        var instanceName = GetInstanceName(workflowJob);
-
-        return await Program.HttpClient.SendAsync(
-            new HttpRequestMessage
-            {
-                Content = JsonContent.Create(
-                    new TaskRequest
-                    {
-                        Task = new Task
-                        {
-                            Name = $"{Queue}/tasks/{taskName}",
-                            HttpRequest = new HttpRequest(instanceName),
-                        },
-                    },
-                    CamelCaseSourceGenerationContext.Default.TaskRequest
-                ),
-                Headers = { { "Authorization", await GoogleCloudClient.GetAccessToken() } },
-                Method = HttpMethod.Post,
-                RequestUri = new Uri($"https://cloudtasks.googleapis.com/v2/{Queue}/tasks"),
-            }
-        );
-    }
-
-    internal static async Task<HttpResponseMessage> CreateTask(
-        string repository,
-        long runId,
         long jobId,
-        long installationId
+        long? installationId = null
     )
     {
         var workflowJob = GetWorkflowJob(repository, runId, jobId);
-        var taskName = GetTaskName('c', workflowJob);
         var instanceName = GetInstanceName(workflowJob);
+
+        string taskName;
+        HttpRequest httpRequest;
+
+        if (installationId == null)
+        {
+            taskName = GetTaskName('d', workflowJob);
+            httpRequest = new HttpRequest(instanceName);
+        }
+        else
+        {
+            taskName = GetTaskName('c', workflowJob);
+            httpRequest = new HttpRequest(instanceName, repository, (long)installationId);
+        }
 
         return await Program.HttpClient.SendAsync(
             new HttpRequestMessage
@@ -67,7 +49,7 @@ internal static partial class CloudTasksClient
                         Task = new Task
                         {
                             Name = $"{Queue}/tasks/{taskName}",
-                            HttpRequest = new HttpRequest(instanceName, repository, installationId),
+                            HttpRequest = httpRequest,
                         },
                     },
                     CamelCaseSourceGenerationContext.Default.TaskRequest
