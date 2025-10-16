@@ -25,7 +25,7 @@ resource "google_artifact_registry_repository" "artifact_registry" {
       }
     }
   }
-  
+
   vulnerability_scanning_config {
     enablement_config = "DISABLED"
   }
