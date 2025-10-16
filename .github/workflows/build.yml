@@ -9,7 +9,9 @@ on:
       - "src/Ktisis.csproj"
       - "src/deps.json"
       - "**.nix"
-      - "lon.lock"
+      - lon.lock
+      - Dockerfile
+      - .github/workflows/build.yml
   workflow_dispatch:
 
 jobs:
@@ -42,11 +44,24 @@ jobs:
 
       - run: docker load < result
 
+      - uses: docker/metadata-action@v4
+        id: meta
+        with:
+          images: ghcr.io/${{ github.repository }}
+          tags: latest
+
+      - name: Log into GitHub Packages
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Upload to GitHub Packages
         uses: docker/build-push-action@v6
         with:
           context: .
           push: true
-          tags: ghcr.io/drakon64/ktisis:latest
+          tags: ${{ steps.meta.outputs.tags }}
         env:
           SOURCE_DATE_EPOCH: 0
