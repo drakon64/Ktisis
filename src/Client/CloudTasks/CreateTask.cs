@@ -111,10 +111,7 @@ internal static partial class CloudTasksClient
 
         public HttpRequest(string name)
         {
-            var queryString = HttpUtility.ParseQueryString(string.Empty);
-            queryString.Add("name", name);
-
-            Url = $"{Processor}?{queryString}";
+            Url = $"{Processor}?name={name}";
             HttpMethod = "DELETE";
         }
 
