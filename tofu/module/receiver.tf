@@ -6,7 +6,7 @@ resource "google_cloud_run_v2_service" "receiver" {
 
   template {
     containers {
-      image = data.google_artifact_registry_docker_image.ktisis.self_link
+      image = local.image
 
       args = ["receiver"]
 

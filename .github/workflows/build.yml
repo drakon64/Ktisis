@@ -18,7 +18,7 @@ jobs:
 
     permissions:
       contents: read
-      id-token: write
+      packages: write
 
     steps:
       - uses: actions/checkout@v4
@@ -42,16 +42,11 @@ jobs:
 
       - run: docker load < result
 
-      - uses: google-github-actions/auth@v3
+      - name: Upload to GitHub Packages
+        uses: docker/build-push-action@v6
         with:
-          project_id: "${{ secrets.GCP_PROJECT }}"
-          workload_identity_provider: "${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}"
-
-      - uses: google-github-actions/setup-gcloud@v3
-
-      - run: gcloud auth configure-docker europe-west2-docker.pkg.dev
-
-      - name: Upload to Artifact Registry
-        run: |
-          docker tag ktisis europe-west2-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/ktisis/ktisis
-          docker push europe-west2-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/ktisis/ktisis
+          context: .
+          push: true
+          tags: ghcr.io/drakon64/ktisis:latest
+        env:
+          SOURCE_DATE_EPOCH: 0

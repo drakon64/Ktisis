@@ -1,9 +1,7 @@
-resource "google_project_service" "cloud_run" {
-  service = "run.googleapis.com"
+locals {
+  image = "ghcr.io/drakon64/ktisis:latest"
 }
 
-data "google_artifact_registry_docker_image" "ktisis" {
-  image_name    = "ktisis:latest"
-  location      = var.region
-  repository_id = google_artifact_registry_repository.artifact_registry.repository_id
+resource "google_project_service" "cloud_run" {
+  service = "run.googleapis.com"
 }
