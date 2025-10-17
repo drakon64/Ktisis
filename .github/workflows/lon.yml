@@ -35,7 +35,7 @@ jobs:
       - name: Update Lon lockfile
         run: nix-shell -A lon --run "lon update nixpkgs"
 
-      - name: Evaluate with updated lockfile
+      - name: Build with updated lockfile
         run: echo "NEW_HASH=$(nix-build -A docker)" >> "$GITHUB_ENV"
 
       - name: Open pull request
