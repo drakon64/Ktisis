@@ -25,16 +25,16 @@ jobs:
       - name: Build Nix shell
         run: nix-shell -A lon --run "exit"
 
-      - name: Evaluating with current lockfile
+      - name: Evaluate with current lockfile
         run: echo "CURRENT_HASH=$(nix eval --file ./default.nix docker --raw)" >> "$GITHUB_ENV"
 
-      - name: Updating Lon lockfile
+      - name: Update Lon lockfile
         run: nix-shell -A lon --run "lon update nixpkgs"
 
-      - name: Evaluating with updated lockfile
+      - name: Evaluate with updated lockfile
         run: echo "NEW_HASH=$(nix eval --file ./default.nix docker --raw)" >> "$GITHUB_ENV"
 
-      - name: Opening pull request
+      - name: Open pull request
         run: |
           git checkout lon.lock
           nix-shell -A lon --run "lon bot github"
