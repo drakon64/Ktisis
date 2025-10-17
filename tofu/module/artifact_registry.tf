@@ -16,12 +16,16 @@ resource "google_artifact_registry_repository" "artifact_registry" {
     }
   }
 
-  mode = "REMOTE_REPOSITORY"
+  mode = var.use_ghcr ? "REMOTE_REPOSITORY" : "STANDARD_REPOSITORY"
 
-  remote_repository_config {
-    docker_repository {
-      custom_repository {
-        uri = "https://ghcr.io"
+  dynamic "remote_repository_config" {
+    for_each = var.use_ghcr ? [true] : []
+
+    content {
+      docker_repository {
+        custom_repository {
+          uri = "https://ghcr.io"
+        }
       }
     }
   }

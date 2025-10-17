@@ -16,6 +16,11 @@ variable "secret_replica_regions" {
   type    = set(string)
 }
 
+variable "use_ghcr" {
+  description = "Use pre-built Ktisis images from GitHub Packages"
+  default     = true
+}
+
 variable "zones" {
   type = set(string)
 }

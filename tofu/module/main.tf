@@ -1,10 +1,5 @@
 terraform {
   required_providers {
-    docker = {
-      source  = "kreuzwerker/docker"
-      version = "~> 3"
-    }
-
     google = {
       source = "hashicorp/google"
     }
@@ -14,10 +9,6 @@ terraform {
       version = "~> 3"
     }
   }
-}
-
-provider "docker" {
-  disable_docker_daemon_check = true
 }
 
 locals {

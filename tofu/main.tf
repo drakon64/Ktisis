@@ -18,5 +18,6 @@ module "ktisis" {
   domain                 = var.domain
   region                 = var.region
   secret_replica_regions = var.secret_replica_regions
+  use_ghcr               = var.use_ghcr
   zones                  = var.zones
 }
