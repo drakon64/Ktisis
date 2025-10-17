@@ -14,13 +14,10 @@ Docker images can be built by running:
 
 ```shell
 nix-build -A docker
+docker build .
 ```
 
-Alternatively a Docker image can be built without Lix by running:
-
-```shell
-dotnet publish --os linux --arch x64 /t:PublishContainer
-```
+A binary cache is available at [Cachix](https://app.cachix.org/cache/drakon64-ktisis#pull).
 
 ## License
 
