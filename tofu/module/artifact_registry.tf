@@ -4,7 +4,7 @@ resource "google_project_service" "artifact_registry" {
 
 resource "google_artifact_registry_repository" "artifact_registry" {
   format        = "DOCKER"
-  repository_id = "ktisis"
+  repository_id = var.use_ghcr ? "ghcr" : "ktisis"
 
   cleanup_policies {
     id = "Untagged"
