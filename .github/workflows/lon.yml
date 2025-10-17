@@ -2,7 +2,7 @@ name: Lon
 
 on:
   schedule:
-    - cron: "0 12 * * 2"
+    - cron: "0 12 * * *"
   workflow_dispatch:
 
 jobs:
@@ -22,7 +22,20 @@ jobs:
 
       - uses: DeterminateSystems/magic-nix-cache-action@v13
 
-      - env:
+      - name: Evaluating with current lockfile
+        run: echo "CURRENT_HASH=$(nix eval --file ./default.nix docker --raw)" >> "$GITHUB_ENV"
+
+      - name: Updating Lon lockfile
+        run: nix-shell -A lon --run "lon update nixpkgs"
+
+      - name: Evaluating with updated lockfile
+        run: echo "NEW_HASH=$(nix eval --file ./default.nix docker --raw)" >> "$GITHUB_ENV"
+
+      - name: Opening pull request
+        run: |
+          git checkout lon.lock
+          nix-shell -A lon --run "lon bot github"
+        env:
           LON_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LON_LABELS: "lon,bot"
-        run: nix-shell -A lon --run "lon bot github"
+        if: ${{ env.NEW_HASH != env.CURRENT_HASH }}
