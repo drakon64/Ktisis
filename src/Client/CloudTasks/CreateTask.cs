@@ -3,7 +3,6 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Web;
 using Ktisis.SourceGenerationContext;
-using Octokit.Webhooks.Events.WorkflowJob;
 
 namespace Ktisis.Client.CloudTasks;
 
@@ -21,29 +20,49 @@ internal static partial class CloudTasksClient
         string repository,
         long runId,
         long jobId,
-        WorkflowJobAction action,
         long installationId
     )
     {
         var workflowJob = GetWorkflowJob(repository, runId, jobId);
+        var taskName = GetTaskName('c', workflowJob);
 
         var instanceName = Convert.ToHexStringLower(
             XxHash3.Hash(Encoding.Default.GetBytes(workflowJob))
         );
 
-        string taskName;
-        HttpRequest httpRequest;
+        var httpRequest = new HttpRequest(instanceName, repository, installationId);
 
-        if (action.Equals(WorkflowJobAction.Completed))
-        {
-            taskName = GetTaskName('d', workflowJob);
-            httpRequest = new HttpRequest(instanceName);
-        }
-        else
-        {
-            taskName = GetTaskName('c', workflowJob);
-            httpRequest = new HttpRequest(instanceName, repository, installationId);
-        }
+        return await Program.HttpClient.SendAsync(
+            new HttpRequestMessage
+            {
+                Content = JsonContent.Create(
+                    new TaskRequest
+                    {
+                        Task = new Task
+                        {
+                            Name = $"{Queue}/tasks/{taskName}",
+                            HttpRequest = httpRequest,
+                        },
+                    },
+                    CamelCaseSourceGenerationContext.Default.TaskRequest
+                ),
+                Headers = { { "Authorization", await GoogleCloudClient.GetAccessToken() } },
+                Method = HttpMethod.Post,
+                RequestUri = new Uri($"https://cloudtasks.googleapis.com/v2/{Queue}/tasks"),
+            }
+        );
+    }
+
+    internal static async Task<HttpResponseMessage> CreateTask(
+        string repository,
+        long runId,
+        long jobId,
+        string instanceName
+    )
+    {
+        var workflowJob = GetWorkflowJob(repository, runId, jobId);
+        var taskName = GetTaskName('d', workflowJob);
+        var httpRequest = new HttpRequest(instanceName);
 
         return await Program.HttpClient.SendAsync(
             new HttpRequestMessage
@@ -93,16 +112,16 @@ internal static partial class CloudTasksClient
         [JsonInclude]
         public readonly OidcToken OidcToken = new();
 
-        public HttpRequest(string name)
+        public HttpRequest(string instanceName)
         {
-            Url = $"{Processor}?name={name}";
+            Url = $"{Processor}?instanceName={instanceName}";
             HttpMethod = "DELETE";
         }
 
-        public HttpRequest(string name, string repository, long installationId)
+        public HttpRequest(string instanceName, string repository, long installationId)
         {
             var queryString = HttpUtility.ParseQueryString(string.Empty);
-            queryString.Add("name", name);
+            queryString.Add("instanceName", instanceName);
             queryString.Add("repository", repository);
             queryString.Add("installationId", installationId.ToString());
 

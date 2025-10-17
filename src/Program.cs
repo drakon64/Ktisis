@@ -43,13 +43,18 @@ internal static class Program
 
             app.MapPost(
                 "/api/ktisis",
-                async (string name, string repository, long installationId) =>
-                    await ComputeEngineClient.CreateInstance(name, repository, installationId)
+                async (string instanceName, string repository, long installationId) =>
+                    await ComputeEngineClient.CreateInstance(
+                        instanceName,
+                        repository,
+                        installationId
+                    )
             );
 
             app.MapDelete(
                 "/api/ktisis",
-                async (string name) => await ComputeEngineClient.DeleteInstance(name)
+                async (string instanceName) =>
+                    await ComputeEngineClient.DeleteInstance(instanceName)
             );
 
             Run(app);
