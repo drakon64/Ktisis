@@ -22,6 +22,9 @@ jobs:
 
       - uses: DeterminateSystems/magic-nix-cache-action@v13
 
+      - name: Build Nix shell
+        run: nix-shell -A lon --run "exit"
+
       - name: Evaluating with current lockfile
         run: echo "CURRENT_HASH=$(nix eval --file ./default.nix docker --raw)" >> "$GITHUB_ENV"
 
