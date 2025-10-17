@@ -5,9 +5,11 @@ namespace Ktisis.Client.ComputeEngine;
 
 internal static partial class ComputeEngineClient
 {
+    private static readonly Random Random = new();
+
     internal static async Task CreateInstance(string name, string repository, long installationId)
     {
-        var zone = Zones[0]; // TODO: Pick a random element
+        var zone = Zones[Random.Next(0, Zones.Length)];
 
         var metadata = new List<MetadataItem>
         {
@@ -29,7 +31,7 @@ internal static partial class ComputeEngineClient
                 Content = JsonContent.Create(
                     new CreateInstanceRequest
                     {
-                        Name = $"i-{name}",
+                        Name = $"{name}-{zone}",
                         Metadata = new Metadata { Items = metadata },
                     },
                     CamelCaseSourceGenerationContext.Default.CreateInstanceRequest
