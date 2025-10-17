@@ -22,7 +22,7 @@ internal static partial class ComputeEngineClient
                 CamelCaseSourceGenerationContext.Default.InstanceTemplate
             );
 
-        throw new Exception(await response.Content.ReadAsStringAsync()); // TODO: Useful exception
+        throw new Exception(await response.Content.ReadAsStringAsync());
     }
 
     internal sealed class InstanceTemplate
