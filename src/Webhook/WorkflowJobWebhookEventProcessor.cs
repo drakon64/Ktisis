@@ -65,7 +65,7 @@ internal class WorkflowJobWebhookEventProcessor(ILogger<WorkflowJobWebhookEventP
                 workflowJobEvent.Repository.FullName,
                 workflowJobEvent.WorkflowJob.RunId,
                 workflowJobEvent.WorkflowJob.Id,
-                workflowJobEvent.Installation!.Id
+                workflowJobEvent.WorkflowJob.RunnerName!
             );
         }
         else
@@ -73,7 +73,7 @@ internal class WorkflowJobWebhookEventProcessor(ILogger<WorkflowJobWebhookEventP
                 workflowJobEvent.Repository.FullName,
                 workflowJobEvent.WorkflowJob.RunId,
                 workflowJobEvent.WorkflowJob.Id,
-                workflowJobEvent.WorkflowJob.RunnerName!
+                workflowJobEvent.Installation!.Id
             );
 
         if (!task.IsSuccessStatusCode)
