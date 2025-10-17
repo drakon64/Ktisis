@@ -4,7 +4,7 @@ terraform {
       source  = "kreuzwerker/docker"
       version = "~> 3"
     }
-    
+
     google = {
       source = "hashicorp/google"
     }
