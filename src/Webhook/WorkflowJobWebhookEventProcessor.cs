@@ -51,8 +51,6 @@ internal class WorkflowJobWebhookEventProcessor(ILogger<WorkflowJobWebhookEventP
 
         logger.LogInformation("Repository: {FullName}", workflowJobEvent.Repository!.FullName);
 
-        HttpResponseMessage task;
-
         if (action.Equals(WorkflowJobAction.Completed))
         {
             // Failing to delete a Cloud Task is not fatal
