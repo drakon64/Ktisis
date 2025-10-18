@@ -1,3 +1,6 @@
+using System.IO.Hashing;
+using System.Text;
+
 using Ktisis.Client.CloudTasks;
 
 using Octokit.Webhooks;
@@ -61,21 +64,29 @@ internal class WorkflowJobWebhookEventProcessor(ILogger<WorkflowJobWebhookEventP
         if (action.Equals(WorkflowJobAction.Completed))
         {
             // Failing to delete a Cloud Task is not fatal
-            await CloudTasksClient.DeleteTask(CloudTasksClient.GetTaskName('c', workflowJob));
+            await CloudTasksClient.DeleteTask(GetTaskName('c', workflowJob));
 
             await CloudTasksClient.CreateTask(
-                CloudTasksClient.GetTaskName('d', workflowJob),
-                new CloudTasksClient.TaskHttpRequest(CloudTasksClient.GetInstanceName(workflowJob))
+                GetTaskName('d', workflowJob),
+                new CloudTasksClient.TaskHttpRequest(GetInstanceName(workflowJob))
             );
         }
         else
             await CloudTasksClient.CreateTask(
-                CloudTasksClient.GetTaskName('c', workflowJob),
+                GetTaskName('c', workflowJob),
                 new CloudTasksClient.TaskHttpRequest(
-                    CloudTasksClient.GetInstanceName(workflowJob),
+                    GetInstanceName(workflowJob),
                     workflowJobEvent.Repository.FullName,
                     workflowJobEvent.Installation!.Id
                 )
             );
     }
+
+    private static string GetTaskName(char prefix, string workflowJob) =>
+        Convert.ToHexStringLower(
+            XxHash3.Hash(Encoding.Default.GetBytes($"{prefix}-{workflowJob}"))
+        );
+
+    private static string GetInstanceName(string workflowJob) =>
+        Convert.ToHexStringLower(XxHash3.Hash(Encoding.Default.GetBytes(workflowJob)));
 }
