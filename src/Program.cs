@@ -1,5 +1,3 @@
-using System.CommandLine;
-
 using Ktisis.Client.ComputeEngine;
 using Ktisis.Webhook;
 
@@ -21,51 +19,46 @@ internal static class Program
         var builder = WebApplication.CreateSlimBuilder();
         WebApplication app;
 
-        var receiver = new Command("receiver");
-        receiver.SetAction(_ =>
+        switch (args[0])
         {
-            builder.Services.AddSingleton<
-                WebhookEventProcessor,
-                WorkflowJobWebhookEventProcessor
-            >();
+            case "receiver":
+                builder.Services.AddSingleton<
+                    WebhookEventProcessor,
+                    WorkflowJobWebhookEventProcessor
+                >();
 
-            app = builder.Build();
+                app = builder.Build();
 
-            app.MapGitHubWebhooks(
-                secret: Environment.GetEnvironmentVariable("KTISIS_GITHUB_WEBHOOK_SECRET")
-            );
+                app.MapGitHubWebhooks(
+                    secret: Environment.GetEnvironmentVariable("KTISIS_GITHUB_WEBHOOK_SECRET")
+                );
 
-            Run(app);
-        });
+                Run(app);
 
-        var processor = new Command("processor");
-        processor.SetAction(_ =>
-        {
-            app = builder.Build();
+                break;
+            case "processor":
+                app = builder.Build();
 
-            app.MapPost(
-                "/api/ktisis",
-                async (string instanceName, string repository, long installationId) =>
-                    await ComputeEngineClient.CreateInstance(
-                        instanceName,
-                        repository,
-                        installationId
-                    )
-            );
+                app.MapPost(
+                    "/api/ktisis",
+                    async (string instanceName, string repository, long installationId) =>
+                        await ComputeEngineClient.CreateInstance(
+                            instanceName,
+                            repository,
+                            installationId
+                        )
+                );
 
-            app.MapDelete(
-                "/api/ktisis",
-                async (string instanceName) =>
-                    await ComputeEngineClient.DeleteInstance(instanceName)
-            );
+                app.MapDelete(
+                    "/api/ktisis",
+                    async (string instanceName) =>
+                        await ComputeEngineClient.DeleteInstance(instanceName)
+                );
 
-            Run(app);
-        });
+                Run(app);
 
-        var rootCommand = new RootCommand();
-        rootCommand.Subcommands.Add(receiver);
-        rootCommand.Subcommands.Add(processor);
-        rootCommand.Parse(args).Invoke();
+                break;
+        }
     }
 
     private static void Run(WebApplication app) =>

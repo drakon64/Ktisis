@@ -50,11 +50,6 @@
     "hash": "sha256-ZTZ/8+BwqZU0dCOoUMreIZAuocG2FZlSzb1Rm9klFJY="
   },
   {
-    "pname": "System.CommandLine",
-    "version": "2.0.0-rc.2.25502.107",
-    "hash": "sha256-aa8dUxLHZxU4bDs1NJ70VhlvwmkxiP/yPHAXaSnT4Uw="
-  },
-  {
     "pname": "System.IdentityModel.Tokens.Jwt",
     "version": "8.14.0",
     "hash": "sha256-huaZiEg+jXsWnVA+kYmMbajYhagqi08mwZ0WhNml7ek="
