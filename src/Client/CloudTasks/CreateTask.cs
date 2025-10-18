@@ -25,36 +25,14 @@ internal static partial class CloudTasksClient
     )
     {
         var workflowJob = GetWorkflowJob(repository, runId, jobId);
-        var taskName = GetTaskName('c', workflowJob);
 
-        var instanceName = Convert.ToHexStringLower(
-            XxHash3.Hash(Encoding.Default.GetBytes(workflowJob))
+        var httpRequest = new HttpRequest(
+            Convert.ToHexStringLower(XxHash3.Hash(Encoding.Default.GetBytes(workflowJob))),
+            repository,
+            installationId
         );
 
-        var httpRequest = new HttpRequest(instanceName, repository, installationId);
-
-        var request = await Program.HttpClient.SendAsync(
-            new HttpRequestMessage
-            {
-                Content = JsonContent.Create(
-                    new TaskRequest
-                    {
-                        Task = new Task
-                        {
-                            Name = $"{Queue}/tasks/{taskName}",
-                            HttpRequest = httpRequest,
-                        },
-                    },
-                    CamelCaseSourceGenerationContext.Default.TaskRequest
-                ),
-                Headers = { { "Authorization", await GoogleCloudClient.GetAccessToken() } },
-                Method = HttpMethod.Post,
-                RequestUri = new Uri($"https://cloudtasks.googleapis.com/v2/{Queue}/tasks"),
-            }
-        );
-
-        if (!request.IsSuccessStatusCode)
-            throw new Exception(await request.Content.ReadAsStringAsync());
+        await SendTask(GetTaskName('c', workflowJob), httpRequest);
     }
 
     internal static async System.Threading.Tasks.Task CreateTask(
@@ -62,12 +40,22 @@ internal static partial class CloudTasksClient
         long runId,
         long jobId,
         string instanceName
+    ) =>
+        await SendTask(
+            GetTaskName('d', GetWorkflowJob(repository, runId, jobId)),
+            new HttpRequest(instanceName)
+        );
+
+    private static string GetTaskName(char prefix, string workflowJob) =>
+        Convert.ToHexStringLower(
+            XxHash3.Hash(Encoding.Default.GetBytes($"{prefix}-{workflowJob}"))
+        );
+
+    private static async System.Threading.Tasks.Task SendTask(
+        string taskName,
+        HttpRequest httpRequest
     )
     {
-        var workflowJob = GetWorkflowJob(repository, runId, jobId);
-        var taskName = GetTaskName('d', workflowJob);
-        var httpRequest = new HttpRequest(instanceName);
-
         var request = await Program.HttpClient.SendAsync(
             new HttpRequestMessage
             {
@@ -91,11 +79,6 @@ internal static partial class CloudTasksClient
         if (!request.IsSuccessStatusCode)
             throw new Exception(await request.Content.ReadAsStringAsync());
     }
-
-    private static string GetTaskName(char prefix, string workflowJob) =>
-        Convert.ToHexStringLower(
-            XxHash3.Hash(Encoding.Default.GetBytes($"{prefix}-{workflowJob}"))
-        );
 
     internal sealed class TaskRequest
     {
