@@ -51,10 +51,7 @@ internal static partial class CloudTasksClient
             XxHash3.Hash(Encoding.Default.GetBytes($"{prefix}-{workflowJob}"))
         );
 
-    private static async System.Threading.Tasks.Task SendTask(
-        string taskName,
-        HttpRequest httpRequest
-    )
+    private static async Task SendTask(string taskName, HttpRequest httpRequest)
     {
         var request = await Program.HttpClient.SendAsync(
             new HttpRequestMessage
@@ -62,7 +59,7 @@ internal static partial class CloudTasksClient
                 Content = JsonContent.Create(
                     new TaskRequest
                     {
-                        Task = new Task
+                        Task = new TaskElement
                         {
                             Name = $"{Queue}/tasks/{taskName}",
                             HttpRequest = httpRequest,
@@ -82,10 +79,10 @@ internal static partial class CloudTasksClient
 
     internal sealed class TaskRequest
     {
-        public required Task Task { get; init; }
+        public required TaskElement Task { get; init; }
     }
 
-    internal sealed class Task
+    internal sealed class TaskElement
     {
         public required string Name { get; init; }
         public required HttpRequest HttpRequest { get; init; }
