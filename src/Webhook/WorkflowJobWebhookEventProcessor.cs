@@ -61,7 +61,7 @@ internal class WorkflowJobWebhookEventProcessor(ILogger<WorkflowJobWebhookEventP
                 workflowJobEvent.WorkflowJob.Id
             );
 
-            task = await CloudTasksClient.CreateTask(
+            await CloudTasksClient.CreateTask(
                 workflowJobEvent.Repository.FullName,
                 workflowJobEvent.WorkflowJob.RunId,
                 workflowJobEvent.WorkflowJob.Id,
@@ -69,16 +69,11 @@ internal class WorkflowJobWebhookEventProcessor(ILogger<WorkflowJobWebhookEventP
             );
         }
         else
-            task = await CloudTasksClient.CreateTask(
+            await CloudTasksClient.CreateTask(
                 workflowJobEvent.Repository.FullName,
                 workflowJobEvent.WorkflowJob.RunId,
                 workflowJobEvent.WorkflowJob.Id,
                 workflowJobEvent.Installation!.Id
             );
-
-        if (!task.IsSuccessStatusCode)
-        {
-            logger.LogError(await task.Content.ReadAsStringAsync(cancellationToken));
-        }
     }
 }

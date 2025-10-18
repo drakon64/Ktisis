@@ -16,7 +16,7 @@ internal static partial class CloudTasksClient
         Environment.GetEnvironmentVariable("KTISIS_SERVICE_ACCOUNT")
         ?? throw new InvalidOperationException("KTISIS_SERVICE_ACCOUNT is null");
 
-    internal static async Task<HttpResponseMessage> CreateTask(
+    internal static async System.Threading.Tasks.Task CreateTask(
         string repository,
         long runId,
         long jobId,
@@ -32,7 +32,7 @@ internal static partial class CloudTasksClient
 
         var httpRequest = new HttpRequest(instanceName, repository, installationId);
 
-        return await Program.HttpClient.SendAsync(
+        var request = await Program.HttpClient.SendAsync(
             new HttpRequestMessage
             {
                 Content = JsonContent.Create(
@@ -51,9 +51,12 @@ internal static partial class CloudTasksClient
                 RequestUri = new Uri($"https://cloudtasks.googleapis.com/v2/{Queue}/tasks"),
             }
         );
+
+        if (!request.IsSuccessStatusCode)
+            throw new Exception(await request.Content.ReadAsStringAsync());
     }
 
-    internal static async Task<HttpResponseMessage> CreateTask(
+    internal static async System.Threading.Tasks.Task CreateTask(
         string repository,
         long runId,
         long jobId,
@@ -64,7 +67,7 @@ internal static partial class CloudTasksClient
         var taskName = GetTaskName('d', workflowJob);
         var httpRequest = new HttpRequest(instanceName);
 
-        return await Program.HttpClient.SendAsync(
+        var request = await Program.HttpClient.SendAsync(
             new HttpRequestMessage
             {
                 Content = JsonContent.Create(
@@ -83,6 +86,9 @@ internal static partial class CloudTasksClient
                 RequestUri = new Uri($"https://cloudtasks.googleapis.com/v2/{Queue}/tasks"),
             }
         );
+
+        if (!request.IsSuccessStatusCode)
+            throw new Exception(await request.Content.ReadAsStringAsync());
     }
 
     private static string GetTaskName(char prefix, string workflowJob) =>
