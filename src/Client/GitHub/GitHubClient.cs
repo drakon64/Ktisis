@@ -1,7 +1,9 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
+
 using Ktisis.SourceGenerationContext;
+
 using Microsoft.IdentityModel.Tokens;
 
 namespace Ktisis.Client.GitHub;
