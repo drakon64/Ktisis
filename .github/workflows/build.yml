@@ -42,7 +42,7 @@ jobs:
 
       - name: Create Cachix pins
         run: |
-          cachix pin drakon64-ktisis ktisis "$(nix-build --no-out-link)" --keep-revisions 1
+          cachix pin drakon64-ktisis ktisis "$(nix eval --expr 'import ./. {}' --raw --impure)" --keep-revisions 1
           cachix pin drakon64-ktisis docker "$(nix eval --file ./default.nix docker --raw)" --keep-revisions 1
 
       - run: docker load < result
