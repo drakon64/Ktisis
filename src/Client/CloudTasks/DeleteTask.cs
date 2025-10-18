@@ -1,20 +1,8 @@
-using System.IO.Hashing;
-using System.Text;
-
 namespace Ktisis.Client.CloudTasks;
 
 internal static partial class CloudTasksClient
 {
-    internal static async System.Threading.Tasks.Task DeleteTask(
-        string repository,
-        long runId,
-        long jobId
-    )
-    {
-        var taskName = Convert.ToHexStringLower(
-            XxHash3.Hash(Encoding.Default.GetBytes("c-" + GetWorkflowJob(repository, runId, jobId)))
-        );
-
+    internal static async Task DeleteTask(string taskName) =>
         await Program.HttpClient.SendAsync(
             new HttpRequestMessage
             {
@@ -25,5 +13,4 @@ internal static partial class CloudTasksClient
                 ),
             }
         );
-    }
 }

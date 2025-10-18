@@ -1,5 +1,3 @@
-using System.IO.Hashing;
-using System.Text;
 using System.Text.Json.Serialization;
 using System.Web;
 
@@ -17,37 +15,7 @@ internal static partial class CloudTasksClient
         Environment.GetEnvironmentVariable("KTISIS_SERVICE_ACCOUNT")
         ?? throw new InvalidOperationException("KTISIS_SERVICE_ACCOUNT is null");
 
-    internal static async Task CreateTask(string repository, long runId, long jobId)
-    {
-        var workflowJob = GetWorkflowJob(repository, runId, jobId);
-
-        await SendTask(
-            GetTaskName('d', workflowJob),
-            new HttpRequest(GetInstanceName(workflowJob))
-        );
-    }
-
-    internal static async Task CreateTask(
-        string repository,
-        long runId,
-        long jobId,
-        long installationId
-    )
-    {
-        var workflowJob = GetWorkflowJob(repository, runId, jobId);
-
-        await SendTask(
-            GetTaskName('c', workflowJob),
-            new HttpRequest(GetInstanceName(workflowJob), repository, installationId)
-        );
-    }
-
-    private static string GetTaskName(char prefix, string workflowJob) =>
-        Convert.ToHexStringLower(
-            XxHash3.Hash(Encoding.Default.GetBytes($"{prefix}-{workflowJob}"))
-        );
-
-    private static async Task SendTask(string taskName, HttpRequest httpRequest)
+    internal static async Task CreateTask(string taskName, TaskHttpRequest taskHttpRequest)
     {
         var request = await Program.HttpClient.SendAsync(
             new HttpRequestMessage
@@ -58,7 +26,7 @@ internal static partial class CloudTasksClient
                         Task = new TaskElement
                         {
                             Name = $"{Queue}/tasks/{taskName}",
-                            HttpRequest = httpRequest,
+                            HttpRequest = taskHttpRequest,
                         },
                     },
                     CamelCaseSourceGenerationContext.Default.TaskRequest
@@ -81,10 +49,10 @@ internal static partial class CloudTasksClient
     internal sealed class TaskElement
     {
         public required string Name { get; init; }
-        public required HttpRequest HttpRequest { get; init; }
+        public required TaskHttpRequest HttpRequest { get; init; }
     }
 
-    internal sealed class HttpRequest
+    internal sealed class TaskHttpRequest
     {
         [JsonInclude]
         public string Url;
@@ -95,13 +63,13 @@ internal static partial class CloudTasksClient
         [JsonInclude]
         public readonly OidcToken OidcToken = new();
 
-        public HttpRequest(string instanceName)
+        public TaskHttpRequest(string instanceName)
         {
             Url = $"{Processor}?instanceName={instanceName}";
             HttpMethod = "DELETE";
         }
 
-        public HttpRequest(string instanceName, string repository, long installationId)
+        public TaskHttpRequest(string instanceName, string repository, long installationId)
         {
             var queryString = HttpUtility.ParseQueryString(string.Empty);
             queryString.Add("instanceName", instanceName);

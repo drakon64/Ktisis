@@ -51,27 +51,31 @@ internal class WorkflowJobWebhookEventProcessor(ILogger<WorkflowJobWebhookEventP
 
         logger.LogInformation("Repository: {FullName}", workflowJobEvent.Repository!.FullName);
 
+        var workflowJob =
+            workflowJobEvent.Repository.FullName.Replace("/", "-")
+            + '-'
+            + workflowJobEvent.WorkflowJob.RunId
+            + '-'
+            + workflowJobEvent.WorkflowJob.Id;
+
         if (action.Equals(WorkflowJobAction.Completed))
         {
             // Failing to delete a Cloud Task is not fatal
-            await CloudTasksClient.DeleteTask(
-                workflowJobEvent.Repository.FullName,
-                workflowJobEvent.WorkflowJob.RunId,
-                workflowJobEvent.WorkflowJob.Id
-            );
+            await CloudTasksClient.DeleteTask(CloudTasksClient.GetTaskName('c', workflowJob));
 
             await CloudTasksClient.CreateTask(
-                workflowJobEvent.Repository.FullName,
-                workflowJobEvent.WorkflowJob.RunId,
-                workflowJobEvent.WorkflowJob.Id
+                CloudTasksClient.GetTaskName('d', workflowJob),
+                new CloudTasksClient.TaskHttpRequest(CloudTasksClient.GetInstanceName(workflowJob))
             );
         }
         else
             await CloudTasksClient.CreateTask(
-                workflowJobEvent.Repository.FullName,
-                workflowJobEvent.WorkflowJob.RunId,
-                workflowJobEvent.WorkflowJob.Id,
-                workflowJobEvent.Installation!.Id
+                CloudTasksClient.GetTaskName('c', workflowJob),
+                new CloudTasksClient.TaskHttpRequest(
+                    CloudTasksClient.GetInstanceName(workflowJob),
+                    workflowJobEvent.Repository.FullName,
+                    workflowJobEvent.Installation!.Id
+                )
             );
     }
 }
