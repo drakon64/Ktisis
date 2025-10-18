@@ -24,11 +24,12 @@ internal static class GoogleCloudClient
             SnakeCaseLowerSourceGenerationContext.Default.AccessTokenResponse
         );
 
-        return $"Bearer {token!.AccessToken}";
+        return $"{token!.TokenType} {token.AccessToken}";
     }
 
     internal sealed class AccessTokenResponse
     {
         public required string AccessToken { get; init; }
+        public required string TokenType { get; init; }
     }
 }
