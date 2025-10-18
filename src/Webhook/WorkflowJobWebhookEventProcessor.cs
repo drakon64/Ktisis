@@ -63,8 +63,7 @@ internal class WorkflowJobWebhookEventProcessor(ILogger<WorkflowJobWebhookEventP
             await CloudTasksClient.CreateTask(
                 workflowJobEvent.Repository.FullName,
                 workflowJobEvent.WorkflowJob.RunId,
-                workflowJobEvent.WorkflowJob.Id,
-                workflowJobEvent.WorkflowJob.RunnerName!
+                workflowJobEvent.WorkflowJob.Id
             );
         }
         else

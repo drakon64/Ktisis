@@ -17,7 +17,17 @@ internal static partial class CloudTasksClient
         Environment.GetEnvironmentVariable("KTISIS_SERVICE_ACCOUNT")
         ?? throw new InvalidOperationException("KTISIS_SERVICE_ACCOUNT is null");
 
-    internal static async System.Threading.Tasks.Task CreateTask(
+    internal static async Task CreateTask(string repository, long runId, long jobId)
+    {
+        var workflowJob = GetWorkflowJob(repository, runId, jobId);
+
+        await SendTask(
+            GetTaskName('d', workflowJob),
+            new HttpRequest(GetInstanceName(workflowJob))
+        );
+    }
+
+    internal static async Task CreateTask(
         string repository,
         long runId,
         long jobId,
@@ -26,25 +36,11 @@ internal static partial class CloudTasksClient
     {
         var workflowJob = GetWorkflowJob(repository, runId, jobId);
 
-        var httpRequest = new HttpRequest(
-            Convert.ToHexStringLower(XxHash3.Hash(Encoding.Default.GetBytes(workflowJob))),
-            repository,
-            installationId
-        );
-
-        await SendTask(GetTaskName('c', workflowJob), httpRequest);
-    }
-
-    internal static async System.Threading.Tasks.Task CreateTask(
-        string repository,
-        long runId,
-        long jobId,
-        string instanceName
-    ) =>
         await SendTask(
-            GetTaskName('d', GetWorkflowJob(repository, runId, jobId)),
-            new HttpRequest(instanceName)
+            GetTaskName('c', workflowJob),
+            new HttpRequest(GetInstanceName(workflowJob), repository, installationId)
         );
+    }
 
     private static string GetTaskName(char prefix, string workflowJob) =>
         Convert.ToHexStringLower(

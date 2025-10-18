@@ -5,11 +5,11 @@ namespace Ktisis.Client.ComputeEngine;
 
 internal static partial class ComputeEngineClient
 {
-    private static readonly Random Random = new();
+    // private static readonly Random Random = new();
 
     internal static async Task CreateInstance(string name, string repository, long installationId)
     {
-        var zone = Zones[Random.Next(0, Zones.Length)];
+        // var zone = Zones[Random.Next(0, Zones.Length)];
 
         var metadata = new List<MetadataItem>
         {
@@ -31,7 +31,7 @@ internal static partial class ComputeEngineClient
                 Content = JsonContent.Create(
                     new CreateInstanceRequest
                     {
-                        Name = $"{name}-{zone}",
+                        Name = name,
                         Metadata = new Metadata { Items = metadata },
                     },
                     CamelCaseSourceGenerationContext.Default.CreateInstanceRequest
@@ -39,7 +39,7 @@ internal static partial class ComputeEngineClient
                 Headers = { { "Authorization", await GoogleCloudClient.GetAccessToken() } },
                 Method = HttpMethod.Post,
                 RequestUri = new Uri(
-                    $"https://compute.googleapis.com/compute/v1/projects/{Project}/zones/{zone}/instances?sourceInstanceTemplate={SourceInstanceTemplate}"
+                    $"https://compute.googleapis.com/compute/v1/projects/{Project}/zones/{Zone}/instances?sourceInstanceTemplate={SourceInstanceTemplate}"
                 ),
             }
         );

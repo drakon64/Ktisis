@@ -14,6 +14,8 @@ internal static partial class ComputeEngineClient
         Environment.GetEnvironmentVariable("KTISIS_SOURCE_INSTANCE_TEMPLATE")
         ?? throw new InvalidOperationException("KTISIS_SOURCE_INSTANCE_TEMPLATE is null");
 
+    private static readonly string Zone = Zones[0]; // TODO: Pick random zone
+
     internal sealed class Metadata
     {
         public required List<MetadataItem> Items { get; init; }
