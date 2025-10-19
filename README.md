@@ -17,7 +17,7 @@ nix-build -A docker
 docker build .
 ```
 
-A binary cache is available at [Cachix](https://app.cachix.org/cache/drakon64-ktisis#pull).
+A binary cache is available at [Cachix](https://app.cachix.org/cache/drakon64#pull).
 
 ## License
 

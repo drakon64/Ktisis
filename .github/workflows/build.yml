@@ -34,16 +34,16 @@ jobs:
       - name: Install Cachix
         uses: cachix/cachix-action@v15
         with:
-          name: drakon64-ktisis
+          name: drakon64
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
 
       - name: Build
-        run: cachix watch-exec drakon64-ktisis -- nix-build -A docker
+        run: cachix watch-exec drakon64 -- nix-build -A docker
 
       - name: Create Cachix pins
         run: |
-          cachix pin drakon64-ktisis ktisis "$(nix eval --expr 'import ./. {}' --raw --impure)" --keep-revisions 1
-          cachix pin drakon64-ktisis docker "$(nix eval --file ./default.nix docker --raw)" --keep-revisions 1
+          cachix pin drakon64 ktisis "$(nix eval --expr 'import ./. {}' --raw --impure)" --keep-revisions 1
+          cachix pin drakon64 ktisis-docker "$(nix eval --file ./default.nix docker --raw)" --keep-revisions 1
 
       - run: docker load < result
 
