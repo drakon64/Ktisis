@@ -16,7 +16,7 @@ internal static partial class ComputeEngineClient
                 Headers = { { "Authorization", await GoogleCloudClient.GetAccessToken() } },
                 Method = HttpMethod.Delete,
                 RequestUri = new Uri(
-                    $"https://compute.googleapis.com/compute/{ApiVersion}/projects/{Project}/zones/{Zone}/instances/{name}"
+                    $"https://compute.googleapis.com/compute/{ApiVersion}/projects/{Project}/zones/{Zone}/instances/i-{name}"
                         + (SkipGracefulShutdown ? "?noGracefulShutdown=true" : null)
                 ),
             }

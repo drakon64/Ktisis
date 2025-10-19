@@ -31,7 +31,7 @@ internal static partial class ComputeEngineClient
                 Content = JsonContent.Create(
                     new CreateInstanceRequest
                     {
-                        Name = name,
+                        Name = $"i-{name}", // Instance names must start with a letter
                         Metadata = new Metadata { Items = metadata },
                     },
                     CamelCaseSourceGenerationContext.Default.CreateInstanceRequest
