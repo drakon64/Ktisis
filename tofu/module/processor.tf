@@ -45,12 +45,6 @@ resource "google_cloud_run_v2_service" "processor" {
       }
 
       env {
-        name = "KTISIS_SKIP_GRACEFUL_SHUTDOWN"
-
-        value = var.skip_graceful_shutdown
-      }
-
-      env {
         name = "KTISIS_PROJECT"
 
         value = data.google_project.project.project_id

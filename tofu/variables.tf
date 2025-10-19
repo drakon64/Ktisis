@@ -20,10 +20,6 @@ variable "secret_replica_regions" {
   type    = set(string)
 }
 
-variable "skip_graceful_shutdown" {
-  default = false
-}
-
 variable "state_bucket" {
   type = string
 }

@@ -16,10 +16,6 @@ variable "secret_replica_regions" {
   type    = set(string)
 }
 
-variable "skip_graceful_shutdown" {
-  default = false
-}
-
 variable "use_ghcr" {
   description = "Use pre-built Ktisis images from GitHub Packages"
   default     = true
