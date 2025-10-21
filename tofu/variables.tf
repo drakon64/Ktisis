@@ -7,6 +7,10 @@ variable "domain" {
   type = string
 }
 
+variable "machine_type" {
+  default = "n2d-standard-4"
+}
+
 variable "project" {
   type = string
 }

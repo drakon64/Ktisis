@@ -41,7 +41,7 @@ resource "google_compute_router_nat" "nat" {
 }
 
 resource "google_compute_instance_template" "runner" {
-  machine_type = "n2d-standard-4"
+  machine_type = var.machine_type
 
   disk {
     disk_size_gb = 14 + 4
