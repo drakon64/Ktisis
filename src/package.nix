@@ -36,6 +36,8 @@ buildDotnetModule (finalAttrs: {
   dotnet-runtime = dotnetCorePackages.aspnetcore_9_0;
 
   executables = [ "Ktisis" ];
+  
+  selfContainedBuild = true;
 
   meta = {
     license = lib.licenses.eupl12;
