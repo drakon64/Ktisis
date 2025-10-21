@@ -21,5 +21,8 @@ output "nat_ip" {
 }
 
 output "service_accounts" {
-  value = google_service_account.ktisis
+  value = {
+    processor = google_service_account.ktisis["processor"]
+    receiver  = google_service_account.ktisis["receiver"]
+  }
 }
