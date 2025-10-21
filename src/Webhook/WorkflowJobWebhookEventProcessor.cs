@@ -66,16 +66,19 @@ internal class WorkflowJobWebhookEventProcessor(ILogger<WorkflowJobWebhookEventP
             // Failing to delete a Cloud Task is not fatal
             await CloudTasksClient.DeleteTask(GetTaskName('c', workflowJob));
 
-            await CloudTasksClient.CreateTask(
-                GetTaskName('d', workflowJob),
-                new CloudTasksClient.TaskHttpRequest(GetInstanceName(workflowJob))
-            );
+            // Since we can't allocate workflow jobs to specific runners,
+            // we can only terminate an instance if we can guarantee that it is running the workflow job that was cancelled
+            if (workflowJobEvent.WorkflowJob.RunnerName != null)
+                await CloudTasksClient.CreateTask(
+                    GetTaskName('d', workflowJob),
+                    new CloudTasksClient.TaskHttpRequest(workflowJobEvent.WorkflowJob.RunnerName)
+                );
         }
         else
             await CloudTasksClient.CreateTask(
                 GetTaskName('c', workflowJob),
                 new CloudTasksClient.TaskHttpRequest(
-                    GetInstanceName(workflowJob),
+                    Convert.ToHexStringLower(XxHash3.Hash(Encoding.Default.GetBytes(workflowJob))),
                     workflowJobEvent.Repository.FullName,
                     workflowJobEvent.Installation!.Id
                 )
@@ -86,7 +89,4 @@ internal class WorkflowJobWebhookEventProcessor(ILogger<WorkflowJobWebhookEventP
         Convert.ToHexStringLower(
             XxHash3.Hash(Encoding.Default.GetBytes($"{prefix}-{workflowJob}"))
         );
-
-    private static string GetInstanceName(string workflowJob) =>
-        Convert.ToHexStringLower(XxHash3.Hash(Encoding.Default.GetBytes(workflowJob)));
 }
