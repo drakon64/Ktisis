@@ -19,3 +19,7 @@ output "load_balancer_ips" {
 output "nat_ip" {
   value = google_compute_address.nat.address
 }
+
+output "service_accounts" {
+  value = google_service_account.ktisis
+}
