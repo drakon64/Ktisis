@@ -1,3 +1,7 @@
+output "artifact_registry" {
+  value = google_artifact_registry_repository.artifact_registry
+}
+
 output "load_balancer_ips" {
   value = {
     v4 = module.lb-http.external_ip
