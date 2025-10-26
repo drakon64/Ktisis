@@ -14,7 +14,7 @@ internal static class Program
 
     internal static readonly HttpClient HttpClient = new();
 
-    internal static void Main(string[] args)
+    private static void Main(string[] args)
     {
         var builder = WebApplication.CreateSlimBuilder();
         WebApplication app;
