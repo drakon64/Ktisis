@@ -3,7 +3,5 @@
     <Platform Name="Any CPU" />
     <Platform Name="x64" />
   </Configurations>
-  <Folder Name="/src/">
-    <Project Path="src/Ktisis.csproj" />
-  </Folder>
+  <Project Path="src/Ktisis.csproj" />
 </Solution>
