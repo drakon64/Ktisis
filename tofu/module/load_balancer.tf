@@ -1,6 +1,6 @@
 module "lb-http" {
   source  = "terraform-google-modules/lb-http/google//modules/serverless_negs"
-  version = "~> 13"
+  version = "13.0.1"
 
   name    = "ktisis"
   project = data.google_project.project.project_id
