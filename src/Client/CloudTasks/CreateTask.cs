@@ -17,28 +17,28 @@ internal static partial class CloudTasksClient
 
     internal static async Task CreateTask(string taskName, TaskHttpRequest taskHttpRequest)
     {
-        using var request = await Program.HttpClient.SendAsync(
-            new HttpRequestMessage
+        using var requestContent = JsonContent.Create(
+            new TaskRequest
             {
-                Content = JsonContent.Create(
-                    new TaskRequest
-                    {
-                        Task = new TaskElement
-                        {
-                            Name = $"{Queue}/tasks/{taskName}",
-                            HttpRequest = taskHttpRequest,
-                        },
-                    },
-                    CamelCaseSourceGenerationContext.Default.TaskRequest
-                ),
-                Headers = { { "Authorization", await GoogleCloudClient.GetAccessToken() } },
-                Method = HttpMethod.Post,
-                RequestUri = new Uri($"https://cloudtasks.googleapis.com/v2/{Queue}/tasks"),
-            }
+                Task = new TaskElement
+                {
+                    Name = $"{Queue}/tasks/{taskName}",
+                    HttpRequest = taskHttpRequest,
+                },
+            },
+            CamelCaseSourceGenerationContext.Default.TaskRequest
         );
 
-        if (!request.IsSuccessStatusCode)
-            throw new Exception(await request.Content.ReadAsStringAsync());
+        using var request = new HttpRequestMessage();
+        request.Content = requestContent;
+        request.Headers.Add("Authorization", await GoogleCloudClient.GetAccessToken());
+        request.Method = HttpMethod.Post;
+        request.RequestUri = new Uri($"https://cloudtasks.googleapis.com/v2/{Queue}/tasks");
+
+        using var response = await Program.HttpClient.SendAsync(request);
+
+        if (!response.IsSuccessStatusCode)
+            throw new Exception(await response.Content.ReadAsStringAsync());
     }
 
     internal sealed class TaskRequest

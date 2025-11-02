@@ -6,16 +6,14 @@ internal static class GoogleCloudClient
 {
     internal static async Task<string> GetAccessToken()
     {
-        using var response = await Program.HttpClient.SendAsync(
-            new HttpRequestMessage
-            {
-                Headers = { { "Metadata-Flavor", "Google" } },
-                Method = HttpMethod.Get,
-                RequestUri = new Uri(
-                    "http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token"
-                ),
-            }
+        using var request = new HttpRequestMessage();
+        request.Headers.Add("Metadata-Flavor", "Google");
+        request.Method = HttpMethod.Get;
+        request.RequestUri = new Uri(
+            "http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token"
         );
+
+        using var response = await Program.HttpClient.SendAsync(request);
 
         if (!response.IsSuccessStatusCode)
             throw new Exception(await response.Content.ReadAsStringAsync());

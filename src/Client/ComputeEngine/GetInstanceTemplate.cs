@@ -6,16 +6,14 @@ internal static partial class ComputeEngineClient
 {
     private static async Task<InstanceTemplate?> GetInstanceTemplate()
     {
-        using var response = await Program.HttpClient.SendAsync(
-            new HttpRequestMessage
-            {
-                Headers = { { "Authorization", await GoogleCloudClient.GetAccessToken() } },
-                Method = HttpMethod.Get,
-                RequestUri = new Uri(
-                    $"https://compute.googleapis.com/compute/v1/{SourceInstanceTemplate}"
-                ),
-            }
+        using var request = new HttpRequestMessage();
+        request.Headers.Add("Authorization", await GoogleCloudClient.GetAccessToken());
+        request.Method = HttpMethod.Get;
+        request.RequestUri = new Uri(
+            $"https://compute.googleapis.com/compute/v1/{SourceInstanceTemplate}"
         );
+
+        using var response = await Program.HttpClient.SendAsync(request);
 
         if (!response.IsSuccessStatusCode)
             throw new Exception(await response.Content.ReadAsStringAsync());

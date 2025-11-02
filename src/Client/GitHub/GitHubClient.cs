@@ -14,11 +14,11 @@ internal static partial class GitHubClient
         Environment.GetEnvironmentVariable("KTISIS_GITHUB_CLIENT_ID")
         ?? throw new InvalidOperationException("KTISIS_GITHUB_CLIENT_ID is null");
 
-    private static readonly SigningCredentials GitHubSigningCredentials = GetSigningCredentials();
+    private static readonly SigningCredentials SigningCredentials = GetSigningCredentials();
 
     private static SigningCredentials GetSigningCredentials()
     {
-        var rsa = RSA.Create();
+        using var rsa = RSA.Create();
         rsa.ImportFromPem(
             Environment.GetEnvironmentVariable("KTISIS_GITHUB_PRIVATE_KEY")
                 ?? throw new InvalidOperationException("KTISIS_GITHUB_PRIVATE_KEY is null")
@@ -46,7 +46,7 @@ internal static partial class GitHubClient
                 ),
             ],
             expires: expires,
-            signingCredentials: GitHubSigningCredentials
+            signingCredentials: SigningCredentials
         );
 
         return new JwtSecurityTokenHandler().WriteToken(jwt);
@@ -54,22 +54,17 @@ internal static partial class GitHubClient
 
     private static async Task<string> GetInstallationAccessToken(long installationId)
     {
-        var response = await Program.HttpClient.SendAsync(
-            new HttpRequestMessage
-            {
-                Headers =
-                {
-                    { "Authorization", $"Bearer {GenerateJwt()}" },
-                    { "User-Agent", "Ktisis/0.0.1" },
-                    { "Accept", "application/vnd.github+json" },
-                    { "X-GitHub-Api-Version", "2022-11-28" },
-                },
-                Method = HttpMethod.Post,
-                RequestUri = new Uri(
-                    $"https://api.github.com/app/installations/{installationId}/access_tokens"
-                ),
-            }
+        using var request = new HttpRequestMessage();
+        request.Headers.Add("Authorization", $"Bearer {GenerateJwt()}");
+        request.Headers.Add("User-Agent", "Ktisis/0.0.1");
+        request.Headers.Add("Accept", "application/vnd.github+json");
+        request.Headers.Add("X-GitHub-Api-Version", "2022-11-28");
+        request.Method = HttpMethod.Post;
+        request.RequestUri = new Uri(
+            $"https://api.github.com/app/installations/{installationId}/access_tokens"
         );
+
+        using var response = await Program.HttpClient.SendAsync(request);
 
         if (!response.IsSuccessStatusCode)
             throw new Exception(await response.Content.ReadAsStringAsync());

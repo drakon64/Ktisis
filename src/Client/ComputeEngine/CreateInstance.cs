@@ -25,24 +25,24 @@ internal static partial class ComputeEngineClient
         };
         metadata.AddRange((await GetInstanceTemplate())!.Properties.Metadata.Items);
 
-        using var response = await Program.HttpClient.SendAsync(
-            new HttpRequestMessage
+        using var requestContent = JsonContent.Create(
+            new CreateInstanceRequest
             {
-                Content = JsonContent.Create(
-                    new CreateInstanceRequest
-                    {
-                        Name = $"i-{name}", // Instance names must start with a letter
-                        Metadata = new Metadata { Items = metadata },
-                    },
-                    CamelCaseSourceGenerationContext.Default.CreateInstanceRequest
-                ),
-                Headers = { { "Authorization", await GoogleCloudClient.GetAccessToken() } },
-                Method = HttpMethod.Post,
-                RequestUri = new Uri(
-                    $"https://compute.googleapis.com/compute/v1/projects/{Project}/zones/{Zone}/instances?sourceInstanceTemplate={SourceInstanceTemplate}"
-                ),
-            }
+                Name = $"i-{name}", // Instance names must start with a letter
+                Metadata = new Metadata { Items = metadata },
+            },
+            CamelCaseSourceGenerationContext.Default.CreateInstanceRequest
         );
+
+        using var request = new HttpRequestMessage();
+        request.Content = requestContent;
+        request.Headers.Add("Authorization", await GoogleCloudClient.GetAccessToken());
+        request.Method = HttpMethod.Post;
+        request.RequestUri = new Uri(
+            $"https://compute.googleapis.com/compute/v1/projects/{Project}/zones/{Zone}/instances?sourceInstanceTemplate={SourceInstanceTemplate}"
+        );
+
+        using var response = await Program.HttpClient.SendAsync(request);
 
         if (!response.IsSuccessStatusCode)
             throw new Exception(await response.Content.ReadAsStringAsync());
