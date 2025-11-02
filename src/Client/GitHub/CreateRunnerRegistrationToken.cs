@@ -9,7 +9,7 @@ internal static partial class GitHubClient
         long installationId
     )
     {
-        var response = await Program.HttpClient.SendAsync(
+        using var response = await Program.HttpClient.SendAsync(
             new HttpRequestMessage
             {
                 Headers =

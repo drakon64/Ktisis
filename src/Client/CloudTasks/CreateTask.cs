@@ -17,7 +17,7 @@ internal static partial class CloudTasksClient
 
     internal static async Task CreateTask(string taskName, TaskHttpRequest taskHttpRequest)
     {
-        var request = await Program.HttpClient.SendAsync(
+        using var request = await Program.HttpClient.SendAsync(
             new HttpRequestMessage
             {
                 Content = JsonContent.Create(

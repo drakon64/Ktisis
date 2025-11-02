@@ -25,7 +25,7 @@ internal static partial class ComputeEngineClient
         };
         metadata.AddRange((await GetInstanceTemplate())!.Properties.Metadata.Items);
 
-        var response = await Program.HttpClient.SendAsync(
+        using var response = await Program.HttpClient.SendAsync(
             new HttpRequestMessage
             {
                 Content = JsonContent.Create(

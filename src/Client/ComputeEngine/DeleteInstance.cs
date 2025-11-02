@@ -4,7 +4,7 @@ internal static partial class ComputeEngineClient
 {
     internal static async Task DeleteInstance(string name)
     {
-        var response = await Program.HttpClient.SendAsync(
+        using var response = await Program.HttpClient.SendAsync(
             new HttpRequestMessage
             {
                 Headers = { { "Authorization", await GoogleCloudClient.GetAccessToken() } },

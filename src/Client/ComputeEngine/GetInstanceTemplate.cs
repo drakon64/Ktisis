@@ -6,7 +6,7 @@ internal static partial class ComputeEngineClient
 {
     private static async Task<InstanceTemplate?> GetInstanceTemplate()
     {
-        var response = await Program.HttpClient.SendAsync(
+        using var response = await Program.HttpClient.SendAsync(
             new HttpRequestMessage
             {
                 Headers = { { "Authorization", await GoogleCloudClient.GetAccessToken() } },
@@ -17,12 +17,12 @@ internal static partial class ComputeEngineClient
             }
         );
 
-        if (response.IsSuccessStatusCode)
-            return await response.Content.ReadFromJsonAsync<InstanceTemplate>(
-                CamelCaseSourceGenerationContext.Default.InstanceTemplate
-            );
+        if (!response.IsSuccessStatusCode)
+            throw new Exception(await response.Content.ReadAsStringAsync());
 
-        throw new Exception(await response.Content.ReadAsStringAsync());
+        return await response.Content.ReadFromJsonAsync<InstanceTemplate>(
+            CamelCaseSourceGenerationContext.Default.InstanceTemplate
+        );
     }
 
     internal sealed class InstanceTemplate

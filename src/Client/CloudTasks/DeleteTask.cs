@@ -2,8 +2,9 @@ namespace Ktisis.Client.CloudTasks;
 
 internal static partial class CloudTasksClient
 {
-    internal static async Task DeleteTask(string taskName) =>
-        await Program.HttpClient.SendAsync(
+    internal static async Task DeleteTask(string taskName)
+    {
+        using var response = await Program.HttpClient.SendAsync(
             new HttpRequestMessage
             {
                 Headers = { { "Authorization", await GoogleCloudClient.GetAccessToken() } },
@@ -13,4 +14,5 @@ internal static partial class CloudTasksClient
                 ),
             }
         );
+    }
 }

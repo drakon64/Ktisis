@@ -6,7 +6,7 @@ internal static class GoogleCloudClient
 {
     internal static async Task<string> GetAccessToken()
     {
-        var response = await Program.HttpClient.SendAsync(
+        using var response = await Program.HttpClient.SendAsync(
             new HttpRequestMessage
             {
                 Headers = { { "Metadata-Flavor", "Google" } },
