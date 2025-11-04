@@ -25,6 +25,8 @@ buildDotnetModule (finalAttrs: {
 
         (lib.fileset.maybeMissing ./deps.json)
         ./package.nix
+
+        ./.gitignore
       ]
     );
   };
