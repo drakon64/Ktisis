@@ -18,7 +18,7 @@ internal static partial class GitHubClient
 
     private static SigningCredentials GetSigningCredentials()
     {
-        using var rsa = RSA.Create();
+        var rsa = RSA.Create();
         rsa.ImportFromPem(
             Environment.GetEnvironmentVariable("KTISIS_GITHUB_PRIVATE_KEY")
                 ?? throw new InvalidOperationException("KTISIS_GITHUB_PRIVATE_KEY is null")

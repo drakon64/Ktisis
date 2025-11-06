@@ -18,10 +18,7 @@ on:
 
 jobs:
   Build:
-    runs-on:
-      - self-hosted
-      - Linux
-      - X64
+    runs-on: ubuntu-latest
 
     permissions:
       contents: read
