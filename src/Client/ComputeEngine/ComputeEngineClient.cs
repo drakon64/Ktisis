@@ -16,7 +16,7 @@ internal static partial class ComputeEngineClient
         Environment.GetEnvironmentVariable("KTISIS_SOURCE_INSTANCE_TEMPLATE")
         ?? throw new InvalidOperationException("KTISIS_SOURCE_INSTANCE_TEMPLATE is null");
 
-    private static string GetRegion(string zone) => RegionRegex().Match(zone).Groups[0].Value;
+    private static string GetRegion(string zone) => RegionRegex().Match(zone).Groups[1].Value;
 
     [GeneratedRegex("(.*)-.")]
     private static partial Regex RegionRegex();
