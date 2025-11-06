@@ -18,10 +18,10 @@ internal static partial class ComputeEngineClient
 
     private static string GetRegion(string zone) => RegionRegex().Match(zone).Groups[0].Value;
 
-    [GeneratedRegex("\"(.*)-.\"")]
+    [GeneratedRegex("(.*)-.")]
     private static partial Regex RegionRegex();
 
-    [GeneratedRegex("\".$\"")]
+    [GeneratedRegex(".$")]
     private static partial Regex ZoneRegex();
 
     internal sealed class Metadata

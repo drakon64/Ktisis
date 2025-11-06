@@ -41,7 +41,7 @@ internal static partial class ComputeEngineClient
         request.Headers.Add("Authorization", await GoogleCloudClient.GetAccessToken());
         request.Method = HttpMethod.Post;
         request.RequestUri = new Uri(
-            $"https://compute.googleapis.com/compute/v1/projects/{Project}/zones/{region}-{zone}/instances?sourceInstanceTemplate={SourceInstanceTemplate}"
+            $"https://compute.googleapis.com/compute/v1/projects/{Project}/zones/{region}-{zoneIndex}/instances?sourceInstanceTemplate={SourceInstanceTemplate}"
         );
 
         using var response = await Program.HttpClient.SendAsync(request);
