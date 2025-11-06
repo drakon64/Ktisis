@@ -1,5 +1,3 @@
-using System.Text.RegularExpressions;
-
 namespace Ktisis.Client.ComputeEngine;
 
 internal static partial class ComputeEngineClient
@@ -16,13 +14,7 @@ internal static partial class ComputeEngineClient
         Environment.GetEnvironmentVariable("KTISIS_SOURCE_INSTANCE_TEMPLATE")
         ?? throw new InvalidOperationException("KTISIS_SOURCE_INSTANCE_TEMPLATE is null");
 
-    private static string GetRegion(string zone) => RegionRegex().Match(zone).Groups[1].Value;
-
-    [GeneratedRegex("(.*)-.")]
-    private static partial Regex RegionRegex();
-
-    [GeneratedRegex(".$")]
-    private static partial Regex ZoneRegex();
+    private static readonly string Zone = Zones[0]; // TODO: Pick random zone
 
     internal sealed class Metadata
     {
