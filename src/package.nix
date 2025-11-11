@@ -35,11 +35,9 @@ buildDotnetModule (finalAttrs: {
   nugetDeps = ./deps.json;
 
   dotnet-sdk = dotnetCorePackages.sdk_9_0;
-  dotnet-runtime = null;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_9_0;
 
   executables = [ "Ktisis" ];
-
-  selfContainedBuild = true;
 
   meta = {
     license = lib.licenses.eupl12;
