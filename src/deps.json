@@ -41,7 +41,7 @@
   },
   {
     "pname": "System.IO.Hashing",
-    "version": "9.0.10",
-    "hash": "sha256-RFjzc4B+mJNBR2VSUJFwVMHDPu4n0riVEXt4oaHYf7A="
+    "version": "10.0.0",
+    "hash": "sha256-zq3baIIsQ1kaY4CVl0vpkDcZb2ZNwT7wC0wDqzEN5oI="
   }
 ]
