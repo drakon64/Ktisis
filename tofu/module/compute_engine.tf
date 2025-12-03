@@ -41,12 +41,18 @@ resource "google_compute_router_nat" "nat" {
 }
 
 resource "google_compute_instance_template" "runner" {
+  disk {
+    disk_size_gb           = 14 + 4
+    disk_type              = "hyperdisk-balanced"
+    provisioned_iops       = 3000
+    provisioned_throughput = 140
+    source_image           = "projects/ubuntu-os-cloud/global/images/family/ubuntu-minimal-2404-lts-amd64"
+  }
+
   machine_type = var.machine_type
 
-  disk {
-    disk_size_gb = 14 + 4
-    disk_type    = "pd-standard"
-    source_image = "projects/ubuntu-os-cloud/global/images/family/ubuntu-minimal-2404-lts-amd64"
+  advanced_machine_features {
+    enable_nested_virtualization = true
   }
 
   metadata = {

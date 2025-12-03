@@ -8,7 +8,7 @@ variable "domain" {
 }
 
 variable "machine_type" {
-  default = "n2d-standard-4"
+  default = "n4-standard-4"
 }
 
 variable "region" {
