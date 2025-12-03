@@ -16,6 +16,7 @@ module "ktisis" {
 
   allowed_repositories   = var.allowed_repositories
   domain                 = var.domain
+  instance_template      = var.instance_template
   machine_type           = var.machine_type
   region                 = var.region
   secret_replica_regions = var.secret_replica_regions

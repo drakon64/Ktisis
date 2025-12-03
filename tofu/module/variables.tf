@@ -7,6 +7,17 @@ variable "domain" {
   type = string
 }
 
+variable "instance_template" {
+  type = object({
+    disk = object({
+      disk_size_gb           = optional(number, 18),
+      disk_type              = optional(string, "hyperdisk-balanced")
+      provisioned_iops       = optional(number, 3000)
+      provisioned_throughput = optional(number, 140)
+    })
+  })
+}
+
 variable "machine_type" {
   default = "n4-standard-4"
 }

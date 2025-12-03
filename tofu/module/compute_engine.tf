@@ -42,10 +42,10 @@ resource "google_compute_router_nat" "nat" {
 
 resource "google_compute_instance_template" "runner" {
   disk {
-    disk_size_gb           = 14 + 4
-    disk_type              = "hyperdisk-balanced"
-    provisioned_iops       = 3000
-    provisioned_throughput = 140
+    disk_size_gb           = var.instance_template.disk.disk_size_gb
+    disk_type              = var.instance_template.disk.disk_type
+    provisioned_iops       = var.instance_template.disk.provisioned_iops
+    provisioned_throughput = var.instance_template.disk.provisioned_throughput
     source_image           = "projects/ubuntu-os-cloud/global/images/family/ubuntu-minimal-2404-lts-amd64"
   }
 
