@@ -10,10 +10,8 @@ variable "domain" {
 variable "instance_template" {
   type = object({
     disk = object({
-      disk_size_gb           = optional(number, 18),
-      disk_type              = optional(string, "hyperdisk-balanced")
-      provisioned_iops       = optional(number, 3000)
-      provisioned_throughput = optional(number, 140)
+      disk_size_gb = optional(number, 18),
+      disk_type    = optional(string, "pd-balanced")
     })
   })
 }
