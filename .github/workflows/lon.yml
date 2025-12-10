@@ -32,7 +32,7 @@ jobs:
       - name: Evaluate with current lockfile
         run: |
           echo "CURRENT_HASH=$(nix eval --file ./default.nix docker --raw)" >> "$GITHUB_ENV"
-          echo "CURRENT_SHELL_HASH=$(nix eval --expr 'import ./shell.nix {}' --raw --impure)" >> "$GITHUB_ENV"
+          echo "CURRENT_SHELL_HASH=$(nix-build shell.nix)" >> "$GITHUB_ENV"
 
       - name: Update Lon lockfile
         run: nix-shell -A lon --run "lon update nixpkgs"
@@ -40,7 +40,7 @@ jobs:
       - name: Build and evaluate with updated lockfile
         run: |
           echo "NEW_HASH=$(nix-build -A docker)" >> "$GITHUB_ENV"
-          echo "NEW_SHELL_HASH=$(nix eval --expr 'import ./shell.nix {}' --raw --impure)" >> "$GITHUB_ENV"
+          echo "NEW_SHELL_HASH=$(nix-build shell.nix)" >> "$GITHUB_ENV"
 
       - name: Open pull request
         run: |
@@ -48,5 +48,13 @@ jobs:
           nix-shell -A lon --run "lon bot github"
         env:
           LON_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          LON_LABELS: "lon,bot"
+          LON_LABELS: "dependencies,Nix"
+        id: lon
         if: ${{ env.NEW_HASH != env.CURRENT_HASH || env.NEW_SHELL_HASH != env.CURRENT_SHELL_HASH }}
+
+      - run: |
+          BODY=$(echo -e "\`\`\`\n$(nix store diff-closures $CURRENT_SHELL_HASH $NEW_SHELL_HASH)\n\`\`\`")
+          gh pr edit lon/nixpkgs -b "$BODY"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: ${{ env.NEW_SHELL_HASH != env.CURRENT_SHELL_HASH }}
