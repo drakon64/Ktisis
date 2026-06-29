@@ -12,7 +12,7 @@
     <!--<PublishTrimmed>true</PublishTrimmed>-->
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Octokit.Webhooks.AspNetCore" Version="3.2.1" />
+    <PackageReference Include="Octokit.Webhooks.AspNetCore" Version="4.0.4" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.15.0" />
     <PackageReference Include="System.IO.Hashing" Version="10.0.2" />
   </ItemGroup>
